@@ -1,0 +1,35 @@
+body {
+  background: #e5e5e5;
+}
+.keyboard-container {
+  width: 100%;
+}
+.keyboard-container .key {
+  width: 6.66%;
+  height: 200px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  background: white;
+  float: left;
+  cursor: pointer;
+}
+.keyboard-container .key.pressed {
+  background: #ddd;
+}
+.keyboard-container .key-container {
+  position: relative;
+  float: left;
+  width: 0;
+}
+.keyboard-container .key-container .black {
+  height: 130px;
+  width: 35px;
+  background: black;
+  border: none;
+  position: absolute;
+  top: 0;
+  left: -17px;
+}
+.keyboard-container .key-container .black.pressed {
+  background: #555;
+}

@@ -1,0 +1,37 @@
+.keyboard-container {
+	width: 100%;
+
+	.key {
+		width: 6.66%;
+		height: 200px;
+		box-sizing: border-box;
+		border: 1px solid #ccc;
+		background: white;
+		float: left;
+		cursor: pointer;
+
+		&.pressed {
+			background: #ddd;
+		}
+	}
+
+	.key-container {
+		position: relative;
+		float: left;
+		width: 0;
+
+		.black {
+			height: 130px;
+			width: 35px;
+			background: black;
+			border: none;
+			position: absolute;
+			top: 0;
+			left: -17px;
+
+			&.pressed {
+				background: #555;
+			}			
+		}
+	}
+}

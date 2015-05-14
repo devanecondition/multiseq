@@ -1,0 +1,20 @@
+{
+  "name": "MultiSeq",
+  "version": "1.0.0",
+  "description": "multi sequencer for music",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "james devane",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt-contrib-copy": "^0.8.0",
+    "grunt-contrib-less": "^1.0.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-css": "^0.5.4",
+    "grunt-dustjs": "^1.2.1",
+    "grunt-jasmine-runner": "^0.6.0",
+    "grunt-notify": "^0.4.1"
+  }
+}
