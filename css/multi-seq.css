@@ -1,8 +1,24 @@
 body {
   background: #e5e5e5;
+  font-family: Arial;
+}
+label {
+  display: block;
+  color: #333;
+  line-height: 2;
+}
+.module {
+  float: left;
+  width: 175px;
+  height: 400px;
+  text-align: center;
+  background: #ddd;
+  border: 1px solid #999;
 }
 .keyboard-container {
   width: 100%;
+  height: auto;
+  border: none;
 }
 .keyboard-container .key {
   width: 6.66%;

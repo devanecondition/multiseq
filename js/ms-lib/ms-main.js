@@ -12,13 +12,13 @@ require([
 	Sequencer
 ) {
 
-	// instantiate synth components...
+	// instantiate/render synth components...
 	var context   = new AudioContext(),
-		vco       = new Vco( context, 0 ),
+		vco       = new Vco( context ),
 		vca       = new Vca( context ),
 		envelope  = new EnvelopeGenerator( context ),
-		keyboard  = new Keyboard(),
-		sequencer = new Sequencer();
+		sequencer = new Sequencer(),
+		keyboard  = new Keyboard();
 
 	// Patch the components...
 	keyboard.connect( 0, vco );

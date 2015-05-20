@@ -1,13 +1,13 @@
 define([
-
+	'ms-note-frequencies',
 ], function(
-
+	Notes
 ) {
 
 	var Key = function( note, keyboard ) {
 		this.note     = note;
 		this.keyboard = keyboard;
-		this.$key     = $( this.render() ).appendTo( keyboard.$keyboard );
+		this.$key     = $( this.render() ).appendTo( keyboard.$module );
 
 		this.$key
 			.on( 'mousedown',  _.bind( this.onButtonPressed, this ))
@@ -33,7 +33,7 @@ define([
 		
 		this.keyboard.activate();
 		$( e.target ).addClass( 'pressed' );
-		this.keyboard.playNote( this.note );
+		this.keyboard.playNote( Notes[ this.note ] );
 	};
 
 	Key.prototype.onButtonReleased = function( e ) {
@@ -47,7 +47,7 @@ define([
 	Key.prototype.onButtonSlideEnter = function( e ) {
 		if ( this.keyboard.active ) {
 			$( e.target ).addClass( 'pressed' );
-			this.keyboard.playNote( this.note );
+			this.keyboard.playNote( Notes[ this.note ] );
 		}
 	};	
 

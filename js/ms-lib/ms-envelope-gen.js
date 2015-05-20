@@ -1,23 +1,28 @@
 define([
+	'Module',
 	'lodash'
 ], function(
+	Module,
 	_
 ) {
 
-	var EnvelopeGenerator = function( context ) {
+	var EnvelopeGenerator = function( context, element ) {
+
+		Module.call( this, 'env-gen', element );
+
 		this.context     = context;
 		this.attackTime  = 0.1;
 		this.releaseTime = 0.1;
-		this.$envelope   = $( this.getHtml() ).appendTo('body');
 		this.$attack     = this.renderKnob( 'Attack', this.setAttack );
 		this.$release    = this.renderKnob( 'Release', this.setRelease );
     };
 
-    EnvelopeGenerator.prototype.getHtml = function() {
+	EnvelopeGenerator.prototype = Object.create( Module.prototype );
+	EnvelopeGenerator.prototype.constructor = Module;
+
+    EnvelopeGenerator.prototype.getInnerHtml = function() {
     	return (
-			'<div class="env-gen">' +
-				'<label>Envelope Generator</label>' +
-			'</div>'
+			'<label>Envelope Generator</label>'
 		);
 	};
 
@@ -32,7 +37,7 @@ define([
 			change      : _.bind( knobFunction, this )
 		};
 
-    	return $( '<input type="text" value="10" class="dial">' ).knob( knobSettings ).appendTo( this.$envelope );
+    	return $( '<input type="text" value="10" class="dial">' ).knob( knobSettings ).appendTo( this.$module );
 	};
 
     EnvelopeGenerator.prototype.trigger = function() {

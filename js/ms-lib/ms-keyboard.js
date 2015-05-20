@@ -1,28 +1,27 @@
 define([
+	'Module',
 	'ms-key',
-	'ms-note-frequencies',
 	'lodash'
 ], function(
+	Module,
 	Key,
-	Notes,
 	_
 ) {
 
-	var Keyboard = function () {
-		this.active       = false;
-		this.$keyboard    = $( this.render() ).appendTo('body');
-		this.octave       = 3;
-		this.firstOutlet  = [];
-		this.secondOutlet = [];
+	var Keyboard = function ( element ) {
+
+		Module.call( this, 'keyboard-container', element );
+
+		this.active = false;
+		this.octave = 3;
 
 		this.createKeys();
 
-		this.$keyboard.on( 'mouseleave', _.bind( this.deactivate, this ));
+		this.$module.on( 'mouseleave', _.bind( this.deactivate, this ));
 	};
 
-	Keyboard.prototype.render = function() {
-		return '<div class="keyboard-container"></div>';
-	};
+	Keyboard.prototype = Object.create( Module.prototype );
+	Keyboard.prototype.constructor = Module;
 
 	Keyboard.prototype.createKeys = function() {
 		_.each( this.octaveGroupings[ this.octave ], _.bind( function( note ) {
@@ -44,27 +43,6 @@ define([
 	Keyboard.prototype.deactivate = function() {
 		this.active = false;
 	};
-
-	Keyboard.prototype.playNote = function( note ) {
-		//try {
-			_.each ( this.firstOutlet, function( module ) {
-				module.setFrequency.call( module, Notes[ note ] );
-			});
-			_.each ( this.secondOutlet, function( module ) {
-				module.trigger.call( module );
-			});
-		//} catch(e) {}
-	};	
-
-	Keyboard.prototype.connect = function( outlet, component ) {
-		// outputs frequency
-		if ( outlet === 0 ) {
-			this.firstOutlet.push( component );
-		}
-		if ( outlet === 1 ) {
-			this.secondOutlet.push( component );
-		}		
-	};	
 
 	return Keyboard;
 });

@@ -1,23 +1,25 @@
 define([
+	'Module',
 	'ms-note-frequencies',
 	'ms-state',
 	'lodash'
 ], function(
+	Module,
 	Notes,
 	State,
 	_
 ) {
 
-	var Sequencer = function() {
+	var Sequencer = function( element ) {
+
+		Module.call( this, 'sequencer', element );
+
+		this.seqId = State.sequencers.length;
+		this.note  = 'a4';
 
 		// Save Sequencer in state...
-		this.seqId     = State.sequencers.length;
-		this.frequency = 440;
-		this.$button   = $( '<button>Start</button>' ).appendTo('body');
-		this.$rec      = $( '<button>Record</button>' ).appendTo('body');
-
 		State.sequencers.push({
-			seqNotes   : ['a3','c3','d3','b3','g3','a3'],
+			seqNotes   : [ Notes['a3'], Notes['c3'], Notes['d3'], Notes['b3'], Notes['g3'], Notes['a3'] ],
 			recordMode : false,
 			waveType   : 'sine',
 			attack     : 0.1,
@@ -26,20 +28,32 @@ define([
 		});
 
 		//Add Listeners...
-		this.$button.on( 'click', _.bind( this.toggleSequencer, this ));
-		this.$rec.on( 'click', _.bind( this.recordSequence, this ));
+		this.$module
+			.on( 'click', '.seq-toggle', _.bind( this.toggleSequencer, this ))
+			.on( 'click', '.seq-record', _.bind( this.recordSequence, this ));
+    };
+
+	Sequencer.prototype = Object.create( Module.prototype );
+	Sequencer.prototype.constructor = Module;
+
+    Sequencer.prototype.getInnerHtml = function() {
+    	return (
+    		'<label>Sequencer</label>' +
+			'<button class="seq-toggle">Start</button>' +
+			'<button class="seq-record">Record</button>'
+		);
     };
 
     Sequencer.prototype.getSequencer = function() {
     	return State.sequencers[ this.seqId ];
     };
 
-	Sequencer.prototype.setFrequency = function( frequency ) {
+	Sequencer.prototype.setFrequency = function( note ) {
 
 		var thisSequencer = State.sequencers[ this.seqId ];
 		
-		if ( thisSequencer.recordMode && frequency ) {
-			this.frequency = frequency;
+		if ( thisSequencer.recordMode && note ) {
+			this.note = note;
 		}
 	};
 
@@ -48,33 +62,33 @@ define([
 		var thisSequencer = State.sequencers[ this.seqId ];
 
 		if ( thisSequencer.recordMode ) {
-			thisSequencer.seqNotes.push( this.frequency );
+			thisSequencer.seqNotes.push( this.note );
 		}
 	};
 
-	Sequencer.prototype.recordSequence = function() {
+	Sequencer.prototype.recordSequence = function( e ) {
 
 		var thisSequencer = State.sequencers[ this.seqId ];
 
 		if ( thisSequencer.recordMode ) {
 			thisSequencer.recordMode = false;
-			this.$rec.html('Record');
+			$( e.target ).html('Record');
 		} else {
 			State.sequenceRunning = false;
 			thisSequencer.seqNotes = [];
 			thisSequencer.recordMode = true;
-			this.$rec.html('off');
+			$( e.target ).html('off');
 		}
 	};
 
-	Sequencer.prototype.toggleSequencer = function() {
+	Sequencer.prototype.toggleSequencer = function( e ) {
 		if ( State.sequenceRunning ) {
 			State.sequenceRunning = false;
 			State.noteIndex = 0;
-			this.$button.html('Play');
+			$( e.target ).html('Play');
 		} else {
 			State.sequenceRunning = true;
-			this.$button.html('Stop');
+			$( e.target ).html('Stop');
 			this.playSequence();
 		}
 	};
@@ -92,23 +106,6 @@ define([
 			setTimeout( _.bind( this.playSequence, this ), 250 );
 		}
 	};
-
-	Sequencer.prototype.playNote = function( note ) {
-		//try {
-			this.firstOutlet.setFrequency.call( this.firstOutlet, note );
-			this.secondOutlet.trigger.call( this.secondOutlet );
-		//} catch(e) {}
-	};
-
-	Sequencer.prototype.connect = function( outlet, component ) {
-		// outputs frequency
-		if ( outlet === 0 ) {
-			this.firstOutlet = component;
-		}
-		if ( outlet === 1 ) {
-			this.secondOutlet = component;
-		}		
-	};	
 
 	return Sequencer;
 });

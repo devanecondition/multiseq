@@ -1,6 +1,7 @@
 require.config({
     paths : {
         // Multi Seq Libraries
+        'Module'               : '../js/ms-lib/ms-Module',
         'ms-vco'               : '../js/ms-lib/ms-vco',
         'ms-vca'               : '../js/ms-lib/ms-vca',
         'ms-envelope-gen'      : '../js/ms-lib/ms-envelope-gen',
