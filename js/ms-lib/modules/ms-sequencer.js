@@ -39,8 +39,8 @@ define([
     Sequencer.prototype.getInnerHtml = function() {
     	return (
     		'<label>Sequencer</label>' +
-			'<button class="seq-toggle">Start</button>' +
-			'<button class="seq-record">Record</button>'
+			'<div class="seq-toggle button">Start</div>' +
+			'<div class="seq-record button">Record</div>'
 		);
     };
 
