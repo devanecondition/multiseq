@@ -15,15 +15,17 @@ require([
 ) {
 
 	// instantiate/render synth components...
-	var context   = new AudioContext(),
-		clock     = new Clock(),
-		vco       = new Vco( context ),
-		vca       = new Vca( context ),
-		envelope  = new EnvelopeGenerator( context ),
-		sequencer = new Sequencer(),
-		keyboard  = new Keyboard();
+	var $container = $( '<div class="synth-container"></div>' ).appendTo( 'body' ),
+		context    = new AudioContext(),
+		clock      = new Clock( $container ),
+		sequencer  = new Sequencer( $container ),
+		vco        = new Vco( context, $container ),
+		vca        = new Vca( context, $container ),
+		envelope   = new EnvelopeGenerator( context, $container ),
+		keyboard   = new Keyboard( $container );
 
 	// Patch the components...
+	clock.connect( 0, sequencer );
 	keyboard.connect( 0, vco );
 	keyboard.connect( 1, envelope );
 	keyboard.connect( 0, sequencer );
@@ -31,6 +33,6 @@ require([
 	sequencer.connect( 0, vco );
 	sequencer.connect( 1, envelope );
 	vco.connect( vca );
-	envelope.connect( vca.amplitude )
+	envelope.connect( vca )
 	vca.connect( context.destination );	
 });

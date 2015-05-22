@@ -8,12 +8,17 @@ define([
 
 		Module.call( this, 'vca', element );
 
-		this.gain = context.createGain();
+		this.gain            = context.createGain();
 		this.gain.gain.value = 0;
-		this.input = this.gain;
-		this.output = this.gain;
-		this.amplitude = this.gain.gain;
-		this.$attack = this.renderKnob( 'Attenuator', this.attenuate, {}, 100 );
+		this.input           = this.gain;
+		this.output          = this.gain;
+		this.amplitude       = this.gain.gain;
+		this.peakAmplitude   = 1;
+		this.$attack         = this.renderKnob({
+			knobLabel    : 'Attenuator',
+			knobFunction : this.setAmplitude,
+			knobValue    : 100
+		});
     };
 
 	Vca.prototype = Object.create( Module.prototype );
@@ -25,8 +30,12 @@ define([
 		);
 	};
 
-    Vca.prototype.attenuate = function( gainPercentage ) {
-		this.output.gain.value = gainPercentage * 0.01;
+    Vca.prototype.setAmplitude = function( gainPercentage ) {
+		this.peakAmplitude = gainPercentage * 0.01;
+    };
+
+    Vca.prototype.getAmplitude = function() {
+		return this.peakAmplitude;
     };
 
     Vca.prototype.connect = function( node ) {

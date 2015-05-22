@@ -5,10 +5,7 @@ define([
 ) {
 
 	var State = {
-		sequenceRunning : false,
-		noteLength      : 250,
-		noteIndex       : 0,
-		sequencers      : []
+		sequencers : []
 	};
 
 	return State;

@@ -14,8 +14,9 @@ define([
 
 		Module.call( this, 'sequencer', element );
 
-		this.seqId = State.sequencers.length;
-		this.note  = 'a4';
+		this.seqId     = State.sequencers.length;
+		this.note      = 'a4';
+		this.noteIndex = 0;
 
 		// Save Sequencer in state...
 		State.sequencers.push({
@@ -23,13 +24,11 @@ define([
 			recordMode : false,
 			waveType   : 'sine',
 			attack     : 0.1,
-			release    : 0.1,
-			noteIndex  : 0
+			release    : 0.1
 		});
 
 		//Add Listeners...
 		this.$module
-			.on( 'click', '.seq-toggle', _.bind( this.toggleSequencer, this ))
 			.on( 'click', '.seq-record', _.bind( this.recordSequence, this ));
     };
 
@@ -39,8 +38,8 @@ define([
     Sequencer.prototype.getInnerHtml = function() {
     	return (
     		'<label>Sequencer</label>' +
-			'<div class="seq-toggle button">Start</div>' +
-			'<div class="seq-record button">Record</div>'
+    		'<p>Record</p>' +
+			'<div class="seq-record button record"></div>'
 		);
     };
 
@@ -72,39 +71,22 @@ define([
 
 		if ( thisSequencer.recordMode ) {
 			thisSequencer.recordMode = false;
-			$( e.target ).html('Record');
+			$( e.target ).removeClass( 'stop' ).addClass( 'record' );
 		} else {
-			State.sequenceRunning = false;
 			thisSequencer.seqNotes = [];
 			thisSequencer.recordMode = true;
-			$( e.target ).html('off');
+			$( e.target ).removeClass( 'record' ).addClass( 'stop' );
 		}
 	};
 
-	Sequencer.prototype.toggleSequencer = function( e ) {
-		if ( State.sequenceRunning ) {
-			State.sequenceRunning = false;
-			State.noteIndex = 0;
-			$( e.target ).html('Play');
-		} else {
-			State.sequenceRunning = true;
-			$( e.target ).html('Stop');
-			this.playSequence();
-		}
-	};
-
-	Sequencer.prototype.playSequence = function() {
+	Sequencer.prototype.gate = function() {
 
 		var notes = this.getSequencer().seqNotes,
-			index = State.noteIndex % notes.length;
+			index = this.noteIndex % notes.length;
 
 		this.playNote( notes[ index ] );
 
-		State.noteIndex++;
-
-		if ( State.sequenceRunning ) {
-			setTimeout( _.bind( this.playSequence, this ), 250 );
-		}
+		this.noteIndex++;
 	};
 
 	return Sequencer;

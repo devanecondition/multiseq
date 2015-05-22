@@ -1,11 +1,68 @@
 body {
   background: #e5e5e5;
-  font-family: Arial;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+.synth-container {
+  width: 885px;
+  margin: 10px auto;
 }
 label {
   display: block;
+  height: 50px;
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: bold;
   color: #333;
-  line-height: 2;
+}
+canvas {
+  cursor: pointer;
+}
+.button {
+  height: 150px;
+  width: 150px;
+  background: #eee;
+  margin: 5px auto 13px;
+  border-radius: 75px;
+  cursor: pointer;
+  position: relative;
+}
+.button:before {
+  position: absolute;
+  content: '';
+}
+.button.play:before {
+  width: 0;
+  height: 0;
+  border-top: 30px solid transparent;
+  border-bottom: 30px solid transparent;
+  border-left: 60px solid #666;
+  top: 45px;
+  left: 52px;
+}
+.button.stop:before,
+.button.record:before {
+  height: 56px;
+  width: 56px;
+  background: #666;
+  top: 47px;
+  left: 47px;
+}
+.button.stop:before:hover,
+.button.record:before:hover {
+  border-left-color: #444;
+}
+.button.record:before {
+  border-radius: 56px;
+}
+.button:hover {
+  background: #ebebeb;
+}
+.button:hover.play:before {
+  border-left-color: #444;
+}
+.button:hover.stop:before,
+.button:hover.record:before {
+  background: #444;
 }
 .cb {
   clear: both;
@@ -13,7 +70,7 @@ label {
 .module {
   float: left;
   width: 175px;
-  height: 400px;
+  height: 450px;
   text-align: center;
   background: #ddd;
   border: 1px solid #999;
@@ -21,10 +78,6 @@ label {
 .module p {
   color: #333;
   margin: 10px 0 5px;
-}
-.module .button {
-  background: #ccc;
-  margin: 5px;
 }
 .module.vco a {
   display: block;
@@ -44,24 +97,28 @@ label {
 .module.vco a.sine {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAO0lEQVQYV2NkIBIwEqmOAVnhfwYGFD6KGTCFMEU4FYMUoktiVYzLjRia8XkGxTmEfA03mZBCuM+JVggA/QkKCtM5VukAAAAASUVORK5CYII=);
 }
+.module.vco a.sine:hover,
 .module.vco a.sine.active {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAO0lEQVQYV2NkIBIwEqmOAa7w/////xkZGXFqBEvAFOFTzIguiUsxVquwasblGXTn4PU1ssmkBw+h8AQAER8oB6jybw8AAAAASUVORK5CYII=);
 }
 .module.vco a.square {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAJ0lEQVQYV2NkYGD4z4AJGNGE/oMEQAqRJdD5ID2jCuEhR1LwYEQBAGoIHAGpnTbNAAAAAElFTkSuQmCC);
 }
+.module.vco a.square:hover,
 .module.vco a.square.active {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAALElEQVQYV2P8////fwY0wMjIyIgsBFLDCCaQJND5IA2jCuHhRlLwoEcAiA8AMMdv41kn+PIAAAAASUVORK5CYII=);
 }
 .module.vco a.saw {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAOklEQVQYV43MUQoAIAgE0bz/oY0NkjRXne/HyJqlMnAK00EgmPJ4EYYUvojCiFKYoQ8y5GCFDHbowA16uhIB+RweBQAAAABJRU5ErkJggg==);
 }
+.module.vco a.saw:hover,
 .module.vco a.saw.active {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAPUlEQVQYV43MSwoAMAgD0eb+h06xoPRjtLN+DMZHJInOGTJTwnUCUB4d2U3CHUl4oxRm6IEKHbBCATvkcAI3j0fjvT6VJgAAAABJRU5ErkJggg==);
 }
 .module.vco a.triangle {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAARElEQVQYV2NkwAT/oUKMyFIoHKgEUQpBimCakdlwQZgtRClEMQHJGWAbkN1IlEJsilCcg9XhaCEGNgSkEJ9pcFOJVggAFbkSCRlAlakAAAAASUVORK5CYII=);
 }
+.module.vco a.triangle:hover,
 .module.vco a.triangle.active {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAARElEQVQYV42OQQoAMAjD1v8/ukOhojJGPakNUZxVJBkrAOjRGCKwwIBk6n1e6HoL3Aa9oQtltMAXpJeUpdECf9CwuuAFo51IAzliit8AAAAASUVORK5CYII=);
 }
@@ -71,11 +128,11 @@ label {
   border: none;
 }
 .module.keyboard-container .key {
-  width: 6.66%;
+  width: 7.1428%;
   height: 200px;
   box-sizing: border-box;
   border: 1px solid #ccc;
-  background: white;
+  background: #eee;
   float: left;
   cursor: pointer;
 }
@@ -90,7 +147,7 @@ label {
 .module.keyboard-container .key-container .black {
   height: 130px;
   width: 35px;
-  background: black;
+  background: #222;
   border: none;
   position: absolute;
   top: 0;

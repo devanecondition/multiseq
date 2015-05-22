@@ -18,7 +18,12 @@ define([
 		this.input           = this.oscillator;
 		this.output          = this.oscillator;
 		this.fineTune        = 0;
-		this.$attack         = this.renderKnob( 'Fine Tune', this.setFineTuning, { min: -20, max: 20 }, 0 );
+		this.$tune           = this.renderKnob({
+			$elem        : this.$module.find( '.dial' ),
+			knobFunction : this.setFineTuning,
+			extraParams  : { min: -20, max: 20 },
+			knobValue    : 0
+		});
 
 		this.setFrequency(440);
 		this.oscillator.start(0);
@@ -29,9 +34,16 @@ define([
 	Vco.prototype = Object.create( Module.prototype );
 	Vco.prototype.constructor = Module;
 
+	Vco.prototype.getModule = function() {
+		return this.$module;
+	}
+
 	Vco.prototype.getInnerHtml = function() {
 		return (
 			'<label>VCO</label>' +
+			'<p>Fine Tune</p>' +
+			'<input type="text" class="dial">' +
+			'<p>Wave Type</p>' +
 			'<a href="#" title="Sine Wave" data-wave-type="sine" class="wave-type sine active"></a>' +
 			'<a href="#" title="Square Wave" data-wave-type="square" class="wave-type square"></a>' +
 			'<a href="#" title="Saw Wave" data-wave-type="sawtooth" class="wave-type saw"></a>' +
@@ -48,7 +60,11 @@ define([
 
 		frequency = frequency + this.fineTune;
 
-		this.oscillator.frequency.setValueAtTime(frequency, this.context.currentTime);
+		try {
+			this.oscillator.frequency.setValueAtTime(frequency, this.context.currentTime);
+		} catch(e) {
+			console.log( 'no frequency detected');
+		}
 	};
 
 	Vco.prototype.setWaveType = function( waveType ) {
@@ -68,12 +84,9 @@ define([
 		var $btn     = $( e.target ),
 			waveType = $btn.data( 'waveType' );
 
-		// if ( waveType !== this.sequencer.waveType ) {
-			// this.sequencer.waveType = waveType;
-			this.$module.find( '.wave-type' ).removeClass( 'active' );
-			$btn.addClass( 'active' );
-			this.setWaveType( waveType );
-		// }
+		this.$module.find( '.wave-type' ).removeClass( 'active' );
+		$btn.addClass( 'active' );
+		this.setWaveType( waveType );
 	};
 
 	return Vco;
