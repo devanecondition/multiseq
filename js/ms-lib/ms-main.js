@@ -1,10 +1,12 @@
 require([
+	'ms-clock',
 	'ms-vco',
 	'ms-vca',
 	'ms-envelope-gen',
 	'ms-keyboard',
 	'ms-sequencer'
 ], function(
+	Clock,
 	Vco,
 	Vca,
 	EnvelopeGenerator,
@@ -14,6 +16,7 @@ require([
 
 	// instantiate/render synth components...
 	var context   = new AudioContext(),
+		clock     = new Clock(),
 		vco       = new Vco( context ),
 		vca       = new Vca( context ),
 		envelope  = new EnvelopeGenerator( context ),

@@ -26,20 +26,6 @@ define([
 		);
 	};
 
-    EnvelopeGenerator.prototype.renderKnob = function( label, knobFunction ) {
-
-		var knobSettings = {
-			fgColor     : "#999",
-			inputColor  : '#666',
-			width       : 150,
-			angleOffset : -125,
-			angleArc    : 250,
-			change      : _.bind( knobFunction, this )
-		};
-
-    	return $( '<input type="text" value="10" class="dial">' ).knob( knobSettings ).appendTo( this.$module );
-	};
-
     EnvelopeGenerator.prototype.trigger = function() {
 		var now = this.context.currentTime;
 		this.param.cancelScheduledValues(now);

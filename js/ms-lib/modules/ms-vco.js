@@ -17,11 +17,13 @@ define([
 		this.oscillator.type = this.oscillator.SINE;
 		this.input           = this.oscillator;
 		this.output          = this.oscillator;
+		this.fineTune        = 0;
+		this.$attack         = this.renderKnob( 'Fine Tune', this.setFineTuning, { min: -20, max: 20 }, 0 );
 
 		this.setFrequency(440);
 		this.oscillator.start(0);
 
-		this.$module.on( 'change', 'select', _.bind( this.onWaveTypeChange, this ));
+		this.$module.on( 'click', '.wave-type', _.bind( this.onWaveTypeChange, this ));
 	};
 
 	Vco.prototype = Object.create( Module.prototype );
@@ -30,16 +32,22 @@ define([
 	Vco.prototype.getInnerHtml = function() {
 		return (
 			'<label>VCO</label>' +
-			'<select>' +
-        		'<option value="sine">Sine</option>' +
-        		'<option value="square">Square</option>' +
-        		'<option value="sawtooth">Saw</option>' +
-        		'<option value="triangle">Triangle</option>' +
-    		'</select>'
+			'<a href="#" title="Sine Wave" data-wave-type="sine" class="wave-type sine active"></a>' +
+			'<a href="#" title="Square Wave" data-wave-type="square" class="wave-type square"></a>' +
+			'<a href="#" title="Saw Wave" data-wave-type="sawtooth" class="wave-type saw"></a>' +
+			'<a href="#" title="Triangle Wave" data-wave-type="triangle" class="wave-type triangle"></a>' +
+			'<div class="cb"></div>'
 		);
 	};
 
+	Vco.prototype.setFineTuning = function( offset ) {
+		this.fineTune = offset;
+	};
+
 	Vco.prototype.setFrequency = function( frequency ) {
+
+		frequency = frequency + this.fineTune;
+
 		this.oscillator.frequency.setValueAtTime(frequency, this.context.currentTime);
 	};
 
@@ -57,10 +65,13 @@ define([
 
 	Vco.prototype.onWaveTypeChange = function( e ) {
 
-		var waveType = $( e.target ).val();
+		var $btn     = $( e.target ),
+			waveType = $btn.data( 'waveType' );
 
 		// if ( waveType !== this.sequencer.waveType ) {
 			// this.sequencer.waveType = waveType;
+			this.$module.find( '.wave-type' ).removeClass( 'active' );
+			$btn.addClass( 'active' );
 			this.setWaveType( waveType );
 		// }
 	};
