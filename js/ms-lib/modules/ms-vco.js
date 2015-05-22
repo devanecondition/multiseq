@@ -81,6 +81,8 @@ define([
 
 	Vco.prototype.onWaveTypeChange = function( e ) {
 
+		e.preventDefault();
+
 		var $btn     = $( e.target ),
 			waveType = $btn.data( 'waveType' );
 
