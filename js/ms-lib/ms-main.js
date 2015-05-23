@@ -14,6 +14,9 @@ require([
 	Sequencer
 ) {
 
+	// Safari fix...
+	window.AudioContext = window.AudioContext || window.webkitAudioContext;
+
 	// instantiate/render synth components...
 	var $container = $( '<div class="synth-container"></div>' ).appendTo( 'body' ),
 		context    = new AudioContext(),
