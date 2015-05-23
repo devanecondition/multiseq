@@ -6,6 +6,8 @@ require.config({
         'ms-vco'               : '../js/ms-lib/modules/ms-vco',
         'ms-vca'               : '../js/ms-lib/modules/ms-vca',
         'ms-envelope-gen'      : '../js/ms-lib/modules/ms-envelope-gen',
+        'ms-filter'            : '../js/ms-lib/modules/ms-filter',
+        'ms-delay'             : '../js/ms-lib/modules/ms-delay',
         'ms-keyboard'          : '../js/ms-lib/modules/ms-keyboard',
         'ms-key'               : '../js/ms-lib/modules/ms-key',
         'ms-sequencer'         : '../js/ms-lib/modules/ms-sequencer',

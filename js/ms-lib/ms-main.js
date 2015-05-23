@@ -3,6 +3,8 @@ require([
 	'ms-vco',
 	'ms-vca',
 	'ms-envelope-gen',
+	'ms-filter',
+	'ms-delay',
 	'ms-keyboard',
 	'ms-sequencer'
 ], function(
@@ -10,6 +12,8 @@ require([
 	Vco,
 	Vca,
 	EnvelopeGenerator,
+	Filter,
+	Delay,
 	Keyboard,
 	Sequencer
 ) {
@@ -25,6 +29,8 @@ require([
 		vco        = new Vco( context, $container ),
 		vca        = new Vca( context, $container ),
 		envelope   = new EnvelopeGenerator( context, $container ),
+		filter     = new Filter( context, $container ),
+		delay      = new Delay( context, $container ),
 		keyboard   = new Keyboard( $container );
 
 	// Patch the components...
@@ -36,6 +42,9 @@ require([
 	sequencer.connect( 0, vco );
 	sequencer.connect( 1, envelope );
 	vco.connect( vca );
-	envelope.connect( vca )
-	vca.connect( context.destination );	
+	envelope.connect( vca );
+	vca.connect( filter );
+	filter.connect( delay );
+	filter.connect( context.destination );
+	delay.connect( context.destination );
 });

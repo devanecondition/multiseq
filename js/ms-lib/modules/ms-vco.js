@@ -14,7 +14,7 @@ define([
 
 		this.context         = context;
 		this.oscillator      = context.createOscillator();
-		this.oscillator.type = this.oscillator.SINE;
+		this.oscillator.type = 'sine';
 		this.input           = this.oscillator;
 		this.output          = this.oscillator;
 		this.fineTune        = 0;

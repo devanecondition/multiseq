@@ -13,12 +13,14 @@ define([
 		this.input           = this.gain;
 		this.output          = this.gain;
 		this.amplitude       = this.gain.gain;
-		this.peakAmplitude   = 1;
+		this.peakAmplitude   = 0.4;
 		this.$attack         = this.renderKnob({
 			knobLabel    : 'Attenuator',
 			knobFunction : this.setAmplitude,
-			knobValue    : 100
+			knobValue    : 40
 		});
+
+		this.setAmplitude( 40 );
     };
 
 	Vca.prototype = Object.create( Module.prototype );
