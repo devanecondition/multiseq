@@ -31,7 +31,9 @@ define([
 		//Add Listeners...
 		this.$module
 			.on( 'click', '.seq-record', _.bind( this.recordSequence, this ))
-			.on( 'click', 'a', _.bind( this.setDirection, this ));
+			.on( 'click', '.direction', _.bind( this.setDirection, this ))
+			.on( 'click', '.rest', _.bind( this.addRest, this ))
+			.on( 'click', '.undo', _.bind( this.removeLastNote, this ));
     };
 
 	Sequencer.prototype = Object.create( Module.prototype );
@@ -45,7 +47,10 @@ define([
 			'<p>Direction</p>' +
 			'<a href="#" data-direction="backward" class="direction backward"></a>' +
 			'<a href="#" data-direction="random" class="direction random"></a>' +
-			'<a href="#" data-direction="forward" class="direction forward active"></a>'
+			'<a href="#" data-direction="forward" class="direction forward active"></a>' +
+			'<p>Sequence</p>' +
+			'<a href="#" data-direction="forward" class="rest text">Skip Note</a>' +
+			'<a href="#" data-direction="forward" class="undo text">Undo</a>'
 		);
     };
 
@@ -84,6 +89,24 @@ define([
 			$( e.target ).removeClass( 'record' ).addClass( 'stop' );
 		}
 	};
+
+    Sequencer.prototype.addRest = function( e ) {
+
+    	e.preventDefault();
+
+    	this.note = 0; //
+    	this.trigger();
+    };
+    Sequencer.prototype.removeLastNote = function( e ) {
+
+    	e.preventDefault();
+
+		var thisSequencer = State.sequencers[ this.seqId ];
+
+		if ( thisSequencer.recordMode ) {
+			thisSequencer.seqNotes.pop();
+		}
+    };
 
 	Sequencer.prototype.gate = function() {
 

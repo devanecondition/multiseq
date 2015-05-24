@@ -92,6 +92,15 @@ canvas {
   background-color: #666;
   border: 5px solid #666;
 }
+.module a.text {
+  width: auto;
+  color: #111;
+  text-decoration: none;
+  line-height: 25px;
+}
+.module a.text:hover {
+  color: #fff;
+}
 .module.vco a.sine {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAO0lEQVQYV2NkIBIwEqmOAVnhfwYGFD6KGTCFMEU4FYMUoktiVYzLjRia8XkGxTmEfA03mZBCuM+JVggA/QkKCtM5VukAAAAASUVORK5CYII=);
 }
