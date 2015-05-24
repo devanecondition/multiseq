@@ -1,7 +1,9 @@
 define([
 	'ms-note-frequencies',
+	'knob'
 ], function(
-	Notes
+	Notes,
+	knob
 ) {
 
 	var Module = function( name, element, innerHtml ) {
