@@ -15,12 +15,13 @@ define([
 		Module.call( this, 'sequencer', element );
 
 		this.seqId     = State.sequencers.length;
-		this.note      = 'a4';
+		this.note      = 'a1';
 		this.noteIndex = 0;
+		this.direction = 'forward';
 
 		// Save Sequencer in state...
 		State.sequencers.push({
-			seqNotes   : [ Notes['a3'], Notes['c3'], Notes['d3'], Notes['b3'], Notes['g3'], Notes['a3'] ],
+			seqNotes   : [ Notes['a1'], Notes['c1'], Notes['d1'], Notes['b1'], Notes['g1'], Notes['a1'] ],
 			recordMode : false,
 			waveType   : 'sine',
 			attack     : 0.1,
@@ -29,7 +30,8 @@ define([
 
 		//Add Listeners...
 		this.$module
-			.on( 'click', '.seq-record', _.bind( this.recordSequence, this ));
+			.on( 'click', '.seq-record', _.bind( this.recordSequence, this ))
+			.on( 'click', 'a', _.bind( this.setDirection, this ));
     };
 
 	Sequencer.prototype = Object.create( Module.prototype );
@@ -39,7 +41,11 @@ define([
     	return (
     		'<label>Sequencer</label>' +
     		'<p>Record</p>' +
-			'<div class="seq-record button record"></div>'
+			'<div class="seq-record button record"></div>' +
+			'<p>Direction</p>' +
+			'<a href="#" data-direction="backward" class="direction backward"></a>' +
+			'<a href="#" data-direction="random" class="direction random"></a>' +
+			'<a href="#" data-direction="forward" class="direction forward active"></a>'
 		);
     };
 
@@ -81,12 +87,39 @@ define([
 
 	Sequencer.prototype.gate = function() {
 
-		var notes = this.getSequencer().seqNotes,
-			index = this.noteIndex % notes.length;
+		var notes     = this.getSequencer().seqNotes,
+			seqLength = notes.length,
+			modIndex  = Math.abs( this.noteIndex.mod )
+			index     = this.noteIndex % seqLength;
 
-		this.playNote( notes[ index ] );
+		switch( this.direction ) {
+			case 'forward' :
+				this.playNote( notes[ index ] );
+				this.noteIndex++;
+				break;
+			case 'backward' :
+				this.playNote( notes[ index ] );
+				this.noteIndex = ( this.noteIndex <= 1 ) ? seqLength : this.noteIndex - 1;
+				break;
+			case 'random' :
+				index = Math.floor( Math.random() * ( seqLength ) );
+				this.playNote( notes[ index ] );
+				break;
+		}
+	};
 
-		this.noteIndex++;
+	Sequencer.prototype.setDirection = function( e ) {
+
+		e.preventDefault();
+
+		var $this     = $( e.target ),
+			direction = $this.data( 'direction' );
+
+		this.$module.find( '.direction' ).removeClass( 'active' );
+
+		$this.addClass( 'active' );
+
+		this.direction = direction;
 	};
 
 	return Sequencer;

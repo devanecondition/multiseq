@@ -1,21 +1,6 @@
 &.vco {
 
 	a {
-		display: block;
-		float: left;
-		height: 25px;
-		width: 25px;
-		margin: 4px;
-		border: 5px solid #999;
-		background-color: #999;
-		background-size: cover;
-
-		&.active,
-		&:hover {
-			background-color: #666;
-			border: 5px solid #666;
-		}
-
 		&.sine {
 			background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAO0lEQVQYV2NkIBIwEqmOAVnhfwYGFD6KGTCFMEU4FYMUoktiVYzLjRia8XkGxTmEfA03mZBCuM+JVggA/QkKCtM5VukAAAAASUVORK5CYII=);
 
@@ -46,6 +31,22 @@
 			&:hover,
 			&.active {
 				background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAARElEQVQYV42OQQoAMAjD1v8/ukOhojJGPakNUZxVJBkrAOjRGCKwwIBk6n1e6HoL3Aa9oQtltMAXpJeUpdECf9CwuuAFo51IAzliit8AAAAASUVORK5CYII=);
+			}
+		}
+		&.down {
+			background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAN0lEQVQYV2NkwAT/GRgYGJGFUThQCRorQjcegw9zE7IEBhvZ4TBJdBrVqwwMDCAFMAA3gKggAADYcQ8JA+GpqgAAAABJRU5ErkJggg==);
+
+			&:hover,
+			&.disabled {
+				background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAOklEQVQYV2NkQAP/////z8jIyIgsjMIBSdBYEbrxWPno7kBWBGPDHQ4TQKdBhqD4DqQA5nXkYCAqCACkgTwGvnJmqQAAAABJRU5ErkJggg==);				
+			}
+		}
+		&.up {
+			background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAOUlEQVQYV2NkwAT/GRgYGJGFUTgMDAwgBTAAl0NWBDMBnYYbi2wFBhtkErobMPjobgK5h6DDaawIAJSPDwkOT1xQAAAAAElFTkSuQmCC);
+
+			&:hover,
+			&.disabled {
+				background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAO0lEQVQYV2NkQAP/////z8jIyIgsjMIBKYBJIiuEK4KZgE6DNIEVIVuBjc2I7gasfJIdjm413BNUMwkAlOo8BozYG/8AAAAASUVORK5CYII=);				
 			}
 		}
 	}

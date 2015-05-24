@@ -1,6 +1,6 @@
 body {
   background: #e5e5e5;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Lato', Helvetica, Arial, sans-serif;
 }
 .synth-container {
   width: 1239px;
@@ -11,8 +11,7 @@ label {
   height: 50px;
   margin-top: 10px;
   font-size: 20px;
-  font-weight: bold;
-  color: #333;
+  color: #444;
 }
 canvas {
   cursor: pointer;
@@ -49,7 +48,7 @@ canvas {
 }
 .button.stop:before:hover,
 .button.record:before:hover {
-  border-left-color: #444;
+  border-left-color: #555;
 }
 .button.record:before {
   border-radius: 56px;
@@ -58,11 +57,11 @@ canvas {
   background: #ebebeb;
 }
 .button:hover.play:before {
-  border-left-color: #444;
+  border-left-color: #555;
 }
 .button:hover.stop:before,
 .button:hover.record:before {
-  background: #444;
+  background: #555;
 }
 .cb {
   clear: both;
@@ -76,12 +75,11 @@ canvas {
   border: 1px solid #999;
 }
 .module p {
-  color: #333;
+  color: #444;
   margin: 10px 0 5px;
 }
-.module.vco a {
-  display: block;
-  float: left;
+.module a {
+  display: inline-block;
   height: 25px;
   width: 25px;
   margin: 4px;
@@ -89,8 +87,8 @@ canvas {
   background-color: #999;
   background-size: cover;
 }
-.module.vco a.active,
-.module.vco a:hover {
+.module a.active,
+.module a:hover {
   background-color: #666;
   border: 5px solid #666;
 }
@@ -122,6 +120,41 @@ canvas {
 .module.vco a.triangle.active {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAARElEQVQYV42OQQoAMAjD1v8/ukOhojJGPakNUZxVJBkrAOjRGCKwwIBk6n1e6HoL3Aa9oQtltMAXpJeUpdECf9CwuuAFo51IAzliit8AAAAASUVORK5CYII=);
 }
+.module.vco a.down {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAN0lEQVQYV2NkwAT/GRgYGJGFUThQCRorQjcegw9zE7IEBhvZ4TBJdBrVqwwMDCAFMAA3gKggAADYcQ8JA+GpqgAAAABJRU5ErkJggg==);
+}
+.module.vco a.down:hover,
+.module.vco a.down.disabled {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAOklEQVQYV2NkQAP/////z8jIyIgsjMIBSdBYEbrxWPno7kBWBGPDHQ4TQKdBhqD4DqQA5nXkYCAqCACkgTwGvnJmqQAAAABJRU5ErkJggg==);
+}
+.module.vco a.up {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAOUlEQVQYV2NkwAT/GRgYGJGFUTgMDAwgBTAAl0NWBDMBnYYbi2wFBhtkErobMPjobgK5h6DDaawIAJSPDwkOT1xQAAAAAElFTkSuQmCC);
+}
+.module.vco a.up:hover,
+.module.vco a.up.disabled {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAO0lEQVQYV2NkQAP/////z8jIyIgsjMIBKYBJIiuEK4KZgE6DNIEVIVuBjc2I7gasfJIdjm413BNUMwkAlOo8BozYG/8AAAAASUVORK5CYII=);
+}
+.module a.forward {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAANUlEQVQYV2NkwAT/GRgYGJGFUThIEigKcSkCqYcrxKcIrhCkCKQDLyDaJFymEHQTQd9hhBMAtEQJCaXFM6UAAAAASUVORK5CYII=);
+}
+.module a.forward:hover,
+.module a.forward.active {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAOklEQVQYV2NkQAP/////z8jIyIgsjMKBSaArxKoIpBhZIU5FyAoZQTrQ3YXOJ84kXKYQdBNB32ELJwDvviQGY3L3CQAAAABJRU5ErkJggg==);
+}
+.module a.random {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAPklEQVQYV2NkQAX/0fiMMD6cwcDAAFKEzAepgYuRpRDNVlQb0K2CKcZwBjaF2NyK4XgUDyC7BZfV6O6lgYkAFssKC4iVcdUAAAAASUVORK5CYII=);
+}
+.module a.random:hover,
+.module a.random.active {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQ0lEQVQYV2NkQAL/////j8xnZGRkhPHhDJAiZAmQAmQx0hUiW4luGogPNxHdrejOwFCIza1YTSRaIbpbMYIHJkCxiQB38SgLZXuXTwAAAABJRU5ErkJggg==);
+}
+.module a.backward {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAPElEQVQYV2NkwAT/GRgYGJGFUTgMDAwYCkCKkRVhVYCsCKcCmCKQArwAZh1Bk2CmEHQTXoXoQQBSjGEiABRTCQlsGMegAAAAAElFTkSuQmCC);
+}
+.module a.backward:hover,
+.module a.backward.active {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAPUlEQVQYV2NkQAP/////z8jIyIgsjMLBpgCkGK4IlwK4InwKwIpACtDdhc4HW0fQJJgugm4ipBAlCHBZDQBv3CQG6zqPEAAAAABJRU5ErkJggg==);
+}
 .module.keyboard-container {
   width: 100%;
   height: auto;
@@ -147,7 +180,7 @@ canvas {
 .module.keyboard-container .key-container .black {
   height: 130px;
   width: 35px;
-  background: #222;
+  background: #444;
   border: none;
   position: absolute;
   top: 0;
