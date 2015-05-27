@@ -1,12 +1,12 @@
 define([
-	'Module'
+	'AudioModule'
 ], function(
-	Module
+	AudioModule
 ) {
 
 	var Delay = function( context, element ) {
 
-		Module.call( this, 'delay', element );
+		AudioModule.call( this, 'delay', element );
 
 		this.delay                 = context.createDelay();
 		this.delay.delayTime.value = 0;
@@ -35,8 +35,8 @@ define([
 		});
     };
 
-	Delay.prototype = Object.create( Module.prototype );
-	Delay.prototype.constructor = Module;
+	Delay.prototype = Object.create( AudioModule.prototype );
+	Delay.prototype.constructor = AudioModule;
 
 	Delay.prototype.getInnerHtml = function() {
 		return (
@@ -50,14 +50,6 @@ define([
 
     Delay.prototype.setFeedback = function( feedback ) {
     	this.feedback.gain.value = feedback * 0.01;
-    };
-
-    Delay.prototype.connect = function( node ) {
-		if (node.hasOwnProperty('input')) {
-			this.output.connect(node.input);
-		} else {
-			this.output.connect(node);
-		};
     };
 
 	return Delay;

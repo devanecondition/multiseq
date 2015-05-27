@@ -1,16 +1,16 @@
 define([
-	'Module',
-	'ms-state',
+	'AudioModule',
+	'state',
 	'lodash'
 ], function(
-	Module,
+	AudioModule,
 	State,
 	_
 ) {
 
 	var Vco = function ( context, element ) {
 
-		Module.call( this, 'vco', element );
+		AudioModule.call( this, 'vco', element );
 
 		this.context         = context;
 		this.oscillator      = context.createOscillator();
@@ -34,8 +34,8 @@ define([
 			.on( 'click', '.octave', _.bind( this.setOctave, this ));
 	};
 
-	Vco.prototype = Object.create( Module.prototype );
-	Vco.prototype.constructor = Module;
+	Vco.prototype = Object.create( AudioModule.prototype );
+	Vco.prototype.constructor = AudioModule;
 
 	Vco.prototype.getModule = function() {
 		return this.$module;
@@ -82,14 +82,6 @@ define([
 	Vco.prototype.setWaveType = function( waveType ) {
 		this.oscillator.type = waveType;
 	};	
-
-	Vco.prototype.connect = function(node) {
-		if (node.hasOwnProperty('input')) {
-			this.output.connect(node.input);
-		} else {
-			this.output.connect(node);
-		};
-	};
 
 	Vco.prototype.onWaveTypeChange = function( e ) {
 

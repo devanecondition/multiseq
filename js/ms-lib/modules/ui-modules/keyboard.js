@@ -1,16 +1,16 @@
 define([
-	'Module',
-	'ms-key',
+	'UiModule',
+	'key',
 	'lodash'
 ], function(
-	Module,
+	UiModule,
 	Key,
 	_
 ) {
 
 	var Keyboard = function ( element ) {
 
-		Module.call( this, 'keyboard-container', element );
+		UiModule.call( this, 'keyboard-container', element );
 
 		this.active = false;
 
@@ -19,8 +19,8 @@ define([
 		this.$module.on( 'mouseleave', _.bind( this.deactivate, this ));
 	};
 
-	Keyboard.prototype = Object.create( Module.prototype );
-	Keyboard.prototype.constructor = Module;
+	Keyboard.prototype = Object.create( UiModule.prototype );
+	Keyboard.prototype.constructor = UiModule;
 
 	Keyboard.prototype.createKeys = function() {
 

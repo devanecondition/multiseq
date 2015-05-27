@@ -1,5 +1,5 @@
 define([
-	'ms-note-frequencies',
+	'note-frequencies',
 	'knob'
 ], function(
 	Notes,
@@ -10,8 +10,7 @@ define([
 		this.name         = name || 'empty-module';
 		this.element      = element || 'body'; // defines where in the dom to insert module
 		this.$module      = this.render();
-		this.firstOutlet  = [];
-		this.secondOutlet = [];
+		this.outlets      = {};
 	};
 
 	// Create a module $wrapper
@@ -55,27 +54,6 @@ define([
 		} else {
     		return $( '<input type="text" value="' + knobValue + '" class="dial">' ).knob( knobSettings ).appendTo( this.$module );
 		}
-	};
-
-	Module.prototype.playNote = function( note ) {
-		//try {
-			_.each ( this.firstOutlet, function( module ) {
-				module.setFrequency.call( module, note );
-			});
-			_.each ( this.secondOutlet, function( module ) {
-				module.trigger.call( module );
-			});
-		//} catch(e) {}
-	};	
-
-	Module.prototype.connect = function( outlet, component ) {
-		// outputs frequency
-		if ( outlet === 0 ) {
-			this.firstOutlet.push( component );
-		}
-		if ( outlet === 1 ) {
-			this.secondOutlet.push( component );
-		}		
 	};
 
 	return Module;

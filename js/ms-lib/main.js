@@ -1,12 +1,12 @@
 require([
-	'ms-clock',
-	'ms-vco',
-	'ms-vca',
-	'ms-envelope-gen',
-	'ms-filter',
-	'ms-delay',
-	'ms-keyboard',
-	'ms-sequencer'
+	'clock',
+	'vco',
+	'vca',
+	'envelope-gen',
+	'filter',
+	'delay',
+	'keyboard',
+	'sequencer'
 ], function(
 	Clock,
 	Vco,

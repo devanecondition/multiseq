@@ -1,12 +1,12 @@
 define([
-	'Module'
+	'AudioModule'
 ], function(
-	Module
+	AudioModule
 ) {
 
 	var Vca = function( context, element ) {
 
-		Module.call( this, 'vca', element );
+		AudioModule.call( this, 'vca', element );
 
 		this.gain            = context.createGain();
 		this.gain.gain.value = 0;
@@ -23,8 +23,8 @@ define([
 		this.setAmplitude( 40 );
     };
 
-	Vca.prototype = Object.create( Module.prototype );
-	Vca.prototype.constructor = Module;
+	Vca.prototype = Object.create( AudioModule.prototype );
+	Vca.prototype.constructor = AudioModule;
 
 	Vca.prototype.getInnerHtml = function() {
 		return (
@@ -38,14 +38,6 @@ define([
 
     Vca.prototype.getAmplitude = function() {
 		return this.peakAmplitude;
-    };
-
-    Vca.prototype.connect = function( node ) {
-		if (node.hasOwnProperty('input')) {
-			this.output.connect(node.input);
-		} else {
-			this.output.connect(node);
-		};
     };
 
 	return Vca;

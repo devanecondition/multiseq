@@ -1,14 +1,14 @@
 define([
-	'Module',
+	'AudioModule',
 	'lodash'
 ], function(
-	Module,
+	AudioModule,
 	_
 ) {
 
 	var EnvelopeGenerator = function( context, element ) {
 
-		Module.call( this, 'env-gen', element );
+		AudioModule.call( this, 'env-gen', element );
 
 		this.context       = context;
 		this.attackTime    = 0.1;
@@ -23,8 +23,8 @@ define([
 		});
     };
 
-	EnvelopeGenerator.prototype = Object.create( Module.prototype );
-	EnvelopeGenerator.prototype.constructor = Module;
+	EnvelopeGenerator.prototype = Object.create( AudioModule.prototype );
+	EnvelopeGenerator.prototype.constructor = AudioModule;
 
     EnvelopeGenerator.prototype.getInnerHtml = function() {
     	return (

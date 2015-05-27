@@ -1,12 +1,12 @@
 define([
-	'Module'
+	'AudioModule'
 ], function(
-	Module
+	AudioModule
 ) {
 
 	var Filter = function( context, element ) {
 
-		Module.call( this, 'filter', element );
+		AudioModule.call( this, 'filter', element );
 
 		this.filter                 = context.createBiquadFilter();
 		this.filter.type            = 'lowpass';
@@ -31,8 +31,8 @@ define([
 		});
     };
 
-	Filter.prototype = Object.create( Module.prototype );
-	Filter.prototype.constructor = Module;
+	Filter.prototype = Object.create( AudioModule.prototype );
+	Filter.prototype.constructor = AudioModule;
 
 	Filter.prototype.getInnerHtml = function() {
 		return (
@@ -46,14 +46,6 @@ define([
 
     Filter.prototype.setResonance = function( frequency ) {
     	this.filter.Q.value = frequency * 0.1;
-    };
-
-    Filter.prototype.connect = function( node ) {
-		if (node.hasOwnProperty('input')) {
-			this.output.connect(node.input);
-		} else {
-			this.output.connect(node);
-		};
     };
 
 	return Filter;

@@ -1,5 +1,5 @@
 define([
-	'ms-note-frequencies',
+	'note-frequencies',
 ], function(
 	Notes
 ) {

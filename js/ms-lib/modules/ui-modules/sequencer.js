@@ -1,10 +1,10 @@
 define([
-	'Module',
-	'ms-note-frequencies',
-	'ms-state',
+	'UiModule',
+	'note-frequencies',
+	'state',
 	'lodash'
 ], function(
-	Module,
+	UiModule,
 	Notes,
 	State,
 	_
@@ -12,7 +12,7 @@ define([
 
 	var Sequencer = function( element ) {
 
-		Module.call( this, 'sequencer', element );
+		UiModule.call( this, 'sequencer', element );
 
 		this.seqId     = State.sequencers.length;
 		this.note      = 'a1';
@@ -36,8 +36,8 @@ define([
 			.on( 'click', '.undo', _.bind( this.removeLastNote, this ));
     };
 
-	Sequencer.prototype = Object.create( Module.prototype );
-	Sequencer.prototype.constructor = Module;
+	Sequencer.prototype = Object.create( UiModule.prototype );
+	Sequencer.prototype.constructor = UiModule;
 
     Sequencer.prototype.getInnerHtml = function() {
     	return (
