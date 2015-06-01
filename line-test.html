@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Line Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/multi-seq.css">
+    <style>
+    	#container {
+    		width: 800px;
+    		height: 500px;
+    		margin: 10px auto;
+    		background: blue;
+    		position: relative;
+    	}
+    	.module {
+    		height: 100%;
+    		width: 50%;
+    		position: relative;
+    		float: left;
+    		border: none;
+    	}
+    	.left {
+    		background: darkgreen;
+    	}
+    	.right {
+    		background: darkblue;
+    	}
+    	.jack {
+    		cursor: pointer;
+    		width: 25px;
+    		height: 25px;
+    		border-radius: 25px;
+    		background: yellow;
+    		position: absolute;
+    		top: 50%;
+    		left: 50%;
+    		z-index: 2000;
+    	}
+    	svg {
+    		width: 100%;
+    		height: 100%;
+    		position: absolute;
+    		top: 0;
+    		left: 0;
+    	}
+    	line {
+    		stroke:rgb(255,0,0);
+    		stroke-width:3;
+    		z-index: 3000;		
+    	}
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <script>
+    	$( document ).ready( function() {
+
+    		var $line,
+
+    			onSvgClick = function( e ) {
+
+					e.preventDefault;
+
+					var $svg       = $('svg'),
+						thisOffset = $svg.offset(),
+						relX       = e.pageX - thisOffset.left,
+						relY       = e.pageY - thisOffset.top;
+
+					if ( !$line ) {
+						newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
+						//newLine.setAttribute('id','line2');
+    					newLine.setAttribute( 'x1', relX );
+    					newLine.setAttribute( 'y1', relY );
+    					newLine.setAttribute( 'x2', relX );
+    					newLine.setAttribute( 'y2', relY );
+    					$line = $( newLine ).appendTo( $svg );
+					} else {
+						$line = null;
+					}
+	    		},
+
+    			onSvgMouseMove = function( e ) {
+
+					e.preventDefault;
+
+					if ( !$line ) { return; }
+
+					var thisOffset = $(this).offset(),
+						relX       = e.pageX - thisOffset.left,
+						relY       = e.pageY - thisOffset.top;
+
+					$line.attr( 'x2', relX ).attr( 'y2', relY );
+	    		};
+
+    		$( '.jack' ).on('click', onSvgClick );
+    		$( 'svg' ).on('mousemove', onSvgMouseMove );
+    	});
+    </script>
+</head>
+<body>
+	<div id="container">
+		<div class="module left">
+			<div class="jack outlet"></div>
+		</div>
+		<div class="module right">
+			<div class="jack inlet"></div>
+		</div>
+		<svg></svg>
+	</div>
+</body>
+</html>
