@@ -180,12 +180,12 @@ canvas {
 .module a.backward.active {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAPUlEQVQYV2NkQAP/////z8jIyIgsjMLBpgCkGK4IlwK4InwKwIpACtDdhc4HW0fQJJgugm4ipBAlCHBZDQBv3CQG6zqPEAAAAABJRU5ErkJggg==);
 }
-.module.keyboard-container {
+.module.keyboard {
   width: 100%;
   height: auto;
   border: none;
 }
-.module.keyboard-container .key {
+.module.keyboard .key {
   width: 7.1428%;
   height: 200px;
   box-sizing: border-box;
@@ -194,15 +194,15 @@ canvas {
   float: left;
   cursor: pointer;
 }
-.module.keyboard-container .key.pressed {
+.module.keyboard .key.pressed {
   background: #ddd;
 }
-.module.keyboard-container .key-container {
+.module.keyboard .key-container {
   position: relative;
   float: left;
   width: 0;
 }
-.module.keyboard-container .key-container .black {
+.module.keyboard .key-container .black {
   height: 130px;
   width: 35px;
   background: #444;
@@ -211,6 +211,6 @@ canvas {
   top: 0;
   left: -17px;
 }
-.module.keyboard-container .key-container .black.pressed {
+.module.keyboard .key-container .black.pressed {
   background: #555;
 }

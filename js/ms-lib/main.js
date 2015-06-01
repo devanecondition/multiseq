@@ -1,50 +1,34 @@
 require([
-	'clock',
-	'vco',
-	'vca',
-	'envelope-gen',
-	'filter',
-	'delay',
-	'keyboard',
-	'sequencer'
+	'Patch',
+	'modules',
+	'lodash'
 ], function(
-	Clock,
-	Vco,
-	Vca,
-	EnvelopeGenerator,
-	Filter,
-	Delay,
-	Keyboard,
-	Sequencer
+	Patch,
+	modules,
+	_
 ) {
 
 	// Safari fix...
 	window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
+	// Create a new patch...
+	var patch = new Patch();
+
 	// instantiate/render synth components...
-	var $container = $( '<div class="synth-container"></div>' ).appendTo( 'body' ),
-		context    = new AudioContext(),
-		clock      = new Clock( $container ),
-		sequencer  = new Sequencer( $container ),
-		vco        = new Vco( context, $container ),
-		vca        = new Vca( context, $container ),
-		envelope   = new EnvelopeGenerator( context, $container ),
-		filter     = new Filter( context, $container ),
-		delay      = new Delay( context, $container ),
-		keyboard   = new Keyboard( $container );
+	_.each( modules, patch.addModule.bind( patch ) );
 
 	// Patch the components...
-	clock.connect( 0, sequencer );
-	keyboard.connect( 0, vco );
-	keyboard.connect( 1, envelope );
-	keyboard.connect( 0, sequencer );
-	keyboard.connect( 1, sequencer );
-	sequencer.connect( 0, vco );
-	sequencer.connect( 1, envelope );
-	vco.connect( vca );
-	envelope.connect( vca );
-	vca.connect( filter );
-	filter.connect( delay );
-	filter.connect( context.destination );
-	delay.connect( context.destination );
+	patch.makeConnection( 0, 0, 1 ); // clock 0 to sequencer
+	patch.makeConnection( 7, 0, 2 ); // keyboard 0 to vco
+	patch.makeConnection( 7, 1, 4 ); // keyboard 1 to envelope
+	patch.makeConnection( 7, 0, 1 ); // keyboard 0 to sequencer
+	patch.makeConnection( 7, 1, 1 ); // keyboard 1 to sequencer
+	patch.makeConnection( 1, 0, 2 ); // sequencer 0 to vco
+	patch.makeConnection( 1, 1, 4 ); // sequencer 1 to envelope
+	patch.makeConnection( 2, 0, 3 ); // vco 0 to vca
+	patch.makeConnection( 4, 0, 3 ); // envelope 0 to vca
+	patch.makeConnection( 3, 0, 5 ); // vca 0 to filter
+	patch.makeConnection( 5, 0, 6 ); // filter 0 to delay
+	patch.makeConnection( 5, 0, 8 ); // filter 0 to output
+	patch.makeConnection( 6, 0, 8 ); // delay 0 to output
 });

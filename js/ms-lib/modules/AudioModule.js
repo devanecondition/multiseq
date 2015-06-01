@@ -6,14 +6,15 @@ define([
 	_
 ) {
 
-	var AudioModule = function ( title, element ) {
-		Module.call( this, title, element );
+	var AudioModule = function () {
+		Module.call( this );
 	};
 
 	AudioModule.prototype = Object.create( Module.prototype );
 	AudioModule.prototype.constructor = Module;
 
-	AudioModule.prototype.connect = function( node ) {
+	AudioModule.prototype.connect = function( nodeOutputIndex, node ) {
+		
 		if (node.hasOwnProperty('input')) {
 			this.output.connect(node.input);
 		} else {

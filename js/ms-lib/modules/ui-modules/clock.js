@@ -6,25 +6,32 @@ define([
 	_
 ) {
 
-	var Clock = function( element ) {
+	var Clock = function( patch, id, context, element ) {
 
-		UiModule.call( this, 'clock', element );
+		this.name    = 'clock';
+		this.patch   = patch;
+		this.id      = id;
+		this.context = context;
+		this.element = element;
+		this.active  = false;
+		this.tempo   = 250;
 
-		this.active = false;
-		this.tempo  = 250;
-		this.$tempo = this.renderKnob({
+		UiModule.call( this );
+
+		this.$tempo  = this.renderKnob({
 			knobLabel    : 'BPM',
 			knobFunction : this.adjustTempo,
 			extraParams  : { min: 20, max: 350 },
 			knobValue    : 240
 		});
+
 		//Add Listeners...
 		this.$module
 			.on( 'click', '.seq-toggle', _.bind( this.toggleClock, this ));
     };
 
 	Clock.prototype = Object.create( UiModule.prototype );
-	Clock.prototype.constructor = UiModule;
+	Clock.prototype.constructor = Clock;
 
 	Clock.prototype.getInnerHtml = function() {
 		return (

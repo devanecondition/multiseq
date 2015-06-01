@@ -8,17 +8,22 @@ define([
 	_
 ) {
 
-	var Vco = function ( context, element ) {
+	var Vco = function( patch, id, context, element ) {
 
-		AudioModule.call( this, 'vco', element );
-
+		this.name            = 'vco';
+		this.patch           = patch;
+		this.id              = id;
 		this.context         = context;
+		this.element         = element;
 		this.oscillator      = context.createOscillator();
 		this.oscillator.type = 'sine';
 		this.octave          = 3,
 		this.input           = this.oscillator;
 		this.output          = this.oscillator;
 		this.fineTune        = 0;
+
+		AudioModule.call( this );
+
 		this.$tune           = this.renderKnob({
 			$elem        : this.$module.find( '.dial' ),
 			knobFunction : this.setFineTuning,
@@ -35,7 +40,7 @@ define([
 	};
 
 	Vco.prototype = Object.create( AudioModule.prototype );
-	Vco.prototype.constructor = AudioModule;
+	Vco.prototype.constructor = Vco;
 
 	Vco.prototype.getModule = function() {
 		return this.$module;

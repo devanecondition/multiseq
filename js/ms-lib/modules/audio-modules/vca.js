@@ -4,16 +4,22 @@ define([
 	AudioModule
 ) {
 
-	var Vca = function( context, element ) {
+	var Vca = function( patch, id, context, element ) {
 
-		AudioModule.call( this, 'vca', element );
-
+		this.name            = 'vca';
+		this.patch           = patch;
+		this.id              = id;
+		this.context         = context;
+		this.element         = element;
 		this.gain            = context.createGain();
 		this.gain.gain.value = 0;
 		this.input           = this.gain;
 		this.output          = this.gain;
 		this.amplitude       = this.gain.gain;
 		this.peakAmplitude   = 0.4;
+
+		AudioModule.call( this, 'vca', element );
+
 		this.$attack         = this.renderKnob({
 			knobLabel    : 'Attenuator',
 			knobFunction : this.setAmplitude,
@@ -24,7 +30,7 @@ define([
     };
 
 	Vca.prototype = Object.create( AudioModule.prototype );
-	Vca.prototype.constructor = AudioModule;
+	Vca.prototype.constructor = Vca;
 
 	Vca.prototype.getInnerHtml = function() {
 		return (

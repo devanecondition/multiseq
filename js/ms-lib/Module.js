@@ -6,11 +6,13 @@ define([
 	knob
 ) {
 
-	var Module = function( name, element, innerHtml ) {
-		this.name         = name || 'empty-module';
-		this.element      = element || 'body'; // defines where in the dom to insert module
+	var Module = function() {
 		this.$module      = this.render();
 		this.outlets      = {};
+	};
+
+	Module.prototype.getId = function() {
+		return this.id;
 	};
 
 	// Create a module $wrapper

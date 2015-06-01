@@ -30,7 +30,7 @@ define([
 
 	Key.prototype.onButtonPressed = function( e ) {
 		e.preventDefault();
-		
+
 		this.keyboard.activate();
 		$( e.target ).addClass( 'pressed' );
 		this.keyboard.playNote( Notes[ this.note ] );

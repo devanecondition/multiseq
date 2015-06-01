@@ -8,11 +8,16 @@ define([
 	_
 ) {
 
-	var Keyboard = function ( element ) {
+	var Keyboard = function( patch, id, context, element ) {
 
-		UiModule.call( this, 'keyboard-container', element );
+		this.name    = 'keyboard';
+		this.patch   = patch;
+		this.id      = id;
+		this.context = context;
+		this.element = element;
+		this.active  = false;
 
-		this.active = false;
+		UiModule.call( this );
 
 		this.createKeys();
 
@@ -20,7 +25,7 @@ define([
 	};
 
 	Keyboard.prototype = Object.create( UiModule.prototype );
-	Keyboard.prototype.constructor = UiModule;
+	Keyboard.prototype.constructor = Keyboard;
 
 	Keyboard.prototype.createKeys = function() {
 

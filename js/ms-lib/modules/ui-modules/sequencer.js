@@ -10,10 +10,13 @@ define([
 	_
 ) {
 
-	var Sequencer = function( element ) {
+	var Sequencer = function( patch, id, context, element ) {
 
-		UiModule.call( this, 'sequencer', element );
-
+		this.name      = 'sequencer';
+		this.patch     = patch;
+		this.id        = id;
+		this.context   = context;
+		this.element   = element;
 		this.seqId     = State.sequencers.length;
 		this.note      = 'a1';
 		this.noteIndex = 0;
@@ -28,6 +31,8 @@ define([
 			release    : 0.1
 		});
 
+		UiModule.call( this, 'sequencer', element );
+
 		//Add Listeners...
 		this.$module
 			.on( 'click', '.seq-record', _.bind( this.recordSequence, this ))
@@ -37,7 +42,7 @@ define([
     };
 
 	Sequencer.prototype = Object.create( UiModule.prototype );
-	Sequencer.prototype.constructor = UiModule;
+	Sequencer.prototype.constructor = Sequencer;
 
     Sequencer.prototype.getInnerHtml = function() {
     	return (

@@ -6,13 +6,18 @@ define([
 	_
 ) {
 
-	var EnvelopeGenerator = function( context, element ) {
+	var EnvelopeGenerator = function( patch, id, context, element ) {
 
-		AudioModule.call( this, 'env-gen', element );
-
+		this.name          = 'envelope-generator';
+		this.patch         = patch;
+		this.id            = id;
 		this.context       = context;
+		this.element       = element;
 		this.attackTime    = 0.1;
 		this.releaseTime   = 0.1;
+
+		AudioModule.call( this );
+
 		this.$attack       = this.renderKnob({
 			knobLabel    : 'Attack',
 			knobFunction : this.setAttack
@@ -24,7 +29,7 @@ define([
     };
 
 	EnvelopeGenerator.prototype = Object.create( AudioModule.prototype );
-	EnvelopeGenerator.prototype.constructor = AudioModule;
+	EnvelopeGenerator.prototype.constructor = EnvelopeGenerator;
 
     EnvelopeGenerator.prototype.getInnerHtml = function() {
     	return (
@@ -55,7 +60,7 @@ define([
 		}
 	};
 
-    EnvelopeGenerator.prototype.connect = function( module ) {
+    EnvelopeGenerator.prototype.connect = function( moduleOutputIndex, module ) {
     	this.getAmplitude  = ( module.getAmplitude ) ? module.getAmplitude.bind( module ) : null;
 		this.param         = module.amplitude;
     };

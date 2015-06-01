@@ -4,10 +4,13 @@ define([
 	AudioModule
 ) {
 
-	var Filter = function( context, element ) {
+	var Filter = function( patch, id, context, element ) {
 
-		AudioModule.call( this, 'filter', element );
-
+		this.name                   = 'filter';
+		this.patch                  = patch;
+		this.id                     = id;
+		this.context                = context;
+		this.element                = element;
 		this.filter                 = context.createBiquadFilter();
 		this.filter.type            = 'lowpass';
 		this.filter.frequency.value = 200;
@@ -15,6 +18,8 @@ define([
 		this.filter.gain.value      = 0.5;
 		this.input                  = this.filter;
 		this.output                 = this.filter;
+
+		AudioModule.call( this );
 
 		this.$freq = this.renderKnob({
 			knobLabel    : 'Frequency',
@@ -32,7 +37,7 @@ define([
     };
 
 	Filter.prototype = Object.create( AudioModule.prototype );
-	Filter.prototype.constructor = AudioModule;
+	Filter.prototype.constructor = Filter;
 
 	Filter.prototype.getInnerHtml = function() {
 		return (

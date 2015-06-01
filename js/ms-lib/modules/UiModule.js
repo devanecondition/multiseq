@@ -6,12 +6,12 @@ define([
 	_
 ) {
 
-	var UiModule = function ( title, element ) {
-		Module.call( this, title, element );
+	var UiModule = function () {
+		Module.call( this );
 	};
 
 	UiModule.prototype = Object.create( Module.prototype );
-	UiModule.prototype.constructor = Module;
+	UiModule.prototype.constructor = UiModule;
 
 	UiModule.prototype.playNote = function( note ) {
 		try {
