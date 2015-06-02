@@ -18,7 +18,7 @@ define([
 		this.amplitude       = this.gain.gain;
 		this.peakAmplitude   = 0.4;
 
-		AudioModule.call( this, 'vca', element );
+		AudioModule.call( this );
 
 		this.$attack         = this.renderKnob({
 			knobLabel    : 'Attenuator',
@@ -31,6 +31,19 @@ define([
 
 	Vca.prototype = Object.create( AudioModule.prototype );
 	Vca.prototype.constructor = Vca;
+
+	Vca.prototype.getJacks = function() {
+		return [
+			{
+				jackId : 0,
+				type   : 'inlet'
+			},
+			{
+				jackId : 0,
+				type   : 'outlet'
+			}
+		];
+	};
 
 	Vca.prototype.getInnerHtml = function() {
 		return (

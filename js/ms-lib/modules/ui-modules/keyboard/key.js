@@ -7,7 +7,7 @@ define([
 	var Key = function( note, keyboard ) {
 		this.note     = note;
 		this.keyboard = keyboard;
-		this.$key     = $( this.render() ).appendTo( keyboard.$module );
+		this.$key     = $( this.getHtml() );
 
 		this.$key
 			.on( 'mousedown',  _.bind( this.onButtonPressed, this ))
@@ -16,7 +16,7 @@ define([
 			.on( 'mouseleave', _.bind( this.onButtonSlideLeave, this ));
 	};
 
-	Key.prototype.render = function() {
+	Key.prototype.getHtml = function() {
 		if ( this.note.length === 2 ) {
         	return '<div class="key"></div>';
     	} else {
@@ -26,6 +26,10 @@ define([
         		'</div>'
     		);
 		}
+	};
+
+	Key.prototype.getKey = function() {
+		return this.$key;
 	};
 
 	Key.prototype.onButtonPressed = function( e ) {

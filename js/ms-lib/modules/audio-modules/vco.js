@@ -17,21 +17,21 @@ define([
 		this.element         = element;
 		this.oscillator      = context.createOscillator();
 		this.oscillator.type = 'sine';
-		this.octave          = 3,
+		this.octave          = 2,
 		this.input           = this.oscillator;
 		this.output          = this.oscillator;
 		this.fineTune        = 0;
 
 		AudioModule.call( this );
 
-		this.$tune           = this.renderKnob({
+		this.$tune = this.renderKnob({
 			$elem        : this.$module.find( '.dial' ),
 			knobFunction : this.setFineTuning,
 			extraParams  : { min: -20, max: 20 },
 			knobValue    : 0
 		});
 
-		this.setFrequency(440);
+		this.setFrequency(110);
 		this.oscillator.start(0);
 
 		this.$module
@@ -42,9 +42,18 @@ define([
 	Vco.prototype = Object.create( AudioModule.prototype );
 	Vco.prototype.constructor = Vco;
 
-	Vco.prototype.getModule = function() {
-		return this.$module;
-	}
+	Vco.prototype.getJacks = function() {
+		return [
+			{
+				jackId : 0,
+				type   : 'inlet'
+			},
+			{
+				jackId : 0,
+				type   : 'outlet'
+			}
+		];
+	};
 
 	Vco.prototype.getInnerHtml = function() {
 		return (

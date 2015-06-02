@@ -25,8 +25,13 @@ define([
 	};	
 
 	UiModule.prototype.connect = function( outlet, component ) {
+console.log('uimodule', outlet, component)
 		this.outlets[ outlet ] = this.outlets[ outlet ] || [];
 		this.outlets[ outlet ].push( component );
+	};
+
+	UiModule.prototype.disconnect = function( outlet, component ) {
+		return true;
 	};
 	return UiModule;
 });

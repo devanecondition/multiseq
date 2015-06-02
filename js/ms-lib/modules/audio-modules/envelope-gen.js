@@ -31,6 +31,19 @@ define([
 	EnvelopeGenerator.prototype = Object.create( AudioModule.prototype );
 	EnvelopeGenerator.prototype.constructor = EnvelopeGenerator;
 
+	EnvelopeGenerator.prototype.getJacks = function() {
+		return [
+			{
+				jackId : 0,
+				type   : 'inlet'
+			},
+			{
+				jackId : 0,
+				type   : 'outlet'
+			}
+		];
+	};
+
     EnvelopeGenerator.prototype.getInnerHtml = function() {
     	return (
 			'<label>Envelope Generator</label>'

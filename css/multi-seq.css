@@ -17,22 +17,59 @@
 body {
   background: #e5e5e5;
   font-family: 'Lato', Helvetica, Arial, sans-serif;
+  padding: 0;
+  margin: 0;
 }
-.synth-container {
-  width: 1239px;
-  margin: 10px auto;
+a {
+  text-decoration: none;
 }
-label {
+.cb {
+  clear: both;
+}
+.menu-container {
+  width: 100%;
+  margin-bottom: 20px;
+  position: relative;
+}
+.menu-container .top {
+  height: 60px;
+  background: #666;
+}
+.menu-container .add {
   display: block;
-  height: 50px;
-  margin-top: 10px;
-  font-size: 20px;
-  color: #444;
+  float: left;
+  height: 60px;
+  width: 60px;
+  text-align: center;
+  line-height: 60px;
+  font-size: 45px;
+  color: #eee;
 }
-canvas {
-  cursor: pointer;
+.menu-container .drawer {
+  width: 100%;
+  height: 0;
+  background: #eee;
+  border-bottom: 1px solid #666;
+  overflow: hidden;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  z-index: 100;
 }
-.button {
+.menu-container .drawer.showing {
+  height: 100px;
+}
+.menu-container .drawer a {
+  display: inline-block;
+  margin: 10px;
+  color: #666;
+  text-transform: capitalize;
+}
+.patch-container {
+  width: 1416px;
+  margin: 0 auto;
+}
+.patch-container .button {
   height: 150px;
   width: 150px;
   background: #eee;
@@ -41,11 +78,11 @@ canvas {
   cursor: pointer;
   position: relative;
 }
-.button:before {
+.patch-container .button:before {
   position: absolute;
   content: '';
 }
-.button.play:before {
+.patch-container .button.play:before {
   width: 0;
   height: 0;
   border-top: 30px solid transparent;
@@ -54,33 +91,111 @@ canvas {
   top: 45px;
   left: 52px;
 }
-.button.stop:before,
-.button.record:before {
+.patch-container .button.stop:before,
+.patch-container .button.record:before {
   height: 56px;
   width: 56px;
   background: #888;
   top: 47px;
   left: 47px;
 }
-.button.stop:before:hover,
-.button.record:before:hover {
+.patch-container .button.stop:before:hover,
+.patch-container .button.record:before:hover {
   border-left-color: #555;
 }
-.button.record:before {
+.patch-container .button.record:before {
   border-radius: 56px;
 }
-.button:hover {
+.patch-container .button:hover {
   background: #ebebeb;
 }
-.button:hover.play:before {
+.patch-container .button:hover.play:before {
   border-left-color: #555;
 }
-.button:hover.stop:before,
-.button:hover.record:before {
+.patch-container .button:hover.stop:before,
+.patch-container .button:hover.record:before {
   background: #555;
 }
-.cb {
-  clear: both;
+.patch-container .button.delete {
+  height: 24px;
+  width: 24px;
+  font-weight: bold;
+  line-height: 24px;
+  background: #666;
+  color: #eee;
+  border-radius: 12px;
+  position: absolute;
+  top: -15px;
+  right: -9px;
+  z-index: 50;
+}
+.patch-container .button.delete:hover {
+  background: #555;
+}
+.patch-container .button.jack {
+  height: 24px;
+  width: 24px;
+  font-weight: bold;
+  line-height: 24px;
+  background: #666;
+  color: #eee;
+  border-radius: 12px;
+  position: absolute;
+  bottom: 0px;
+  z-index: 50;
+}
+.patch-container .button.jack::before {
+  content: "";
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: 4px;
+  top: -10px;
+}
+.patch-container .button.jack.inlet {
+  left: 0px;
+}
+.patch-container .button.jack.inlet::before {
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #666;
+}
+.patch-container .button.jack.outlet {
+  right: 0;
+}
+.patch-container .button.jack.outlet::before {
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid #666;
+}
+.patch-container .button.jack::after {
+  content: "";
+  height: 16px;
+  width: 16px;
+  border-radius: 8px;
+  background: #eee;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+}
+.patch-container .button.jack:hover {
+  background: #555;
+}
+.patch-container .button.jack:hover::before {
+  border-bottom-color: #555;
+}
+.patch-container .button.jack:hover::after {
+  background: #fff;
+}
+.patch-container label {
+  display: block;
+  height: 50px;
+  margin-top: 10px;
+  font-size: 20px;
+  color: #444;
+}
+.patch-container canvas {
+  cursor: pointer;
 }
 .module {
   float: left;
@@ -89,6 +204,7 @@ canvas {
   text-align: center;
   background: #ddd;
   border: 1px solid #999;
+  position: relative;
 }
 .module p {
   color: #444;
@@ -159,25 +275,31 @@ canvas {
 .module.vco a.up.disabled {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAO0lEQVQYV2NkQAP/////z8jIyIgsjMIBKYBJIiuEK4KZgE6DNIEVIVuBjc2I7gasfJIdjm413BNUMwkAlOo8BozYG/8AAAAASUVORK5CYII=);
 }
-.module a.forward {
+.module.sequencer .button.outlet_0 {
+  right: 50px;
+}
+.module.sequencer .button.inlet_1 {
+  left: 50px;
+}
+.module.sequencer a.forward {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAANUlEQVQYV2NkwAT/GRgYGJGFUThIEigKcSkCqYcrxKcIrhCkCKQDLyDaJFymEHQTQd9hhBMAtEQJCaXFM6UAAAAASUVORK5CYII=);
 }
-.module a.forward:hover,
-.module a.forward.active {
+.module.sequencer a.forward:hover,
+.module.sequencer a.forward.active {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAOklEQVQYV2NkQAP/////z8jIyIgsjMKBSaArxKoIpBhZIU5FyAoZQTrQ3YXOJ84kXKYQdBNB32ELJwDvviQGY3L3CQAAAABJRU5ErkJggg==);
 }
-.module a.random {
+.module.sequencer a.random {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAPklEQVQYV2NkQAX/0fiMMD6cwcDAAFKEzAepgYuRpRDNVlQb0K2CKcZwBjaF2NyK4XgUDyC7BZfV6O6lgYkAFssKC4iVcdUAAAAASUVORK5CYII=);
 }
-.module a.random:hover,
-.module a.random.active {
+.module.sequencer a.random:hover,
+.module.sequencer a.random.active {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQ0lEQVQYV2NkQAL/////j8xnZGRkhPHhDJAiZAmQAmQx0hUiW4luGogPNxHdrejOwFCIza1YTSRaIbpbMYIHJkCxiQB38SgLZXuXTwAAAABJRU5ErkJggg==);
 }
-.module a.backward {
+.module.sequencer a.backward {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAPElEQVQYV2NkwAT/GRgYGJGFUTgMDAwYCkCKkRVhVYCsCKcCmCKQArwAZh1Bk2CmEHQTXoXoQQBSjGEiABRTCQlsGMegAAAAAElFTkSuQmCC);
 }
-.module a.backward:hover,
-.module a.backward.active {
+.module.sequencer a.backward:hover,
+.module.sequencer a.backward.active {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAPUlEQVQYV2NkQAP/////z8jIyIgsjMLBpgCkGK4IlwK4InwKwIpACtDdhc4HW0fQJJgugm4ipBAlCHBZDQBv3CQG6zqPEAAAAABJRU5ErkJggg==);
 }
 .module.keyboard {
@@ -213,4 +335,7 @@ canvas {
 }
 .module.keyboard .key-container .black.pressed {
   background: #555;
+}
+.module.keyboard .button.outlet_0 {
+  right: 100px;
 }

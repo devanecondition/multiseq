@@ -41,6 +41,19 @@ define([
 	Delay.prototype = Object.create( AudioModule.prototype );
 	Delay.prototype.constructor = Delay;
 
+	Delay.prototype.getJacks = function() {
+		return [
+			{
+				jackId : 0,
+				type   : 'inlet'
+			},
+			{
+				jackId : 0,
+				type   : 'outlet'
+			}
+		];
+	};
+
 	Delay.prototype.getInnerHtml = function() {
 		return (
 			'<label>Delay</label>'

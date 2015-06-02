@@ -39,6 +39,19 @@ define([
 	Filter.prototype = Object.create( AudioModule.prototype );
 	Filter.prototype.constructor = Filter;
 
+	Filter.prototype.getJacks = function() {
+		return [
+			{
+				jackId : 0,
+				type   : 'inlet'
+			},
+			{
+				jackId : 0,
+				type   : 'outlet'
+			}
+		];
+	};
+
 	Filter.prototype.getInnerHtml = function() {
 		return (
 			'<label>Filter</label>'

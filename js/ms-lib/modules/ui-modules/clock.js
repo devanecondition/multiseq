@@ -33,6 +33,15 @@ define([
 	Clock.prototype = Object.create( UiModule.prototype );
 	Clock.prototype.constructor = Clock;
 
+	Clock.prototype.getJacks = function() {
+		return [
+			{
+				jackId : 0,
+				type   : 'outlet'
+			}
+		];
+	};
+
 	Clock.prototype.getInnerHtml = function() {
 		return (
 			'<label>Clock</label>' +

@@ -1,14 +1,26 @@
 define([
+	'jack',
+	'delete-module-btn',
 	'note-frequencies',
-	'knob'
+	'knob',
+	'lodash'
 ], function(
+	Jack,
+	DeleteModuleBtn,
 	Notes,
-	knob
+	knob,
+	_
 ) {
 
 	var Module = function() {
-		this.$module      = this.render();
+		this.$module      = $( this.getHtml() );
 		this.outlets      = {};
+		this.jacks        = this.getJacks();
+		this.$deleteBtn   = new DeleteModuleBtn( this, this.patch )
+			.getElem()
+			.appendTo( this.$module );
+
+		this.renderJacks();
 	};
 
 	Module.prototype.getId = function() {
@@ -20,12 +32,16 @@ define([
 		return '<div class="module ' + this.name + '">' + this.getInnerHtml() + '</div>';
 	};
 
+	Module.prototype.getJacks = function() {
+		return [];
+	};
+
 	Module.prototype.getInnerHtml = function() {
 		return '';
 	};
 
-	Module.prototype.render = function() {
-		return $( this.getHtml() ).appendTo( this.element );
+	Module.prototype.getElem = function() {
+		return this.$module;
 	};
 
     Module.prototype.renderKnob = function( settings ) {
@@ -56,6 +72,18 @@ define([
 		} else {
     		return $( '<input type="text" value="' + knobValue + '" class="dial">' ).knob( knobSettings ).appendTo( this.$module );
 		}
+	};
+
+	Module.prototype.renderJacks = function() {
+
+		_.each( this.jacks, function( jack ) {
+			this.$module.append( new Jack({
+				jackId : jack.jackId,
+				type   : jack.type,
+				Module : this,
+				Patch  : this.patch
+			}).getElem() );
+		}.bind( this ));
 	};
 
 	return Module;

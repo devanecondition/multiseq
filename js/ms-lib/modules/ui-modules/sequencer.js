@@ -44,6 +44,27 @@ define([
 	Sequencer.prototype = Object.create( UiModule.prototype );
 	Sequencer.prototype.constructor = Sequencer;
 
+	Sequencer.prototype.getJacks = function() {
+		return [
+			{
+				jackId : 0,
+				type   : 'inlet'
+			},
+			{
+				jackId : 1,
+				type   : 'inlet'
+			},
+			{
+				jackId : 0,
+				type   : 'outlet'
+			},
+			{
+				jackId : 1,
+				type   : 'outlet'
+			}
+		];
+	};
+
     Sequencer.prototype.getInnerHtml = function() {
     	return (
     		'<label>Sequencer</label>' +

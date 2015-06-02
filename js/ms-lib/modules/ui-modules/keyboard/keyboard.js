@@ -27,6 +27,19 @@ define([
 	Keyboard.prototype = Object.create( UiModule.prototype );
 	Keyboard.prototype.constructor = Keyboard;
 
+	Keyboard.prototype.getJacks = function() {
+		return [
+			{
+				jackId : 0,
+				type   : 'outlet'
+			},
+			{
+				jackId : 1,
+				type   : 'outlet'
+			}
+		];
+	};
+
 	Keyboard.prototype.createKeys = function() {
 
 		var notes = [
@@ -36,6 +49,7 @@ define([
 
 		_.each( notes, _.bind( function( note ) {
 			var key = new Key( note, this );
+			this.$module.append( key.getKey() );
 		}, this ));
 	};
 
