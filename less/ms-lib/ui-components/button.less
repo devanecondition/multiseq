@@ -1,0 +1,133 @@
+.button {
+	height: 150px;
+	width: 150px;
+	background: #eee;
+	margin: 5px auto 13px;
+	border-radius: 75px;
+	cursor: pointer;
+	position: relative;
+
+	&:before {
+		position: absolute;
+		content: '';
+	}
+
+	&.play:before {
+		width: 0; 
+		height: 0; 
+		border-top: 30px solid transparent;
+		border-bottom: 30px solid transparent;
+		border-left: 60px solid #888;
+		top: 45px;
+		left: 52px;
+	}
+
+	&.stop:before,
+	&.record:before {
+		height: 56px; 
+		width: 56px;
+		background: #888;
+		top: 47px;
+		left: 47px;
+
+		&:hover {
+			border-left-color: #555;
+		}
+	}
+
+	&.record:before {
+		border-radius: 56px;
+	}
+
+	&:hover {
+		background: #ebebeb;
+		&.play:before {
+			border-left-color: #555;
+		}
+		&.stop:before,
+		&.record:before {
+			background: #555;
+		}
+	}
+
+	&.delete {
+		height: 24px;
+		width: 24px;
+		font-weight: bold;
+		line-height: 24px;
+		background: #666;
+		color: #eee;
+		border-radius: 12px;
+		position: absolute;
+		top: -15px;
+		right: -9px;
+		z-index: 50;
+
+		&:hover {
+			background: #555;
+		}
+	}
+
+	&.jack {
+		height: 24px;
+		width: 24px;
+		font-weight: bold;
+		line-height: 24px;
+		background: #666;
+		color: #eee;
+		border-radius: 12px;
+		position: absolute;
+		bottom: 0px;
+		z-index: 50;
+
+		&::before {
+			content: "";
+			width: 0;
+			height: 0;
+			position: absolute;
+			left: 4px;
+			top: -10px;
+		}
+
+		&.inlet {
+			left: 0px;
+
+			&::before {
+				border-left: 8px solid transparent;
+				border-right: 8px solid transparent;
+				border-top: 8px solid #666;
+			}
+		}
+
+		&.outlet {
+			right: 0;
+
+			&::before {			
+				border-left: 8px solid transparent;
+				border-right: 8px solid transparent;
+				border-bottom: 8px solid #666;
+			}
+		}
+
+		&::after {
+			content: "";
+			height: 16px;
+			width: 16px;
+			border-radius: 8px;
+			background: #eee;
+			position: absolute;
+			top: 4px;
+			left: 4px;
+		}
+
+		&:hover {
+			background: #555;
+			&::before {
+				border-bottom-color: #555;
+			}
+			&::after {
+				background: #fff;
+			}
+		}
+	}
+}

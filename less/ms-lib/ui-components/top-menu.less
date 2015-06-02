@@ -1,0 +1,44 @@
+.menu-container {
+	width: 100%;
+	margin-bottom: 20px;
+	position: relative;
+
+	.top {
+		height: 60px;
+		background: #666;
+	}
+
+	.add {
+		display: block;
+		float: left;
+		height: 60px;
+		width: 60px;
+		text-align: center;
+		line-height: 60px;
+		font-size: 45px;
+		color: #eee;
+	}
+
+	.drawer {
+		width: 100%;
+		height: 0;
+		background: #eee;
+		border-bottom: 1px solid #666;
+		overflow: hidden;
+		position: absolute;
+		top: 60px;
+		left: 0;
+		z-index: 100;
+
+		&.showing {
+			height: 100px;
+		}
+
+		a {
+			display: inline-block;
+			margin: 10px;
+			color: #666;
+			text-transform: capitalize;
+		}
+	}
+}
