@@ -14,7 +14,6 @@ define([
 	AudioModule.prototype.constructor = Module;
 
 	AudioModule.prototype.connect = function( nodeOutputIndex, node ) {
-console.log(this,node)
 		if ( node.hasOwnProperty( 'input' ) ) {
 			this.output.connect( node.input );
 		} else {

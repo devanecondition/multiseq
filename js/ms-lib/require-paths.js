@@ -40,9 +40,17 @@ require.config({
              'https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min',
              'lib/jquery-2.1.4.min'
         ],
+        'jsPlumb'           : '../js/lib/dom.jsPlumb-1.7.5-min',
         'knob'              : '../js/lib/jquery.knob',
     },
 	shim: {
+        'jquery' : {
+            exports: '$'
+        },
+        'jsPlumb' : {
+            deps: ['jquery'],
+            exports: 'jsPlumb'
+        },
         'knob': {
             deps: ['jquery'],
             exports: 'knob'

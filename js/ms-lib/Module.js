@@ -77,12 +77,16 @@ define([
 	Module.prototype.renderJacks = function() {
 
 		_.each( this.jacks, function( jack ) {
-			this.$module.append( new Jack({
-				jackId : jack.jackId,
-				type   : jack.type,
-				Module : this,
-				Patch  : this.patch
-			}).getElem() );
+
+			jack = new Jack({
+				jackId   : jack.jackId,
+				type     : jack.type,
+				moduleId : this.getId()
+			});
+
+			this.$module.append( jack.getElem() )
+			//jack.addPlumbListeners();
+
 		}.bind( this ));
 	};
 

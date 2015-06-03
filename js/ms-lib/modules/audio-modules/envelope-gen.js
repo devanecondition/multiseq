@@ -78,5 +78,9 @@ define([
 		this.param         = module.amplitude;
     };
 
+    EnvelopeGenerator.prototype.disconnect = function( moduleOutputIndex, module ) {
+    	return true;
+    };
+
     return EnvelopeGenerator;
 });

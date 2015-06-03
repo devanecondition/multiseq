@@ -12,7 +12,7 @@ define([
 
 		this.patch = patch;
 
-		// add menu to DOM
+		// add menu to wrapper div
 		this.$container = $( this.getHtml() )
 			.on( 'click', '.add', this.toggleDrawer.bind( this ) );
 
@@ -53,7 +53,7 @@ define([
 				moduleName : moduleName,
 				Module     : Module
 			});
-		}.bind( this ));
+		}.bind( this ) );
 	};
 
 	return Menu;

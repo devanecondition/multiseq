@@ -63,11 +63,16 @@ a {
   display: inline-block;
   margin: 10px;
   color: #666;
+  font-weight: bold;
   text-transform: capitalize;
+}
+.menu-container .drawer a:hover {
+  color: #222;
 }
 .patch-container {
   width: 1416px;
   margin: 0 auto;
+  position: relative;
 }
 .patch-container .button {
   height: 150px;
@@ -142,7 +147,12 @@ a {
   border-radius: 12px;
   position: absolute;
   bottom: 0px;
-  z-index: 50;
+}
+.patch-container .button.jack div {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 10;
 }
 .patch-container .button.jack::before {
   content: "";
@@ -178,6 +188,12 @@ a {
   top: 4px;
   left: 4px;
 }
+.patch-container .button.jack.dragHover {
+  background: #456;
+}
+.patch-container .button.jack._jsPlumb_connected {
+  background: #444;
+}
 .patch-container .button.jack:hover {
   background: #555;
 }
@@ -196,15 +212,17 @@ a {
 }
 .patch-container canvas {
   cursor: pointer;
+  position: relative;
 }
 .module {
-  float: left;
+  display: inline-block;
   width: 175px;
   height: 450px;
   text-align: center;
   background: #ddd;
   border: 1px solid #999;
   position: relative;
+  vertical-align: top;
 }
 .module p {
   color: #444;
