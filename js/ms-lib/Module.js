@@ -16,6 +16,7 @@ define([
 		this.$module      = $( this.getHtml() );
 		this.outlets      = {};
 		this.jacks        = this.getJacks();
+		this.connections  = [];
 		this.$deleteBtn   = new DeleteModuleBtn( this, this.patch )
 			.getElem()
 			.appendTo( this.$module );
@@ -30,6 +31,14 @@ define([
 	// Create a module $wrapper
 	Module.prototype.getHtml = function() {
 		return '<div class="module ' + this.name + '">' + this.getInnerHtml() + '</div>';
+	};
+
+	Module.prototype.storeConnection = function( connection ) {
+		this.connections.push( connection );
+	};
+
+	Module.prototype.getConnectionIds = function() {
+		return this.connections;
 	};
 
 	Module.prototype.getJacks = function() {

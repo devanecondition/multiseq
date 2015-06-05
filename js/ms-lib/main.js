@@ -1,32 +1,40 @@
 require([
 	'menu',
 	'Patch',
+	'jsPlumb',
 	'lodash'
 ], function(
-	menu,
+	Menu,
 	Patch,
+	jsPlumb,
 	_
 ) {
 
 	// Safari fix...
 	window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
-	var $wrapper      = $( '<div></div>' ),
-		plumbInstance = jsPlumb.getInstance({ // create instance to draw module lines
-	        Endpoint  : [ "Dot", { radius: 8 } ]
-	    }),
-		patch         = new Patch( plumbInstance ), // Create a new patch...
-		menu          = new menu( patch );  // Build top menu...
+	jsPlumb.ready( function() {
 
-	// Render...
-	$wrapper
-		.append( menu.getElem() )
-		.append( patch.getElem() );
+		var $wrapper      = $( '<div></div>' ),
+			plumbInstance = jsPlumb.getInstance({ // create instance to draw module lines
+		        Endpoint  : [ "Dot", { radius: 8 } ]
+		    }),
+			patch         = new Patch( plumbInstance ), // Create a new patch...
+			menu          = new Menu( patch );  // Build top menu...
 
-	$wrapper.appendTo('body');
 
-	// Post-render functions...
-	plumbInstance.setContainer( patch.getElem() );
+		patch.enableShortcuts(); // Add listeners for "n" and "delete" keys
+
+		// Render...
+		$wrapper
+			.append( menu.getElem() )
+			.append( patch.getElem() );
+
+		$wrapper.appendTo('body');
+
+		// Post-render functions...
+		plumbInstance.setContainer( patch.getElem() );
+	});
 
 	// // Patch the components...
 	// patch.makeConnection( 0, 0, 1 ); // clock 0 to sequencer

@@ -22,6 +22,7 @@ require.config({
         // Modules
         'Module'            : '../js/ms-lib/Module',
         'AudioModule'       : '../js/ms-lib/modules/AudioModule',
+        'empty'             : '../js/ms-lib/modules/empty',
         'vco'               : '../js/ms-lib/modules/audio-modules/vco',
         'vca'               : '../js/ms-lib/modules/audio-modules/vca',
         'envelope-gen'      : '../js/ms-lib/modules/audio-modules/envelope-gen',
@@ -40,11 +41,16 @@ require.config({
              'https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min',
              'lib/jquery-2.1.4.min'
         ],
+        'jquery-ui'         : '../js/lib/jquery-ui.min',
         'jsPlumb'           : '../js/lib/dom.jsPlumb-1.7.5-min',
         'knob'              : '../js/lib/jquery.knob',
     },
 	shim: {
         'jquery' : {
+            exports: '$'
+        },
+        'jquery-ui' : {
+            deps: ['jquery'],
             exports: '$'
         },
         'jsPlumb' : {
