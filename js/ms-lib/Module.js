@@ -53,6 +53,10 @@ define([
 		return this.$module;
 	};
 
+	Module.prototype.postRenderFunction = function() {
+		return true;
+	};
+
     Module.prototype.renderKnob = function( settings ) {
 
 		var knobLabel    = settings.knobLabel || '',

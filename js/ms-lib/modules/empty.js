@@ -18,10 +18,17 @@ define([
 
 		Module.call( this );
 
-		this.patch.disableShortcuts();
-		var that = this;
+		var that = this,
+			moduleLoaded = false;
+
 		//Add Listeners...
 		this.$module
+			.on( 'input', 'input', function( e ) {
+				if ( !moduleLoaded ) {
+					$( e.target ).val('').off('input');
+					moduleLoaded = true;
+				}
+			})
 			.on( 'focus', 'input', function( e ) {
 				$( e.target ).autocomplete({
 					source: moduleList,
@@ -39,7 +46,7 @@ define([
 
 	Empty.prototype.getInnerHtml = function() {
 		return (
-			'<input type="text" autofocus />'
+			'<input type="text" />'
 		);
 	};
 
@@ -52,6 +59,11 @@ define([
 		});
 
 		return moduleList;
+	};
+
+	Empty.prototype.postRenderFunction = function() {
+		this.$module.find( 'input' ).focus();
+		this.patch.disableShortcuts();
 	};
 
 	return Empty;

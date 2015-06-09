@@ -91,6 +91,7 @@ define([
 
 		this.$container.append( $module );
 		this.addJackListeners( $module );
+		modules[ id ].postRenderFunction();
 	};
 
 	Patch.prototype.removeModule = function( moduleId ) {
