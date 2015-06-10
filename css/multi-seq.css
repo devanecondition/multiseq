@@ -780,6 +780,9 @@ a {
 .cb {
   clear: both;
 }
+.ui-helper-hidden-accessible {
+  display: none;
+}
 .menu-container {
   width: 100%;
   position: fixed;
@@ -1010,6 +1013,35 @@ a {
 }
 .module a.text:hover {
   color: #fff;
+}
+.module input.mod-name {
+  display: block;
+  height: 35px;
+  width: 80%;
+  line-height: 35px;
+  margin: 0 auto;
+  font-size: 20px;
+  color: #444;
+  outline: none;
+  border: 1px solid #666;
+  background: transparent;
+  text-align: center;
+}
+.module .ui-widget-content {
+  width: 142px !important;
+  border-color: #999;
+  padding: 0;
+}
+.module .ui-widget-content li {
+  display: block;
+  min-height: 35px;
+  line-height: 35px;
+}
+.module .ui-widget-content li.ui-state-focus {
+  background: #666;
+  color: #eee;
+  font-weight: normal;
+  border: none;
 }
 .module.vco a.sine {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAO0lEQVQYV2NkIBIwEqmOAVnhfwYGFD6KGTCFMEU4FYMUoktiVYzLjRia8XkGxTmEfA03mZBCuM+JVggA/QkKCtM5VukAAAAASUVORK5CYII=);

@@ -11,44 +11,28 @@ define([
 
 	var Empty = function( patch, id ) {
 
-		var moduleList = this.getModuleList();
-
-		this.patch = patch;
-		this.id    = id;
+		this.name       = 'empty';
+		this.patch      = patch;
+		this.id         = id;
+		this.moduleList = this.getModuleList();
 
 		Module.call( this );
 
-		var that = this,
-			moduleLoaded = false;
+		var that = this;
 
 		//Add Listeners...
 		this.$module
-			.on( 'input', 'input', function( e ) {
-				if ( !moduleLoaded ) {
-					$( e.target ).val('').off('input');
-					moduleLoaded = true;
-				}
-			})
-			.on( 'focus', 'input', function( e ) {
-				$( e.target ).autocomplete({
-					source: moduleList,
-				 	select: function( event, ui ) {
-						that.patch.removeModule( that.getId() );
-				 		that.patch.addModule( modules[ ui.item.value ] );
-				 		that.patch.enableShortcuts();
-				 	}
-				});
-			});
+			.on( 'input', 'input', this.preventShortcutInput.bind( this ) )
+			.on( 'focus', 'input', this.autoCompleteInput.bind( this ) )
+			.on( 'focusout', 'input', this.onInputFocusOut.bind( this ) );
     };
 
 	Empty.prototype = Object.create( Module.prototype );
 	Empty.prototype.constructor = Empty;
 
 	Empty.prototype.getInnerHtml = function() {
-		return (
-			'<input type="text" />'
-		);
-	};
+		return ( '<input class="mod-name" type="text" />' );
+	};	
 
 	Empty.prototype.getModuleList = function() {
 
@@ -59,6 +43,32 @@ define([
 		});
 
 		return moduleList;
+	};
+
+	Empty.prototype.preventShortcutInput = function( e ) {
+		$( e.target ).val('');
+		this.$module.off( 'input', 'input' );
+	};
+
+	Empty.prototype.autoCompleteInput = function( e ) {
+		$( e.target ).autocomplete({
+			source   : this.moduleList,
+			appendTo : this.$module,
+			messages : {
+			    noResults: '',
+			    results: function() {}
+			},
+		 	select   : function( event, ui ) {
+				this.patch.removeModule( this.getId() );
+		 		this.patch.addModule( modules[ ui.item.value ] );
+		 		this.patch.enableShortcuts();
+		 	}.bind( this )
+		});
+	};
+
+	Empty.prototype.onInputFocusOut = function( e ) {
+		this.patch.removeModule( this.getId() );
+		this.patch.enableShortcuts();
 	};
 
 	Empty.prototype.postRenderFunction = function() {

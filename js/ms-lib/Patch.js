@@ -95,7 +95,7 @@ define([
 	};
 
 	Patch.prototype.removeModule = function( moduleId ) {
-console.log(moduleId)
+
 		var module = modules[ moduleId ];
 
 		// disconnect any patch cords
