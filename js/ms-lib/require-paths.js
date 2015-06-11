@@ -23,6 +23,7 @@ require.config({
         'Module'            : '../js/ms-lib/Module',
         'AudioModule'       : '../js/ms-lib/modules/AudioModule',
         'empty'             : '../js/ms-lib/modules/empty',
+        'lfo'               : '../js/ms-lib/modules/audio-modules/lfo',
         'vco'               : '../js/ms-lib/modules/audio-modules/vco',
         'vca'               : '../js/ms-lib/modules/audio-modules/vca',
         'envelope-gen'      : '../js/ms-lib/modules/audio-modules/envelope-gen',

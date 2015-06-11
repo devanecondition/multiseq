@@ -361,7 +361,7 @@
         };
 
         this._validate = function(v) {
-            return (~~ (((v < 0) ? -0.5 : 0.5) + (v/this.o.step))) * this.o.step;
+            return Math.round(Math.floor(((v < 0) ? -0.5 : 0.5) + (v/this.o.step)) * this.o.step * 100 ) / 100;
         };
 
         // Abstract methods
@@ -441,8 +441,13 @@
                 a += this.PI2;
             }
 
-            ret = ~~ (0.5 + (a * (this.o.max - this.o.min) / this.angleArc))
-                    + this.o.min;
+            ret = (a * (this.o.max - this.o.min) / this.angleArc) + this.o.min;
+
+            if(this.o.step > 1 && Math.round(this.o.step) == this.o.step) {
+                ret = ~~ (0.5 + ret);
+            } else {
+                ret = Math.floor(ret * 100) / 100;
+            }
 
             this.o.stopper
             && (ret = max(min(ret, this.o.max), this.o.min));
@@ -458,14 +463,14 @@
                             var ori = e.originalEvent
                                 ,deltaX = ori.detail || ori.wheelDeltaX
                                 ,deltaY = ori.detail || ori.wheelDeltaY
-                                ,v = parseInt(s.$.val()) + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0);
+                                ,v = (Math.round(parseFloat(s.$.val()) * 100) / 100) + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0);
 
                             if (
                                 s.cH
                                 && (s.cH(v) === false)
                             ) return;
 
-                            s.val(v);
+                            s.val(s._validate(v));
                         }
                 , kval, to, m = 1, kv = {37:-s.o.step, 38:s.o.step, 39:s.o.step, 40:-s.o.step};
 
@@ -494,12 +499,16 @@
                             if ($.inArray(kc,[37,38,39,40]) > -1) {
                                 e.preventDefault();
 
-                                var v = parseInt(s.$.val()) + kv[kc] * m;
+                                if(s.o.step > 1 && Math.round(s.o.step) == s.o.step) {
+                                    var v = parseInt(s.$.val()) + kv[kc] * m;
+                                } else {
+                                    var v = parseFloat(s.$.val()) + kv[kc] * m;
+                                }
 
                                 s.o.stopper
                                 && (v = max(min(v, s.o.max), s.o.min));
 
-                                s.change(v);
+                                s.change(s._validate(v));
                                 s._draw();
 
                                 // long time keydown speed-up
@@ -619,7 +628,7 @@
 
             c.beginPath();
                 c.strokeStyle = this.o.bgColor;
-                c.arc(this.xy, this.xy, this.radius, this.endAngle - 0.00001, this.startAngle + 0.00001, true);
+                c.arc(this.xy, this.xy, this.radius, this.endAngle, this.startAngle, true);
             c.stroke();
 
             if (this.o.displayPrevious) {
