@@ -8,13 +8,16 @@ define([
 
 	var Clock = function( patch, id, context, element ) {
 
-		this.name    = 'clock';
+		this.stateData = {
+			id    : id,
+			name  : 'clock',
+			tempo : 250
+		}
+
 		this.patch   = patch;
-		this.id      = id;
 		this.context = context;
 		this.element = element;
 		this.active  = false;
-		this.tempo   = 250;
 
 		UiModule.call( this );
 
@@ -66,12 +69,12 @@ define([
 			_.each( this.outlets[ 0 ], function( module ) {
 				module.gate.call( module );
 			});
-			setTimeout( _.bind( this.runClock, this ), this.tempo );
+			setTimeout( _.bind( this.runClock, this ), this.stateData.tempo );
 		}
 	};
 
 	Clock.prototype.adjustTempo = function( newTempo ) {
-		this.tempo = 60000 / newTempo;
+		this.stateData.tempo = 60000 / newTempo;
 	};
 
 	return Clock;

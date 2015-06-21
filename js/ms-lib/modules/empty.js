@@ -11,9 +11,12 @@ define([
 
 	var Empty = function( patch, id ) {
 
-		this.name       = 'empty';
+		this.stateData = {
+			id    : id,
+			name  : 'empty'
+		}
+
 		this.patch      = patch;
-		this.id         = id;
 		this.moduleList = this.getModuleList();
 
 		Module.call( this );

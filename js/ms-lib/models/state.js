@@ -1,14 +1,14 @@
 define([
-
+	'lodash'
 ], function(
-
+	_
 ) {
 
 	var State = function( patch ) {
-		this.modules     = [];
-		this.connections = [];
-	},
-	proto = State.prototype;
+			this.modules     = [];
+			this.connections = [];
+		},
+		proto = State.prototype;
 
 	proto.getState = function() {
 		return {
@@ -22,14 +22,14 @@ define([
 	};
 
 	proto.addModule = function( module ) {
-		this.modules.push( module );
+		this.modules.push( module.getStateData() );
 		return module;
 	};
 
 	proto.removeModule = function( moduleId ) {
 
 		var index = _.findIndex( this.modules, { id: moduleId } );
-		
+
 		if ( index > -1 ) {
 			this.modules.splice( index, 1 );
 		}

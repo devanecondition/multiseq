@@ -11,7 +11,8 @@ define([
 ) {
 
 	// private variables...
-	var moduleIdIncrementor = 0,
+	var modules             = {},
+		moduleIdIncrementor = 0,
 		connections         = {},
 		context             = new AudioContext();
 
@@ -33,7 +34,7 @@ window.State = this.state;
 		});
 
 	    this.instance.bind( 'connection', this.makeConnection.bind( this ) );
-	    this.instance.bind("click", this.onCableSelected.bind( this ) );
+	    this.instance.bind( 'click', this.onCableSelected.bind( this ) );
 	};
 
 	Patch.prototype.getHtml = function() {
@@ -89,18 +90,20 @@ window.State = this.state;
 		var id       = moduleIdIncrementor++,
 			$module;
 
-		module = this.state.addModule( new Module( this, id, context, this.$container ) );
+		modules[ id ] = new Module( this, id, context, this.$container );
 
-		$module = module.getElem();
+		this.state.addModule( modules[ id ] );
+
+		$module = modules[ id ].getElem();
 
 		this.$container.append( $module );
 		this.addJackListeners( $module );
-		module.postRenderFunction();
+		modules[ id ].postRenderFunction();
 	};
 
 	Patch.prototype.removeModule = function( moduleId ) {
 
-		var module = this.state.getModule( moduleId );
+		var module = modules[ moduleId ];
 
 		// disconnect any patch cords
 		_.each( module.getConnectionIds(), this.detachConnection.bind( this ) );
@@ -108,6 +111,7 @@ window.State = this.state;
 		module.getElem().remove();
 		this.instance.repaintEverything();
 		// delete instance from memory
+		delete modules[ moduleId ];
 		this.state.removeModule( moduleId );
 	};
 

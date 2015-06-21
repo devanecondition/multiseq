@@ -24,13 +24,17 @@ define([
 		this.renderJacks();
 	};
 
+	Module.prototype.getStateData = function() {
+		return this.stateData;
+	};
+
 	Module.prototype.getId = function() {
-		return this.id;
+		return this.stateData.id;
 	};
 
 	// Create a module $wrapper
 	Module.prototype.getHtml = function() {
-		return '<div class="module ' + this.name + '">' + this.getInnerHtml() + '</div>';
+		return '<div class="module ' + this.stateData.name + '">' + this.getInnerHtml() + '</div>';
 	};
 
 	Module.prototype.storeConnection = function( connection ) {
