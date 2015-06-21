@@ -35,5 +35,16 @@ define([
 		}
 	};
 
+	proto.setModuleProperty = function( params ) {
+
+		var module = this.getModule( params.id );
+
+		if ( module ) {
+			module[ params.property ] = params.value;
+		}
+
+		return params.value;
+	};
+
 	return State;
 });

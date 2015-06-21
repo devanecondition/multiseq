@@ -15,6 +15,7 @@ define([
 		}
 
 		this.patch   = patch;
+		this.state   = patch.state;
 		this.context = context;
 		this.element = element;
 		this.active  = false;
@@ -74,7 +75,11 @@ define([
 	};
 
 	Clock.prototype.adjustTempo = function( newTempo ) {
-		this.stateData.tempo = 60000 / newTempo;
+		this.stateData.tempo = this.state.setModuleProperty({
+			id       : this.id,
+			property : 'tempo',
+			value    : 60000 / newTempo
+		});
 	};
 
 	return Clock;

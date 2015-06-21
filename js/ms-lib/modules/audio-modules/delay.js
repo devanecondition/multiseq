@@ -6,7 +6,13 @@ define([
 
 	var Delay = function( patch, id, context, element ) {
 
-		this.name                  = 'delay';
+		this.stateData = {
+			id        : id,
+			name      : 'delay',
+			delayTime : 0,
+			feedback  : 0
+		};
+
 		this.patch                 = patch;
 		this.id                    = id;
 		this.context               = context;
