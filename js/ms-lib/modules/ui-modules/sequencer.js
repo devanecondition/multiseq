@@ -1,35 +1,29 @@
 define([
 	'UiModule',
 	'note-frequencies',
-	'state',
 	'lodash'
 ], function(
 	UiModule,
 	Notes,
-	State,
 	_
 ) {
 
 	var Sequencer = function( patch, id, context, element ) {
 
-		this.name      = 'sequencer';
-		this.patch     = patch;
-		this.id        = id;
-		this.context   = context;
-		this.element   = element;
-		this.seqId     = State.sequencers.length;
-		this.note      = 'a1';
-		this.noteIndex = 0;
-		this.direction = 'forward';
+		this.name       = 'sequencer';
+		this.patch      = patch;
+		this.id         = id;
+		this.context    = context;
+		this.element    = element;
+		this.note       = 'a1';
+		this.noteIndex  = 0;
+		this.direction  = 'forward';
+		this.seqNotes   = [ Notes['a1'], Notes['c1'], Notes['d1'], Notes['b1'], Notes['g1'], Notes['a1'] ];
+		this.recordMode = false,
+		this.waveType   = 'sine',
+		this.attack     = 0.1,
+		this.release    = 0.1
 
-		// Save Sequencer in state...
-		State.sequencers.push({
-			seqNotes   : [ Notes['a1'], Notes['c1'], Notes['d1'], Notes['b1'], Notes['g1'], Notes['a1'] ],
-			recordMode : false,
-			waveType   : 'sine',
-			attack     : 0.1,
-			release    : 0.1
-		});
 
 		UiModule.call( this, 'sequencer', element );
 
@@ -80,38 +74,29 @@ define([
 		);
     };
 
-    Sequencer.prototype.getSequencer = function() {
-    	return State.sequencers[ this.seqId ];
-    };
-
 	Sequencer.prototype.setFrequency = function( note ) {
 
-		var thisSequencer = State.sequencers[ this.seqId ];
-		
-		if ( thisSequencer.recordMode && note ) {
+		if ( this.recordMode && note ) {
 			this.note = note;
 		}
 	};
 
 	Sequencer.prototype.trigger = function() {
 
-		var thisSequencer = State.sequencers[ this.seqId ];
-
-		if ( thisSequencer.recordMode ) {
-			thisSequencer.seqNotes.push( this.note );
+		if ( this.recordMode ) {
+			this.seqNotes.push( this.note );
 		}
 	};
 
 	Sequencer.prototype.recordSequence = function( e ) {
 
-		var thisSequencer = State.sequencers[ this.seqId ];
 
-		if ( thisSequencer.recordMode ) {
-			thisSequencer.recordMode = false;
+		if ( this.recordMode ) {
+			this.recordMode = false;
 			$( e.target ).removeClass( 'stop' ).addClass( 'record' );
 		} else {
-			thisSequencer.seqNotes = [];
-			thisSequencer.recordMode = true;
+			this.seqNotes = [];
+			this.recordMode = true;
 			$( e.target ).removeClass( 'record' ).addClass( 'stop' );
 		}
 	};
@@ -127,16 +112,14 @@ define([
 
     	e.preventDefault();
 
-		var thisSequencer = State.sequencers[ this.seqId ];
-
-		if ( thisSequencer.recordMode ) {
-			thisSequencer.seqNotes.pop();
+		if ( this.recordMode ) {
+			this.seqNotes.pop();
 		}
     };
 
 	Sequencer.prototype.gate = function() {
 
-		var notes     = this.getSequencer().seqNotes,
+		var notes     = this.seqNotes,
 			seqLength = notes.length,
 			modIndex  = Math.abs( this.noteIndex.mod )
 			index     = this.noteIndex % seqLength;

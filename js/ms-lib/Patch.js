@@ -1,16 +1,17 @@
 define([
+	'state',
 	'empty',
 	'jsPlumb',
 	'lodash'
 ], function(
+	State,
 	Empty,
 	jsPlumb,
 	_
 ) {
 
 	// private variables...
-	var modules             = {},
-		moduleIdIncrementor = 0,
+	var moduleIdIncrementor = 0,
 		connections         = {},
 		context             = new AudioContext();
 
@@ -19,6 +20,9 @@ define([
 		this.instance   = instance;
 		this.$container = $( this.getHtml() );
 		this.$doc       = $( document );
+		this.state      = new State();
+
+window.State = this.state;
 
 		this.instance.registerConnectionTypes({
 			"selected":{
@@ -43,7 +47,7 @@ define([
 	};
 
 	Patch.prototype.getModules = function() {
-		return modules;
+		return this.state.modules;
 	};
 
 	Patch.prototype.getPlumbInstance = function() {
@@ -85,18 +89,18 @@ define([
 		var id       = moduleIdIncrementor++,
 			$module;
 
-		modules[ id ] = new Module( this, id, context, this.$container );
+		module = this.state.addModule( new Module( this, id, context, this.$container ) );
 
-		$module = modules[ id ].getElem();
+		$module = module.getElem();
 
 		this.$container.append( $module );
 		this.addJackListeners( $module );
-		modules[ id ].postRenderFunction();
+		module.postRenderFunction();
 	};
 
 	Patch.prototype.removeModule = function( moduleId ) {
 
-		var module = modules[ moduleId ];
+		var module = this.state.getModule( moduleId );
 
 		// disconnect any patch cords
 		_.each( module.getConnectionIds(), this.detachConnection.bind( this ) );
@@ -104,7 +108,7 @@ define([
 		module.getElem().remove();
 		this.instance.repaintEverything();
 		// delete instance from memory
-		delete modules[ moduleId ];
+		this.state.removeModule( moduleId );
 	};
 
 	Patch.prototype.detachConnection = function( connectionId ) {

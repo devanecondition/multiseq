@@ -1,10 +1,8 @@
 define([
 	'AudioModule',
-	'state',
 	'lodash'
 ], function(
 	AudioModule,
-	State,
 	_
 ) {
 
