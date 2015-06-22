@@ -13,13 +13,31 @@ require([
 	// Safari fix...
 	window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
+	var presets = {
+		'basic' : {
+			modules: [
+				{
+					id: 0,
+					name: 'clock',
+					tempo: 120
+				},
+				{
+					id: 2,
+					name: 'delay',
+					delayTime: 38,
+					feedback: 72
+				}
+			]
+		}
+	};
+
 	jsPlumb.ready( function() {
 
 		var $wrapper      = $( '<div></div>' ),
 			plumbInstance = jsPlumb.getInstance({ // create instance to draw module lines
 		        Endpoint  : [ "Dot", { radius: 8 } ]
 		    }),
-			patch         = new Patch( plumbInstance ), // Create a new patch...
+			patch         = new Patch( plumbInstance, presets.basic ), // Create a new patch...
 			menu          = new Menu( patch );  // Build top menu...
 
 
@@ -33,6 +51,7 @@ require([
 		$wrapper.appendTo('body');
 
 		// Post-render functions...
+		patch.postRenderFunction();
 		plumbInstance.setContainer( patch.getElem() );
 	});
 

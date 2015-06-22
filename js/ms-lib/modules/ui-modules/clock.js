@@ -6,18 +6,18 @@ define([
 	_
 ) {
 
-	var Clock = function( patch, id, context, element ) {
+	var Clock = function( params ) {
 
 		this.stateData = {
-			id    : id,
-			name  : 'clock',
-			tempo : 250
+			id    : params.settings.id || params.id,
+			name  : params.settings.name || 'clock',
+			tempo : params.settings.tempo || 250
 		}
 
-		this.patch   = patch;
-		this.state   = patch.state;
-		this.context = context;
-		this.element = element;
+		this.patch   = params.patch;
+		this.state   = params.patch.state;
+		this.context = params.context;
+		this.element = params.element;
 		this.active  = false;
 
 		UiModule.call( this );
@@ -26,7 +26,7 @@ define([
 			knobLabel    : 'BPM',
 			knobFunction : this.adjustTempo,
 			extraParams  : { min: 20, max: 350 },
-			knobValue    : 240
+			knobValue    : params.settings.tempo || 250
 		});
 
 		//Add Listeners...
@@ -70,12 +70,12 @@ define([
 			_.each( this.outlets[ 0 ], function( module ) {
 				module.gate.call( module );
 			});
-			setTimeout( _.bind( this.runClock, this ), this.stateData.tempo );
+			setTimeout( _.bind( this.runClock, this ), 60000 / this.stateData.tempo );
 		}
 	};
 
-	Clock.prototype.adjustTempo = function( newTempo ) {		
-		this.stateData.tempo = this.setModuleProperty( 'tempo', 60000 / newTempo );
+	Clock.prototype.adjustTempo = function( newTempo ) {
+		this.stateData.tempo = this.setModuleProperty( 'tempo', newTempo );
 	};
 
 	return Clock;

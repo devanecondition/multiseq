@@ -4,9 +4,9 @@ define([
 	_
 ) {
 
-	var State = function( patch ) {
-			this.modules     = [];
-			this.connections = [];
+	var State = function( preset ) {
+			this.modules     = preset.modules || [];
+			this.connections = preset.connections || [];
 		},
 		proto = State.prototype;
 

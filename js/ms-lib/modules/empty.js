@@ -9,14 +9,14 @@ define([
 	$
 ) {
 
-	var Empty = function( patch, id ) {
+	var Empty = function( params ) {
 
 		this.stateData = {
-			id    : id,
+			id    : params.id,
 			name  : 'empty'
 		}
 
-		this.patch      = patch;
+		this.patch      = params.patch;
 		this.moduleList = this.getModuleList();
 
 		Module.call( this );

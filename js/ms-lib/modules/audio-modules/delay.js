@@ -4,23 +4,23 @@ define([
 	AudioModule
 ) {
 
-	var Delay = function( patch, id, context, element ) {
+	var Delay = function( params ) {
 
 		this.stateData = {
-			id        : id,
-			name      : 'delay',
-			delayTime : 0,
-			feedback  : 0
+			id        : params.settings.id || params.id,
+			name      : params.settings.name || 'delay',
+			delayTime : params.settings.delayTime || 0,
+			feedback  : params.settings.feedback || 0
 		};
 
-		this.patch                 = patch;
-		this.id                    = id;
-		this.context               = context;
-		this.element               = element;
-		this.delay                 = context.createDelay();
-		this.delay.delayTime.value = 0;
-		this.feedback              = context.createGain();
-    	this.feedback.gain.value   = 0;
+		this.patch                 = params.patch;
+		this.state                 = params.patch.state;
+		this.context               = params.context;
+		this.element               = params.element;
+		this.delay                 = params.context.createDelay();
+		this.delay.delayTime.value = this.stateData.delayTime;
+		this.feedback              = params.context.createGain();
+    	this.feedback.gain.value   = this.stateData.feedback;
 		this.input                 = this.delay;
 		this.output                = this.delay;
 
@@ -33,14 +33,14 @@ define([
 			knobLabel    : 'Time',
 			knobFunction : this.setTime,
 			extraParams  : { min: 0, max: 100},
-			knobValue    : 0
+			knobValue    : this.stateData.delayTime
 		});
 
 		this.$feedback = this.renderKnob({
 			knobLabel    : 'FeedBack',
 			knobFunction : this.setFeedback,
 			extraParams  : { min: 0, max: 100 },
-			knobValue    : 0
+			knobValue    : this.stateData.feedback
 		});
     };
 
@@ -68,10 +68,12 @@ define([
 
     Delay.prototype.setTime = function( time ) {
 		this.delay.delayTime.value = time * 0.01;
+		this.setModuleProperty( 'delayTime', time );
     };
 
     Delay.prototype.setFeedback = function( feedback ) {
     	this.feedback.gain.value = feedback * 0.01;
+    	this.setModuleProperty( 'feedback', feedback );
     };
 
 	return Delay;

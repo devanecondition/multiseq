@@ -1,9 +1,11 @@
 define([
+	'modules',
 	'state',
 	'empty',
 	'jsPlumb',
 	'lodash'
 ], function(
+	Modules,
 	State,
 	Empty,
 	jsPlumb,
@@ -16,12 +18,14 @@ define([
 		connections         = {},
 		context             = new AudioContext();
 
-	var Patch = function( instance ) {
+	var Patch = function( instance, preset ) {
 
 		this.instance   = instance;
 		this.$container = $( this.getHtml() );
 		this.$doc       = $( document );
-		this.state      = new State();
+		this.preset     = preset;
+		this.state      = new State( this.preset );
+		this.rendered   = ( typeof preset === 'undefined' );
 
 window.State = this.state;
 
@@ -35,6 +39,10 @@ window.State = this.state;
 
 	    this.instance.bind( 'connection', this.makeConnection.bind( this ) );
 	    this.instance.bind( 'click', this.onCableSelected.bind( this ) );
+
+	    if ( this.preset ) {
+	    	this.buildPresetModules();
+	    }
 	};
 
 	Patch.prototype.getHtml = function() {
@@ -45,6 +53,16 @@ window.State = this.state;
 
 	Patch.prototype.getElem = function() {
 		return this.$container;
+	};
+
+	Patch.prototype.postRenderFunction = function( $wrapper ) {
+		if ( !this.rendered ) {
+			_.each( modules, function( module ) {
+				this.addJackListeners( module.getElem() );
+				module.postRenderFunction();
+			}, this );
+			this.rendered = true;
+		}
 	};
 
 	Patch.prototype.getModules = function() {
@@ -85,20 +103,41 @@ window.State = this.state;
 	    }
     };
 
-	Patch.prototype.addModule = function( Module ) {
+    Patch.prototype.buildPresetModules = function() {
+    	_.each( this.preset.modules, function( module ) {
+    		this.addModule( Modules[ module.name ], module );
+    	}, this );
+    };
 
-		var id       = moduleIdIncrementor++,
-			$module;
+	Patch.prototype.addModule = function( Module, settings ) {
 
-		modules[ id ] = new Module( this, id, context, this.$container );
+		var id = moduleIdIncrementor++;
 
-		this.state.addModule( modules[ id ] );
+		modules[ id ] = new Module({
+			patch      : this, 
+			id         : id, 
+			context    : context,
+			$container : this.$container,
+			settings   : settings || {}
+		});
 
-		$module = modules[ id ].getElem();
+		if ( !settings ) {
+			this.state.addModule( modules[ id ] );
+		}
+
+		this.renderModule( id );
+	};
+
+	Patch.prototype.renderModule = function( id ) {
+
+		var $module = modules[ id ].getElem();
 
 		this.$container.append( $module );
-		this.addJackListeners( $module );
-		modules[ id ].postRenderFunction();
+
+		if ( this.rendered ) {
+			this.addJackListeners( $module );
+			modules[ id ].postRenderFunction();
+		}
 	};
 
 	Patch.prototype.removeModule = function( moduleId ) {

@@ -109,10 +109,14 @@ define([
 
 	Module.prototype.setModuleProperty = function( property, value ) {
 		return this.state.setModuleProperty({
-			id       : this.id,
+			id       : this.getId(),
 			property : property,
 			value    : value
 		});
+	};
+
+	Module.prototype.paramChange = function( param, value ) {
+		this.stateData[ param ] = value;
 	};
 
 	return Module;
