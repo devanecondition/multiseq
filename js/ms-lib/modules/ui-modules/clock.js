@@ -74,12 +74,8 @@ define([
 		}
 	};
 
-	Clock.prototype.adjustTempo = function( newTempo ) {
-		this.stateData.tempo = this.state.setModuleProperty({
-			id       : this.id,
-			property : 'tempo',
-			value    : 60000 / newTempo
-		});
+	Clock.prototype.adjustTempo = function( newTempo ) {		
+		this.stateData.tempo = this.setModuleProperty( 'tempo', 60000 / newTempo );
 	};
 
 	return Clock;

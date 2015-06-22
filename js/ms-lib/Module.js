@@ -107,5 +107,13 @@ define([
 		}.bind( this ));
 	};
 
+	Module.prototype.setModuleProperty = function( property, value ) {
+		return this.state.setModuleProperty({
+			id       : this.id,
+			property : property,
+			value    : value
+		});
+	};
+
 	return Module;
 });
