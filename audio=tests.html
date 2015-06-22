@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Web Modular</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/multi-seq.css">
+    <script>
+
+		var context  = new (window.AudioContext || window.webkitAudioContext)(),
+			saw      = context.createOscillator(),
+			sine     = context.createOscillator(),
+			sineGain = context.createGainNode();
+
+		//set up our oscillator types
+		saw.type = saw.SAWTOOTH;
+		sine.type = sine.SINE;
+
+		//set the amplitude of the modulation
+		sineGain.gain.value = 10;
+
+		//connect the dots
+		sine.connect(sineGain);
+		sineGain.connect(saw.frequency);
+		saw.connect( context.destination );
+    </script>
+</head>
+<body></body>
+</html>
