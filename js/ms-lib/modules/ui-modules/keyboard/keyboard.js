@@ -8,7 +8,7 @@ define([
 	_
 ) {
 
-	var Keyboard = function( patch, id, context, element ) {
+	var Keyboard = function( params ) {
 
 		this.name    = 'keyboard';
 		this.patch   = patch;

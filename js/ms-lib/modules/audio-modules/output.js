@@ -4,7 +4,7 @@ define([
 	AudioModule
 ) {
 
-	var Output = function( patch, id, context, element ) {
+	var Output = function( params ) {
 		this.name    = 'output';
 		this.patch   = patch;
 		this.id      = id;

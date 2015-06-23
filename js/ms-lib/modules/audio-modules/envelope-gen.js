@@ -6,25 +6,33 @@ define([
 	_
 ) {
 
-	var EnvelopeGenerator = function( patch, id, context, element ) {
+	var EnvelopeGenerator = function( params ) {
 
-		this.name          = 'envelope-generator';
-		this.patch         = patch;
-		this.id            = id;
-		this.context       = context;
-		this.element       = element;
-		this.attackTime    = 0.1;
-		this.releaseTime   = 0.1;
+		this.stateData = {
+			id          : params.settings.id || params.id,
+			name        : params.settings.name || 'envelope-generator',
+			attackTime  : params.settings.attackTime || 0.1,
+			releaseTime : params.settings.releaseTime || 0.1
+		};
+
+		this.patch       = params.patch;
+		this.state       = this.patch.state;
+		this.context     = params.context;
+		this.element     = params.element;
+		this.attackTime  = this.stateData.attackTime;
+		this.releaseTime = this.stateData.releaseTime;
 
 		AudioModule.call( this );
 
-		this.$attack       = this.renderKnob({
+		this.$attack  = this.renderKnob({
 			knobLabel    : 'Attack',
-			knobFunction : this.setAttack
+			knobFunction : this.setAttack,
+			knobValue    : this.stateData.attackTime
 		});
-		this.$release      = this.renderKnob({
+		this.$release = this.renderKnob({
 			knobLabel    : 'Release',
-			knobFunction : this.setRelease
+			knobFunction : this.setRelease,
+			knobValue    : this.stateData.releaseTime
 		});
     };
 
@@ -64,12 +72,14 @@ define([
     EnvelopeGenerator.prototype.setAttack = function( value ) {
     	if ( value ) {
 			this.attackTime = value * 0.01;
+			this.setModuleProperty( 'attackTime', value );
 		}
     };    
 
     EnvelopeGenerator.prototype.setRelease = function( value ) {
     	if ( value ) {
 			this.releaseTime = value * 0.01;
+			this.setModuleProperty( 'releaseTime', value );
 		}
 	};
 

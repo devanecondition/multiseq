@@ -4,7 +4,7 @@ define([
 	AudioModule
 ) {
 
-	var Vca = function( patch, id, context, element ) {
+	var Vca = function( params ) {
 
 		this.name            = 'vca';
 		this.patch           = patch;

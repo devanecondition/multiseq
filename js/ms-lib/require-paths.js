@@ -25,7 +25,7 @@ require.config({
         'empty'             : '../js/ms-lib/modules/empty',
         'vco'               : '../js/ms-lib/modules/audio-modules/vco',
         'vca'               : '../js/ms-lib/modules/audio-modules/vca',
-        'envelope-gen'      : '../js/ms-lib/modules/audio-modules/envelope-gen',
+        'envelope-generator': '../js/ms-lib/modules/audio-modules/envelope-gen',
         'filter'            : '../js/ms-lib/modules/audio-modules/filter',
         'delay'             : '../js/ms-lib/modules/audio-modules/delay',
         'output'            : '../js/ms-lib/modules/audio-modules/output',

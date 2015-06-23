@@ -6,7 +6,7 @@ define([
 	_
 ) {
 
-	var Vco = function( patch, id, context, element ) {
+	var Vco = function( params ) {
 
 		this.name            = 'vco';
 		this.patch           = patch;

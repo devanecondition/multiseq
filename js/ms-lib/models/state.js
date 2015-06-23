@@ -5,6 +5,7 @@ define([
 ) {
 
 	var State = function( preset ) {
+			preset           = preset || {};
 			this.modules     = preset.modules || [];
 			this.connections = preset.connections || [];
 		},

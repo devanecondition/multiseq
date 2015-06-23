@@ -8,7 +8,7 @@ define([
 	_
 ) {
 
-	var Sequencer = function( patch, id, context, element ) {
+	var Sequencer = function( params ) {
 
 		this.name       = 'sequencer';
 		this.patch      = patch;

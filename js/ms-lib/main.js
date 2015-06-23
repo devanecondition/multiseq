@@ -26,6 +26,18 @@ require([
 					name: 'delay',
 					delayTime: 38,
 					feedback: 72
+				},
+				{
+					id: 3,
+					name: 'envelope-generator',
+					attackTime: 28,
+					releaseTime: 5
+				},
+				{
+					id: 4,
+					name: 'filter',
+					attackTime: 2600,
+					releaseTime: 62
 				}
 			]
 		}
