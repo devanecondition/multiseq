@@ -6,27 +6,23 @@ define([
 
 	var Vca = function( params ) {
 
-		this.name            = 'vca';
-		this.patch           = patch;
-		this.id              = id;
-		this.context         = context;
-		this.element         = element;
-		this.gain            = context.createGain();
+		AudioModule.call( this, params, {
+			peakAmplitude : params.settings.peakAmplitude || 40
+		});
+
+		this.gain            = this.context.createGain();
 		this.gain.gain.value = 0;
 		this.input           = this.gain;
 		this.output          = this.gain;
 		this.amplitude       = this.gain.gain;
-		this.peakAmplitude   = 0.4;
 
-		AudioModule.call( this );
+		this.setAmplitude( this.stateData.peakAmplitude );
 
 		this.$attack         = this.renderKnob({
 			knobLabel    : 'Attenuator',
 			knobFunction : this.setAmplitude,
-			knobValue    : 40
+			knobValue    : this.stateData.peakAmplitude
 		});
-
-		this.setAmplitude( 40 );
     };
 
 	Vca.prototype = Object.create( AudioModule.prototype );
@@ -53,6 +49,7 @@ define([
 
     Vca.prototype.setAmplitude = function( gainPercentage ) {
 		this.peakAmplitude = gainPercentage * 0.01;
+		this.setModuleProperty( 'peakAmplitude', gainPercentage );
     };
 
     Vca.prototype.getAmplitude = function() {

@@ -6,25 +6,17 @@ define([
 
 	var Delay = function( params ) {
 
-		this.stateData = {
-			id        : params.settings.id || params.id,
-			name      : params.settings.name || 'delay',
+		AudioModule.call( this, params, {
 			delayTime : params.settings.delayTime || 0,
 			feedback  : params.settings.feedback || 0
-		};
+		});
 
-		this.patch                 = params.patch;
-		this.state                 = params.patch.state;
-		this.context               = params.context;
-		this.element               = params.element;
 		this.delay                 = params.context.createDelay();
 		this.delay.delayTime.value = this.stateData.delayTime;
 		this.feedback              = params.context.createGain();
     	this.feedback.gain.value   = this.stateData.feedback;
 		this.input                 = this.delay;
 		this.output                = this.delay;
-
-		AudioModule.call( this );
 
 		this.delay.connect( this.feedback );
     	this.feedback.connect( this.delay );

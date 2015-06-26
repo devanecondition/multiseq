@@ -10,14 +10,9 @@ define([
 
 	var Keyboard = function( params ) {
 
-		this.name    = 'keyboard';
-		this.patch   = patch;
-		this.id      = id;
-		this.context = context;
-		this.element = element;
-		this.active  = false;
+		UiModule.call( this, params );
 
-		UiModule.call( this );
+		this.active = false;
 
 		this.createKeys();
 

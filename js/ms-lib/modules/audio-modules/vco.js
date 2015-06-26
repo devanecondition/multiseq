@@ -8,29 +8,29 @@ define([
 
 	var Vco = function( params ) {
 
-		this.name            = 'vco';
-		this.patch           = patch;
-		this.id              = id;
-		this.context         = context;
-		this.element         = element;
-		this.oscillator      = context.createOscillator();
-		this.oscillator.type = 'sine';
-		this.octave          = 2,
+		AudioModule.call( this, params, {
+			waveType  : params.settings.waveType || 'sine',
+			frequency : params.settings.frequency || 110,
+			octave    : params.settings.octave || 2,
+			fineTune  : params.settings.fineTune || 0
+		});
+
+		this.oscillator      = this.context.createOscillator();
+		this.oscillator.type = this.stateData.waveType;
+		this.octave          = this.stateData.octave,
 		this.input           = this.oscillator;
 		this.output          = this.oscillator;
-		this.fineTune        = 0;
-
-		AudioModule.call( this );
+		this.fineTune        = this.stateData.fineTune;
 
 		this.$tune = this.renderKnob({
 			$elem        : this.$module.find( '.dial' ),
 			knobFunction : this.setFineTuning,
 			extraParams  : { min: -20, max: 20 },
-			knobValue    : 0
+			knobValue    : this.stateData.fineTune
 		});
 
-		this.setFrequency(110);
-		this.oscillator.start(0);
+		this.setFrequency( this.stateData.frequency );
+		this.oscillator.start( 0 );
 
 		this.$module
 			.on( 'click', '.wave-type', _.bind( this.onWaveTypeChange, this ))
@@ -53,16 +53,26 @@ define([
 		];
 	};
 
+	Vco.prototype.buildButtons = function() {
+
+		var waveTypes = [ 'sine', 'square', 'sawtooth', 'triangle' ],
+			html      = '';
+
+		_.each( waveTypes, function( waveType ) {
+			var isActive  = ( waveType === this.stateData.waveType ) ? ' active' : '';
+			html += '<a href="#" title="' + waveType + ' Wave" data-wave-type="' + waveType + '" class="wave-type ' + waveType + isActive + '"></a>';
+		}, this );
+
+		return html;
+	},
+
 	Vco.prototype.getInnerHtml = function() {
 		return (
 			'<label>VCO</label>' +
 			'<p>Fine Tune</p>' +
 			'<input type="text" class="dial">' +
 			'<p>Wave Type</p>' +
-			'<a href="#" title="Sine Wave" data-wave-type="sine" class="wave-type sine active"></a>' +
-			'<a href="#" title="Square Wave" data-wave-type="square" class="wave-type square"></a>' +
-			'<a href="#" title="Saw Wave" data-wave-type="sawtooth" class="wave-type saw"></a>' +
-			'<a href="#" title="Triangle Wave" data-wave-type="triangle" class="wave-type triangle"></a>' +
+			this.buildButtons() +
 			'<p>Octave</p>' +
 			'<a href="#" data-octave-dir="down" class="octave down"></a>' +
 			'<a href="#" data-octave-dir="up" class="octave up"></a>'
@@ -71,6 +81,7 @@ define([
 
 	Vco.prototype.setFineTuning = function( offset ) {
 		this.fineTune = offset;
+		this.setModuleProperty( 'fineTune', offset );
 	};
 
 	Vco.prototype.getFrequency = function( frequency ) {
@@ -86,6 +97,7 @@ define([
 
 		try {
 			this.oscillator.frequency.setValueAtTime(frequency, this.context.currentTime);
+			this.setModuleProperty( 'frequency', frequency );
 		} catch(e) {
 			console.log( 'no frequency detected' );
 		}
@@ -93,6 +105,7 @@ define([
 
 	Vco.prototype.setWaveType = function( waveType ) {
 		this.oscillator.type = waveType;
+		this.setModuleProperty( 'waveType', waveType );
 	};	
 
 	Vco.prototype.onWaveTypeChange = function( e ) {
@@ -122,6 +135,8 @@ define([
 		} else {
 			this.octave++;
 		}
+
+		this.setModuleProperty( 'octave', this.octave );
 
 		if ( this.octave === 0 || this.octave === 8 ) {
 			$this.addClass( 'disabled' );

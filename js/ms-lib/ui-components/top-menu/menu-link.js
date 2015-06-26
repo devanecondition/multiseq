@@ -24,7 +24,10 @@ define([
 
 		e.preventDefault();
 
-		this.patch.addModule( this.Module );
+		this.patch.addModule({
+			name   : this.moduleName,
+			module : this.Module
+		});
 		this.menu.toggleDrawer(e);
 	};
 

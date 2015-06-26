@@ -6,8 +6,8 @@ define([
 	_
 ) {
 
-	var UiModule = function () {
-		Module.call( this );
+	var UiModule = function ( params, settings ) {
+		Module.call( this, params, settings );
 	};
 
 	UiModule.prototype = Object.create( Module.prototype );

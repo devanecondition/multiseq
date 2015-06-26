@@ -8,21 +8,13 @@ define([
 
 	var EnvelopeGenerator = function( params ) {
 
-		this.stateData = {
-			id          : params.settings.id || params.id,
-			name        : params.settings.name || 'envelope-generator',
+		AudioModule.call( this, params, {
 			attackTime  : params.settings.attackTime || 0.1,
 			releaseTime : params.settings.releaseTime || 0.1
-		};
+		});
 
-		this.patch       = params.patch;
-		this.state       = this.patch.state;
-		this.context     = params.context;
-		this.element     = params.element;
 		this.attackTime  = this.stateData.attackTime;
 		this.releaseTime = this.stateData.releaseTime;
-
-		AudioModule.call( this );
 
 		this.$attack  = this.renderKnob({
 			knobLabel    : 'Attack',

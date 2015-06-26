@@ -23,7 +23,7 @@ define([
 		this.$container = $( this.getHtml() );
 		this.$doc       = $( document );
 		this.preset     = preset;
-		this.state      = new State( this.preset );
+		this.state      = new State();
 		this.rendered   = ( typeof preset === 'undefined' );
 
 window.State = this.state;
@@ -104,25 +104,27 @@ window.State = this.state;
 
     Patch.prototype.buildPresetModules = function() {
     	_.each( this.preset.modules, function( module ) {
-    		this.addModule( Modules[ module.name ], module );
+    		this.addModule({
+    			name   : module.name,
+    			module : Modules[ module.name ]
+    		}, module );
     	}, this );
     };
 
-	Patch.prototype.addModule = function( Module, settings ) {
+	Patch.prototype.addModule = function( moduleObj, settings ) {
 
 		var id = moduleIdIncrementor++;
 
-		modules[ id ] = new Module({
-			patch      : this, 
-			id         : id, 
+		modules[ id ] = new moduleObj.module({
+			name       : moduleObj.name,
+			patch      : this,
+			id         : id,
 			context    : context,
 			$container : this.$container,
 			settings   : settings || {}
 		});
 
-		if ( !settings ) {
-			this.state.addModule( modules[ id ] );
-		}
+		this.state.addModule( modules[ id ] );
 
 		this.renderModule( id );
 	};
@@ -208,7 +210,10 @@ window.State = this.state;
 				e.preventDefault();
 				break;
 			case 78:
-				var $module = this.addModule( Empty );
+				var $module = this.addModule({
+					name   : 'empty',
+					module : Empty
+				});
 				break;
 		};
 	};

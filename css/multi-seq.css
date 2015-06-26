@@ -1057,11 +1057,11 @@ a {
 .module.vco a.square.active {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAALElEQVQYV2P8////fwY0wMjIyIgsBFLDCCaQJND5IA2jCuHhRlLwoEcAiA8AMMdv41kn+PIAAAAASUVORK5CYII=);
 }
-.module.vco a.saw {
+.module.vco a.sawtooth {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAOklEQVQYV43MUQoAIAgE0bz/oY0NkjRXne/HyJqlMnAK00EgmPJ4EYYUvojCiFKYoQ8y5GCFDHbowA16uhIB+RweBQAAAABJRU5ErkJggg==);
 }
-.module.vco a.saw:hover,
-.module.vco a.saw.active {
+.module.vco a.sawtooth:hover,
+.module.vco a.sawtooth.active {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAPUlEQVQYV43MSwoAMAgD0eb+h06xoPRjtLN+DMZHJInOGTJTwnUCUB4d2U3CHUl4oxRm6IEKHbBCATvkcAI3j0fjvT6VJgAAAABJRU5ErkJggg==);
 }
 .module.vco a.triangle {

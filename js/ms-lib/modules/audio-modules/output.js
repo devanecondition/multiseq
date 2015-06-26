@@ -5,15 +5,11 @@ define([
 ) {
 
 	var Output = function( params ) {
-		this.name    = 'output';
-		this.patch   = patch;
-		this.id      = id;
-		this.context = context;
-		this.element = element;
-		this.input   = context.destination;
-		this.output  = context.destination;
 
-		AudioModule.call( this );
+		AudioModule.call( this, params );
+
+		this.input  = this.context.destination;
+		this.output = this.context.destination;
     };
 
 	Output.prototype = Object.create( AudioModule.prototype );

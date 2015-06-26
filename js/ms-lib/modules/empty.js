@@ -11,17 +11,9 @@ define([
 
 	var Empty = function( params ) {
 
-		this.stateData = {
-			id    : params.id,
-			name  : 'empty'
-		}
+		Module.call( this, params );
 
-		this.patch      = params.patch;
 		this.moduleList = this.getModuleList();
-
-		Module.call( this );
-
-		var that = this;
 
 		//Add Listeners...
 		this.$module
@@ -63,7 +55,10 @@ define([
 			},
 		 	select   : function( event, ui ) {
 				this.patch.removeModule( this.getId() );
-		 		this.patch.addModule( modules[ ui.item.value ] );
+		 		this.patch.addModule({
+		 			name : ui.item.label,
+		 			module: modules[ ui.item.value ]
+		 		});
 		 		this.patch.enableShortcuts();
 		 	}.bind( this )
 		});

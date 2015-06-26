@@ -10,29 +10,23 @@ define([
 
 	var Sequencer = function( params ) {
 
-		this.name       = 'sequencer';
-		this.patch      = patch;
-		this.id         = id;
-		this.context    = context;
-		this.element    = element;
+		UiModule.call( this, params, {
+			direction : params.settings.direction || 'forward',
+			seqNotes : params.settings.seqNotes || [ Notes['a1'], Notes['c1'], Notes['d1'], Notes['b1'], Notes['g1'], Notes['a1'] ]
+		});
+
 		this.note       = 'a1';
 		this.noteIndex  = 0;
-		this.direction  = 'forward';
-		this.seqNotes   = [ Notes['a1'], Notes['c1'], Notes['d1'], Notes['b1'], Notes['g1'], Notes['a1'] ];
-		this.recordMode = false,
-		this.waveType   = 'sine',
-		this.attack     = 0.1,
-		this.release    = 0.1
-
-
-		UiModule.call( this, 'sequencer', element );
+		this.direction  = this.stateData.direction;
+		this.seqNotes   = this.stateData.seqNotes;
+		this.recordMode = false;
 
 		//Add Listeners...
 		this.$module
-			.on( 'click', '.seq-record', _.bind( this.recordSequence, this ))
-			.on( 'click', '.direction', _.bind( this.setDirection, this ))
-			.on( 'click', '.rest', _.bind( this.addRest, this ))
-			.on( 'click', '.undo', _.bind( this.removeLastNote, this ));
+			.on( 'click', '.seq-record', this.recordSequence.bind( this ))
+			.on( 'click', '.direction', this.setDirection.bind( this ))
+			.on( 'click', '.rest', this.addRest.bind( this ))
+			.on( 'click', '.undo', this.removeLastNote.bind( this ));
     };
 
 	Sequencer.prototype = Object.create( UiModule.prototype );
@@ -60,14 +54,20 @@ define([
 	};
 
     Sequencer.prototype.getInnerHtml = function() {
+
+    	var direction     = this.stateData.direction,
+    		forwardClass  = ( direction === 'forward' ) ? ' active' : '',
+    		randomClass   = ( direction === 'random' ) ? ' active' : '',
+    		backwardClass = ( direction === 'backward' ) ? ' active' : '';
+
     	return (
     		'<label>Sequencer</label>' +
     		'<p>Record</p>' +
 			'<div class="seq-record button record"></div>' +
 			'<p>Direction</p>' +
-			'<a href="#" data-direction="backward" class="direction backward"></a>' +
-			'<a href="#" data-direction="random" class="direction random"></a>' +
-			'<a href="#" data-direction="forward" class="direction forward active"></a>' +
+			'<a href="#" data-direction="backward" class="direction backward' + backwardClass + '"></a>' +
+			'<a href="#" data-direction="random" class="direction random' + randomClass + '"></a>' +
+			'<a href="#" data-direction="forward" class="direction forward' + forwardClass + '"></a>' +
 			'<p>Sequence</p>' +
 			'<a href="#" data-direction="forward" class="rest text">Skip Note</a>' +
 			'<a href="#" data-direction="forward" class="undo text">Undo</a>'
@@ -85,11 +85,11 @@ define([
 
 		if ( this.recordMode ) {
 			this.seqNotes.push( this.note );
+			this.setModuleProperty( 'seqNotes', this.seqNotes );
 		}
 	};
 
 	Sequencer.prototype.recordSequence = function( e ) {
-
 
 		if ( this.recordMode ) {
 			this.recordMode = false;
@@ -108,12 +108,14 @@ define([
     	this.note = 0; //
     	this.trigger();
     };
+
     Sequencer.prototype.removeLastNote = function( e ) {
 
     	e.preventDefault();
 
 		if ( this.recordMode ) {
 			this.seqNotes.pop();
+			this.setModuleProperty( 'seqNotes', this.seqNotes );
 		}
     };
 
@@ -152,6 +154,7 @@ define([
 		$this.addClass( 'active' );
 
 		this.direction = direction;
+		this.setModuleProperty( 'direction', direction );
 	};
 
 	return Sequencer;

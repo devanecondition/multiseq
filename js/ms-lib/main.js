@@ -17,27 +17,47 @@ require([
 		'basic' : {
 			modules: [
 				{
-					id: 0,
 					name: 'clock',
-					tempo: 120
+					tempo: 224
 				},
 				{
-					id: 2,
-					name: 'delay',
-					delayTime: 38,
-					feedback: 72
+					name: 'sequencer',
+					direction:'forward'
 				},
 				{
-					id: 3,
+					name: 'vco',
+					waveType: 'square',
+					fineTune: -10
+				},
+				{
+					name: 'vca',
+					peakAmplitude: 80
+				},
+				{
 					name: 'envelope-generator',
-					attackTime: 28,
-					releaseTime: 5
+					attackTime: 40,
+					releaseTime: 15
 				},
 				{
-					id: 4,
 					name: 'filter',
-					attackTime: 2600,
-					releaseTime: 62
+					frequency: 2600,
+					resonance: 62
+				},
+				{
+					name: 'delay',
+					delayTime: 45,
+					feedback: 90
+				},
+				// {
+				// 	name: 'lfo',
+				// 	frequency: 80,
+				// 	waveType: 'triangle'
+				// },
+				{
+					name: 'output'
+				},
+				{
+					name: 'keyboard'
 				}
 			]
 		}

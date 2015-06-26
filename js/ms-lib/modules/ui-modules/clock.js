@@ -8,19 +8,11 @@ define([
 
 	var Clock = function( params ) {
 
-		this.stateData = {
-			id    : params.settings.id || params.id,
-			name  : params.settings.name || 'clock',
+		UiModule.call( this, params, {
 			tempo : params.settings.tempo || 250
-		}
+		});
 
-		this.patch   = params.patch;
-		this.state   = params.patch.state;
-		this.context = params.context;
-		this.element = params.element;
 		this.active  = false;
-
-		UiModule.call( this );
 
 		this.$tempo  = this.renderKnob({
 			knobLabel    : 'BPM',

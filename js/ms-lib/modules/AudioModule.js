@@ -6,8 +6,8 @@ define([
 	_
 ) {
 
-	var AudioModule = function () {
-		Module.call( this );
+	var AudioModule = function ( params, settings ) {
+		Module.call( this, params, settings );
 	};
 
 	AudioModule.prototype = Object.create( Module.prototype );

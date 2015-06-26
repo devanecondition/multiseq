@@ -12,12 +12,21 @@ define([
 	_
 ) {
 
-	var Module = function() {
-		this.$module      = $( this.getHtml() );
-		this.outlets      = {};
-		this.jacks        = this.getJacks();
-		this.connections  = [];
-		this.$deleteBtn   = new DeleteModuleBtn( this, this.patch )
+	var Module = function( params, settings ) {
+		this.stateData = {
+			id        : params.id,
+			name      : params.name || params.settings.name,
+		};
+		if ( settings ) { _.extend( this.stateData, settings ); }
+		this.patch       = params.patch;
+		this.state       = params.patch.state;
+		this.context     = params.context;
+		this.element     = params.element;		
+		this.$module     = $( this.getHtml() );
+		this.outlets     = {};
+		this.jacks       = this.getJacks();
+		this.connections = [];
+		this.$deleteBtn  = new DeleteModuleBtn( this, this.patch )
 			.getElem()
 			.appendTo( this.$module );
 
