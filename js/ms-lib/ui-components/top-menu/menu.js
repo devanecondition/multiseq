@@ -1,8 +1,10 @@
 define([
+	'Patch',
 	'menu-link',
 	'modules',
 	'lodash'
 ], function(
+	Patch,
 	menuLink,
 	modules,
 	_
@@ -14,7 +16,8 @@ define([
 
 		// add menu to wrapper div
 		this.$container = $( this.getHtml() )
-			.on( 'click', '.add', this.toggleDrawer.bind( this ) );
+			.on( 'click', '.add', this.toggleDrawer.bind( this ) )
+			.on( 'click', '.new-patch', this.createNewPatch );
 
 		this.$drawer = this.$container.find( '.drawer' );
 
@@ -31,6 +34,8 @@ define([
 			'<div class="menu-container">' +
 				'<div class="top">' +
 					'<a href="#" class="add">+</a>' +
+					'<div class="spacer">|</div>' +
+					'<a href="#" class="new-patch">New Patch</a>' +
 				'</div>' +
 				'<div class="drawer"></div>' +
 			'</div>'
@@ -54,6 +59,34 @@ define([
 				Module     : Module
 			});
 		}.bind( this ) );
+	};
+
+	Menu.prototype.createNewPatch = function( e ) {
+
+		e.preventDefault();
+
+		delete this.patch;
+
+		var $wrapper      = $( '<div></div>' ),
+			plumbInstance = jsPlumb.getInstance({ // create instance to draw module lines
+		        Endpoint : [ "Dot", { radius: 8 } ]
+		    }),
+			patch         = new Patch( plumbInstance ), // Create a new patch...
+			menu          = new Menu( patch );  // Build top menu...
+
+
+		patch.enableShortcuts(); // Add listeners for "n" and "delete" keys
+
+		// Render...
+		$wrapper
+			.append( menu.getElem() )
+			.append( patch.getElem() );
+
+		$('body').html( $wrapper );
+
+		// Post-render functions...
+		plumbInstance.setContainer( patch.getElem() );
+		patch.postRenderFunction();		
 	};
 
 	return Menu;

@@ -804,6 +804,22 @@ a {
   font-size: 45px;
   color: #eee;
 }
+.menu-container .spacer,
+.menu-container .new-patch {
+  color: #eee;
+  text-decoration: none;
+  font-size: 20px;
+  line-height: 60px;
+  float: left;
+  margin-right: 25px;
+}
+.menu-container .spacer {
+  font-size: 30px;
+}
+.menu-container .add:hover,
+.menu-container .new-patch:hover {
+  color: #fff;
+}
 .menu-container .drawer {
   width: 100%;
   height: 0;
