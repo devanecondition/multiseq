@@ -84,7 +84,7 @@ define([
 				height      : 150,
 				angleOffset : -125,
 				angleArc    : 250,
-				change      : _.bind( knobFunction, this )
+				change      : knobFunction.bind( this )
 			};
 
 		knobSettings = $.extend( {}, knobSettings, extraParams );

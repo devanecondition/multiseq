@@ -13,8 +13,8 @@ define([
 			releaseTime : params.settings.releaseTime || 0.1
 		});
 
-		this.attackTime  = this.stateData.attackTime;
-		this.releaseTime = this.stateData.releaseTime;
+		this.setAttack( this.stateData.attackTime );
+		this.setRelease( this.stateData.releaseTime );
 
 		this.$attack  = this.renderKnob({
 			knobLabel    : 'Attack',

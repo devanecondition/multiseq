@@ -47,5 +47,9 @@ define([
 		return params.value;
 	};
 
+	proto.addConnection = function( connection ) {
+		this.connections.push( connection );
+	};
+
 	return State;
 });

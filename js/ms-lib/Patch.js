@@ -12,6 +12,9 @@ define([
 	_
 ) {
 
+	// Safari fix...
+	window.AudioContext = window.AudioContext || window.webkitAudioContext;
+
 	// private variables...
 	var modules             = {},
 		moduleIdIncrementor = 0,
@@ -61,6 +64,7 @@ window.State = this.state;
 				module.postRenderFunction();
 			}, this );
 			this.rendered = true;
+			_.each( this.preset.connections, this.setConnection, this);
 		}
 	};
 
@@ -102,18 +106,33 @@ window.State = this.state;
 	    }
     };
 
+    Patch.prototype.setConnection = function( connection ) {
+
+    	var instance = this.getPlumbInstance();
+
+		instance.connect({
+		  source: connection.source,
+		  target: connection.target
+		});
+    };
+
     Patch.prototype.buildPresetModules = function() {
+
     	_.each( this.preset.modules, function( module ) {
     		this.addModule({
+    			id     : module.id,
     			name   : module.name,
     			module : Modules[ module.name ]
     		}, module );
     	}, this );
+
+    	
     };
 
 	Patch.prototype.addModule = function( moduleObj, settings ) {
 
-		var id = moduleIdIncrementor++;
+		var timeStamp = new Date().getTime(),
+			id        = moduleObj.id || ++moduleIdIncrementor + '_' + timeStamp;
 
 		modules[ id ] = new moduleObj.module({
 			name       : moduleObj.name,
@@ -199,6 +218,11 @@ window.State = this.state;
 			target : targetData
 		});
 
+		this.state.addConnection({
+			source: info.source.id,
+			target: info.target.id
+		});
+		
 		modules[ sourceData.moduleId ].storeConnection( connection.id );
 		modules[ targetData.moduleId ].storeConnection( connection.id );
         modules[ sourceData.moduleId ].connect( sourceData.jackId, modules[ targetData.moduleId ] );

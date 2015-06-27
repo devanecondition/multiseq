@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Web Modular</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/multi-seq.css">
+    <script>
+
+		var context      = new (window.AudioContext || window.webkitAudioContext)(),
+			vco          = context.createOscillator(),
+			vcoFreq      = context.createGain(),
+			lfo          = context.createOscillator();
+
+		vco.frequency.value = 10000;
+		lfo.frequency.value = 0.5;
+
+		vco.type = 'sine';
+		lfo.type = 'sine';
+
+		//set the amplitude of the modulation
+		vcoFreq.gain.value = 10000;
+
+		vco.start();
+		lfo.start();
+
+		vcoFreq.connect( vco.frequency );
+
+		
+		lfo.connect( vcoFreq );
+
+
+		//vco.connect( context.destination );
+    </script>
+</head>
+<body></body>
+</html>

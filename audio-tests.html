@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Web Modular</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/multi-seq.css">
+    <script>
+
+		var context  = new (window.AudioContext || window.webkitAudioContext)();
+
+		var Vco = function() {
+			this.node = context.createOscillator();
+			this.node.type = 'sine';
+			this.node.frequency.value = 10000;
+			this.node.start();
+
+			this.inlets = [
+				{
+					param: context.createGain(),
+					name: 'frequency',
+					range: 10000
+				}
+			];
+
+			for ( var i = 0; i < this.inlets.length; i ++ ) {
+
+				var inlet = this.inlets[i],
+					param = inlet.param;
+
+				param.gain.value = inlet.range;
+
+				param.connect( this.node[ inlet.name ] );
+			}
+		};
+
+		var Lfo = function() {
+			this.node = context.createOscillator();
+			this.node.type = 'sine';
+			this.node.frequency.value = 1;
+			this.node.start();
+		}
+
+		Lfo.prototype.connect = function( inletIndex, module ) {
+			this.node.connect( module.inlets[ inletIndex ].param );
+		};		
+
+	
+		var vco = new Vco(),
+			lfo = new Lfo();
+
+		lfo.connect( 0, vco );
+		// vco.node.connect( context.destination );
+
+    </script>
+</head>
+<body></body>
+</html>

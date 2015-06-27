@@ -11,12 +11,13 @@ define([
 			feedback  : params.settings.feedback || 0
 		});
 
-		this.delay                 = params.context.createDelay();
-		this.delay.delayTime.value = this.stateData.delayTime;
-		this.feedback              = params.context.createGain();
-    	this.feedback.gain.value   = this.stateData.feedback;
-		this.input                 = this.delay;
-		this.output                = this.delay;
+		this.delay    = params.context.createDelay();
+		this.feedback = params.context.createGain();
+		this.input    = this.delay;
+		this.output   = this.delay;
+
+		this.setTime( this.stateData.delayTime );
+    	this.setFeedback( this.stateData.feedback );
 
 		this.delay.connect( this.feedback );
     	this.feedback.connect( this.delay );

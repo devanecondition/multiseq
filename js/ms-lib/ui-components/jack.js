@@ -13,7 +13,7 @@ define([
 
 	Jack.prototype.getHtml = function() {
 		return(
-			'<div class="button jack ' + this.type + ' ' + this.type + '_' + this.jackId + '">' +
+			'<div id="' + this.type + '_' + this.moduleId + '_' + this.jackId + '" class="button jack ' + this.type + ' ' + this.type + '_' + this.jackId + '">' +
 				'<div></div>' +
 			'</div>'
 		);
