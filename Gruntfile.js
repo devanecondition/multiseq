@@ -15,11 +15,11 @@ module.exports = function(grunt) {
         less: {
             dev: {
                 options: {
-                    paths: ['less/ms-lib'],
+                    paths: ['public/less/ms-lib'],
                     compress: false
                 },
                 files: {
-                    'css/multi-seq.css'  : 'less/ms-lib/multi-seq.less'
+                    'public/stylesheets/multi-seq.css'  : 'public/less/ms-lib/multi-seq.less'
                 }
             }
         },
@@ -35,7 +35,7 @@ module.exports = function(grunt) {
                 interrupt: false
             },
             less: {
-                files: ['less/**/*.less'],
+                files: ['public/less/**/*.less'],
                 tasks: ['less', 'notify:watch']
             }
         },
