@@ -69,7 +69,7 @@ window.State = this.state;
 	};
 
 	Patch.prototype.getModules = function() {
-		return this.state.modules;
+		return modules;
 	};
 
 	Patch.prototype.getPlumbInstance = function() {

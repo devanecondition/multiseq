@@ -51,5 +51,32 @@ define([
 		this.connections.push( connection );
 	};
 
+	proto.save = function() {
+
+		var state = this.getState(),
+			data = {
+			    name: 'basic',
+			    user_id: 0,
+			    user_name: 'presets',
+			    modules: JSON.stringify( state.modules ),
+			    connections: JSON.stringify( state.connections )
+			};
+		
+		$.ajax({
+			url: '/api/patch/add',
+			method: 'POST',
+			data: data,
+			dataType: 'json',
+			success: function( preset ) {
+				preset.modules = JSON.parse( preset.modules );
+				preset.connections = JSON.parse( preset.connections );
+				initialize( preset );
+			},
+			error: function( r ) {
+				console.log('no preset found', r );
+			}
+		});		
+	};
+
 	return State;
 });
