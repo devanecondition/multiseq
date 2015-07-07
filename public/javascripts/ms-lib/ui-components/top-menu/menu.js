@@ -17,6 +17,7 @@ define([
 		// add menu to wrapper div
 		this.$container = $( this.getHtml() )
 			.on( 'click', '.add', this.toggleDrawer.bind( this ) )
+			.on( 'click', '.patch-mode', this.toggleMode.bind( this ) )
 			.on( 'click', '.new-patch', this.createNewPatch.bind( this ) );
 
 		this.$drawer = this.$container.find( '.drawer' );
@@ -36,6 +37,7 @@ define([
 					'<a href="#" class="add">+</a>' +
 					'<div class="spacer">|</div>' +
 					'<a href="#" class="new-patch">New Patch</a>' +
+					'<a href="#" class="patch-mode">Edit Mode</a>' +
 				'</div>' +
 				'<div class="drawer"></div>' +
 			'</div>'
@@ -47,6 +49,19 @@ define([
 		e.preventDefault();
 
 		this.$drawer.toggleClass( 'showing' );
+	};
+
+	Menu.prototype.toggleMode = function( e ) {
+
+		e.preventDefault();
+
+		var $this   = $( e.target ),
+			mode    = $this.text(),
+			newMode = ( mode === 'Performance Mode' ) ? 'Edit Mode' : 'Performance Mode';
+
+		$this.text( newMode );
+		$( '.delete, .connections, ._jsPlumb_connector, ._jsPlumb_endpoint' ).toggle();
+		this.patch.instance.repaintEverything();
 	};
 
 	Menu.prototype.createDrawerLinks = function() {

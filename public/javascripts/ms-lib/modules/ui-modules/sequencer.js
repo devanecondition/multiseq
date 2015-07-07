@@ -35,18 +35,22 @@ define([
 	Sequencer.prototype.getJacks = function() {
 		return [
 			{
+				name   : 'Pitch In',
 				jackId : 0,
 				type   : 'inlet'
 			},
 			{
+				name   : 'Gate In',
 				jackId : 1,
 				type   : 'inlet'
 			},
 			{
+				name   : 'Pitch Out',
 				jackId : 0,
 				type   : 'outlet'
 			},
 			{
+				name   : 'Gate Out',
 				jackId : 1,
 				type   : 'outlet'
 			}

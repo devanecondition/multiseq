@@ -32,6 +32,7 @@ define([
 	Clock.prototype.getJacks = function() {
 		return [
 			{
+				name   : 'Gate Out',
 				jackId : 0,
 				type   : 'outlet'
 			}

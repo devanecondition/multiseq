@@ -43,10 +43,12 @@ define([
 	Vco.prototype.getJacks = function() {
 		return [
 			{
+				name   : 'Pitch',
 				jackId : 0,
 				type   : 'inlet'
 			},
 			{
+				name   : 'Audio Out',
 				jackId : 0,
 				type   : 'outlet'
 			}

@@ -106,14 +106,19 @@ define([
 
 		_.each( this.jacks, function( jack ) {
 
-			jack = new Jack({
+			 var $jack = $(
+			 	'<div class="jack-wrap">' +
+			 		'<p>' + jack.name + '</p>' +
+			 	'</div>'
+		 	);
+
+			$jack.append( new Jack({
 				jackId   : jack.jackId,
 				type     : jack.type,
 				moduleId : this.getId()
-			});
+			}).getElem() );
 
-			$wrapper.append( jack.getElem() );
-			//jack.addPlumbListeners();
+			$wrapper.append( $jack );
 
 		}, this );
 

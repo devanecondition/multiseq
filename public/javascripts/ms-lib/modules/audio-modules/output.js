@@ -18,6 +18,7 @@ define([
 	Output.prototype.getJacks = function() {
 		return [
 			{
+				name   : 'Audio In',
 				jackId : 0,
 				type   : 'inlet'
 			}

@@ -61,7 +61,7 @@
 		position: absolute;
 		top: -15px;
 		right: -9px;
-		z-index: 50;
+		z-index: 95;
 
 		&:hover {
 			background: #555;
@@ -69,15 +69,14 @@
 	}
 
 	&.jack {
-		height: 24px;
-		width: 24px;
+		height: 40px;
+		width: 40px;
 		font-weight: bold;
 		line-height: 24px;
 		background: #666;
 		color: #eee;
-		border-radius: 12px;
-		position: absolute;
-		bottom: 0px;
+		border-radius: 20px;
+		position: relative;
 
 		div {
 			width: 100%;
@@ -91,12 +90,11 @@
 			width: 0;
 			height: 0;
 			position: absolute;
-			left: 4px;
-			top: -10px;
+			left: 11px;
+			top: -13px;
 		}
 
 		&.inlet {
-			left: 10px;
 
 			&::before {
 				border-left: 8px solid transparent;
@@ -106,7 +104,6 @@
 		}
 
 		&.outlet {
-			right: 10px;
 
 			&::before {			
 				border-left: 8px solid transparent;
@@ -117,13 +114,13 @@
 
 		&::after {
 			content: "";
-			height: 16px;
-			width: 16px;
-			border-radius: 8px;
-			background: #eee;
+			height: 30px;
+			width: 30px;
+			border-radius: 15px;
+			background: #ededed;
 			position: absolute;
-			top: 4px;
-			left: 4px;
+			top: 5px;
+			left: 5px;
 		}
 
 		&.dragHover {

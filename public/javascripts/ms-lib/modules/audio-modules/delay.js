@@ -43,10 +43,12 @@ define([
 	Delay.prototype.getJacks = function() {
 		return [
 			{
+				name   : 'Audio In',
 				jackId : 0,
 				type   : 'inlet'
 			},
 			{
+				name   : 'Audio Out',
 				jackId : 0,
 				type   : 'outlet'
 			}

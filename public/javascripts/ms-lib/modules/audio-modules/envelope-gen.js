@@ -34,10 +34,12 @@ define([
 	EnvelopeGenerator.prototype.getJacks = function() {
 		return [
 			{
+				name   : 'Gate In',
 				jackId : 0,
 				type   : 'inlet'
 			},
 			{
+				name   : 'Env Out',
 				jackId : 0,
 				type   : 'outlet'
 			}

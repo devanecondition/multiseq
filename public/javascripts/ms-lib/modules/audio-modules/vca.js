@@ -31,10 +31,12 @@ define([
 	Vca.prototype.getJacks = function() {
 		return [
 			{
+				name   : 'Audio/Env',
 				jackId : 0,
 				type   : 'inlet'
 			},
 			{
+				name   : 'Audio Out',
 				jackId : 0,
 				type   : 'outlet'
 			}

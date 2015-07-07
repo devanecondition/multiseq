@@ -25,10 +25,12 @@ define([
 	Keyboard.prototype.getJacks = function() {
 		return [
 			{
+				name   : 'Pitch Out',
 				jackId : 0,
 				type   : 'outlet'
 			},
 			{
+				name   : 'Gate Out',
 				jackId : 1,
 				type   : 'outlet'
 			}

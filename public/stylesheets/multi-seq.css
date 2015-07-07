@@ -790,28 +790,33 @@ a {
   left: 0;
   z-index: 100;
 }
+.menu-container a,
+.menu-container .spacer {
+  display: block;
+  color: #eee;
+  text-decoration: none;
+  font-size: 20px;
+  line-height: 60px;
+  margin-right: 25px;
+}
 .menu-container .top {
   height: 60px;
   background: #666;
 }
 .menu-container .add {
-  display: block;
   float: left;
   height: 60px;
   width: 60px;
   text-align: center;
-  line-height: 60px;
   font-size: 45px;
-  color: #eee;
+  margin: 0;
 }
 .menu-container .spacer,
 .menu-container .new-patch {
-  color: #eee;
-  text-decoration: none;
-  font-size: 20px;
-  line-height: 60px;
   float: left;
-  margin-right: 25px;
+}
+.menu-container .patch-mode {
+  float: right;
 }
 .menu-container .spacer {
   font-size: 30px;
@@ -907,21 +912,20 @@ a {
   position: absolute;
   top: -15px;
   right: -9px;
-  z-index: 50;
+  z-index: 95;
 }
 .patch-container .button.delete:hover {
   background: #555;
 }
 .patch-container .button.jack {
-  height: 24px;
-  width: 24px;
+  height: 40px;
+  width: 40px;
   font-weight: bold;
   line-height: 24px;
   background: #666;
   color: #eee;
-  border-radius: 12px;
-  position: absolute;
-  bottom: 0px;
+  border-radius: 20px;
+  position: relative;
 }
 .patch-container .button.jack div {
   width: 100%;
@@ -934,19 +938,13 @@ a {
   width: 0;
   height: 0;
   position: absolute;
-  left: 4px;
-  top: -10px;
-}
-.patch-container .button.jack.inlet {
-  left: 10px;
+  left: 11px;
+  top: -13px;
 }
 .patch-container .button.jack.inlet::before {
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
   border-top: 8px solid #666;
-}
-.patch-container .button.jack.outlet {
-  right: 10px;
 }
 .patch-container .button.jack.outlet::before {
   border-left: 8px solid transparent;
@@ -955,13 +953,13 @@ a {
 }
 .patch-container .button.jack::after {
   content: "";
-  height: 16px;
-  width: 16px;
-  border-radius: 8px;
-  background: #eee;
+  height: 30px;
+  width: 30px;
+  border-radius: 15px;
+  background: #ededed;
   position: absolute;
-  top: 4px;
-  left: 4px;
+  top: 5px;
+  left: 5px;
 }
 .patch-container .button.jack.dragHover {
   background: #456;
@@ -992,6 +990,21 @@ a {
 .patch-container .patch-cord {
   cursor: pointer;
   z-index: 10;
+}
+.patch-container ._jsPlumb_endpoint,
+.patch-container ._jsPlumb_connector {
+  z-index: 99;
+}
+.patch-container .jack-wrap {
+  display: inline-block;
+  width: 50%;
+  min-height: 120px;
+}
+.patch-container .jack-wrap p {
+  color: #222;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 99;
 }
 .module {
   display: inline-block;
@@ -1029,6 +1042,15 @@ a {
 }
 .module a.text:hover {
   color: #fff;
+}
+.module .connections {
+  width: 100%;
+  height: 390px;
+  background: #ddd;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 90;
 }
 .module input.mod-name {
   display: block;
@@ -1101,12 +1123,6 @@ a {
 .module.vco a.up.disabled {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAO0lEQVQYV2NkQAP/////z8jIyIgsjMIBKYBJIiuEK4KZgE6DNIEVIVuBjc2I7gasfJIdjm413BNUMwkAlOo8BozYG/8AAAAASUVORK5CYII=);
 }
-.module.sequencer .button.outlet_0 {
-  right: 50px;
-}
-.module.sequencer .button.inlet_1 {
-  left: 50px;
-}
 .module.sequencer a.forward {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAANUlEQVQYV2NkwAT/GRgYGJGFUThIEigKcSkCqYcrxKcIrhCkCKQDLyDaJFymEHQTQd9hhBMAtEQJCaXFM6UAAAAASUVORK5CYII=);
 }
@@ -1162,6 +1178,6 @@ a {
 .module.keyboard .key-container .black.pressed {
   background: #555;
 }
-.module.keyboard .button.outlet_0 {
-  right: 100px;
+.module.keyboard .connections {
+  height: 100%;
 }
