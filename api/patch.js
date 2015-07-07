@@ -5,7 +5,7 @@ var mongoose   = require('mongoose');
 var Patch      = require('../models/patch');
 var router     = express.Router();
 
-mongoose.connect('mongodb://Jamess-MacBook-Pro.local:27000'); // connect to our database
+mongoose.connect('mongodb://Jamess-MacBook-Pro-2.local:27017'); // connect to our database
 
 // bodyParser gets the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));

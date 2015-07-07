@@ -102,6 +102,8 @@ define([
 
 	Module.prototype.renderJacks = function() {
 
+		var $wrapper = $( '<div class="connections"></div>' );
+
 		_.each( this.jacks, function( jack ) {
 
 			jack = new Jack({
@@ -110,10 +112,12 @@ define([
 				moduleId : this.getId()
 			});
 
-			this.$module.append( jack.getElem() )
+			$wrapper.append( jack.getElem() );
 			//jack.addPlumbListeners();
 
-		}.bind( this ));
+		}, this );
+
+		this.$module.append( $wrapper );
 	};
 
 	Module.prototype.setModuleProperty = function( property, value ) {
