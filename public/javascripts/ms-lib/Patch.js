@@ -26,7 +26,7 @@ define([
 		this.$container = $( this.getHtml() );
 		this.$doc       = $( document );
 		this.preset     = preset;
-		this.state      = new State();
+		this.state      = new State( preset );
 		this.rendered   = ( typeof preset === 'undefined' );
 
 window.State = this.state;
@@ -45,6 +45,23 @@ window.State = this.state;
 	    if ( this.preset ) {
 	    	this.buildPresetModules();
 	    }
+
+	    this.state.addListener( 'mode', this.render, this );
+	};
+
+	Patch.prototype.render = function() {
+
+		var mode = this.state.getMode();
+
+		_.each( modules, function( module ) {
+			module.render();
+		});
+
+		if ( mode === 'edit' ) {
+			// hide cables
+		} else {
+			// show cables
+		}
 	};
 
 	Patch.prototype.getHtml = function() {
@@ -64,7 +81,9 @@ window.State = this.state;
 				module.postRenderFunction();
 			}, this );
 			this.rendered = true;
-			_.each( this.preset.connections, this.setConnection, this);
+			if ( this.state.getMode() === 'edit' ) {
+				_.each( this.preset.connections, this.setConnection, this);
+			}
 		}
 	};
 
@@ -125,8 +144,6 @@ window.State = this.state;
     			module : Modules[ module.name ]
     		}, module );
     	}, this );
-
-    	
     };
 
 	Patch.prototype.addModule = function( moduleObj, settings ) {
@@ -182,6 +199,7 @@ window.State = this.state;
 		if ( connection ) {
 			this.instance.detach( connection.data );
 			source.disconnect();
+			this.state.removeConnection( connectionId );
 			delete connections[ connectionId ];
 		}
 	};
@@ -219,8 +237,9 @@ window.State = this.state;
 		});
 
 		this.state.addConnection({
-			source: info.source.id,
-			target: info.target.id
+			id     : connection.id,
+			source : info.source.id,
+			target : info.target.id
 		});
 		
 		modules[ sourceData.moduleId ].storeConnection( connection.id );

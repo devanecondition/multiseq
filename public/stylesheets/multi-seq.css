@@ -798,6 +798,7 @@ a {
   font-size: 20px;
   line-height: 60px;
   margin-right: 25px;
+  text-transform: capitalize;
 }
 .menu-container .top {
   height: 60px;

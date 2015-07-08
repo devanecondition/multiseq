@@ -14,8 +14,10 @@ define([
 
 		this.patch = patch;
 
+		this.patch.state.addListener( 'mode', this.render, this );
+
 		// add menu to wrapper div
-		this.$container = $( this.getHtml() )
+		this.$container = $( '<div class="menu-container">' + this.getHtml() + '</div>' )
 			.on( 'click', '.add', this.toggleDrawer.bind( this ) )
 			.on( 'click', '.patch-mode', this.toggleMode.bind( this ) )
 			.on( 'click', '.new-patch', this.createNewPatch.bind( this ) );
@@ -26,21 +28,24 @@ define([
 		this.createDrawerLinks();
 	};
 
+	Menu.prototype.render = function() {
+		this.$container.html( this.getHtml() );
+	};
+
 	Menu.prototype.getElem = function() {
 		return this.$container;
 	};
 
 	Menu.prototype.getHtml = function() {
-		return (
-			'<div class="menu-container">' +
-				'<div class="top">' +
-					'<a href="#" class="add">+</a>' +
-					'<div class="spacer">|</div>' +
-					'<a href="#" class="new-patch">New Patch</a>' +
-					'<a href="#" class="patch-mode">Edit Mode</a>' +
-				'</div>' +
-				'<div class="drawer"></div>' +
-			'</div>'
+		var mode = this.patch.state.getMode();
+		return (			
+			'<div class="top">' +
+				'<a href="#" class="add">+</a>' +
+				'<div class="spacer">|</div>' +
+				'<a href="#" class="new-patch">New Patch</a>' +
+				'<a href="#" class="patch-mode">' + mode + ' Mode</a>' +
+			'</div>' +
+			'<div class="drawer"></div>'
 		);
 	};
 
@@ -52,16 +57,8 @@ define([
 	};
 
 	Menu.prototype.toggleMode = function( e ) {
-
 		e.preventDefault();
-
-		var $this   = $( e.target ),
-			mode    = $this.text(),
-			newMode = ( mode === 'Performance Mode' ) ? 'Edit Mode' : 'Performance Mode';
-
-		$this.text( newMode );
-		$( '.delete, .connections, ._jsPlumb_connector, ._jsPlumb_endpoint' ).toggle();
-		this.patch.instance.repaintEverything();
+		this.patch.state.toggleMode();
 	};
 
 	Menu.prototype.createDrawerLinks = function() {
@@ -76,22 +73,27 @@ define([
 		}.bind( this ) );
 	};
 
-	Menu.prototype.createNewPatch = function( e ) {
-
-		e.preventDefault();
-
+	Menu.prototype.destroyPatch = function() {
 		_.each( this.patch.getModules(), function( module ) {
-			module.disconnect();
-		});
+			this.patch.removeModule( module.stateData.id );
+		}, this );
 
 		$('.patch-container').remove();
 
+		this.patch.state.destroy();
 		delete this.patch;
+	};
+
+	Menu.prototype.createNewPatch = function( e ) {
+
+		e.preventDefault();
 
 		var $wrapper      = $( '<div></div>' ),
 			plumbInstance = jsPlumb.getInstance({ // create instance to draw module lines
 		        Endpoint : [ "Dot", { radius: 8 } ]
 		    });
+
+	    this.destroyPatch();
 
 		this.patch = new Patch( plumbInstance );
 

@@ -4,35 +4,66 @@ define([
 	_
 ) {
 
-	var State = function( preset ) {
-			preset           = preset || {};
-			this.modules     = preset.modules || [];
-			this.connections = preset.connections || [];
+	var modules     = [],
+		connections = [],
+		mode        = 'edit',
+		listeners   = {},
+		State       = function( preset ) {
+			if ( preset ) {
+				// this.toggleMode( mode );
+			}
 		},
-		proto = State.prototype;
+		proto       = State.prototype;
 
 	proto.getState = function() {
 		return {
-			modules     : this.modules,
-			connections : this.connections
+			modules     : modules,
+			connections : connections
 		}
 	};
 
+	proto.addListener = function( setting, fn, context ) {
+		listeners[ setting ] = listeners[ setting ] || [];
+		listeners[ setting ].push({
+			setting : setting,
+			fn      : fn,
+			context : context
+		});
+		return this;
+	};
+
+	proto.updateListeners = function( setting ) {
+		if ( listeners[ setting ] ) {
+			_.each( listeners[ setting ], function( listener ) {
+				listener.fn.call( listener.context );
+			});
+		};
+	};
+
+	proto.getMode = function() {
+		return mode;
+	};
+
+	proto.toggleMode = function() {
+		mode = ( mode === 'performance' ) ? 'edit' : 'performance';
+		this.updateListeners( 'mode' );
+	};
+
 	proto.getModule = function( moduleId ) {
-		return _.findWhere( this.modules, { id: moduleId } );
+		return _.findWhere( modules, { id: moduleId } );
 	};
 
 	proto.addModule = function( module ) {
-		this.modules.push( module.getStateData() );
+		modules.push( module.getStateData() );
 		return module;
 	};
 
 	proto.removeModule = function( moduleId ) {
 
-		var index = _.findIndex( this.modules, { id: moduleId } );
+		var index = _.findIndex( modules, { id: moduleId } );
 
 		if ( index > -1 ) {
-			this.modules.splice( index, 1 );
+			modules.splice( index, 1 );
 		}
 	};
 
@@ -48,7 +79,16 @@ define([
 	};
 
 	proto.addConnection = function( connection ) {
-		this.connections.push( connection );
+		connections.push( connection );
+	};
+
+	proto.removeConnection = function( connectionId ) {
+
+		var index = _.findIndex( connections, { id: connectionId } );
+
+		if ( index > -1 ) {
+			connections.splice( index, 1 );
+		}
 	};
 
 	proto.save = function() {
@@ -76,6 +116,12 @@ define([
 				console.log('no preset found', r );
 			}
 		});		
+	};
+
+	proto.destroy = function() {
+		modules = [];
+		connections = [];
+		mode = 'edit';
 	};
 
 	return State;

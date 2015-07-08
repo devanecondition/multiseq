@@ -13,24 +13,37 @@ define([
 ) {
 
 	var Module = function( params, settings ) {
+
 		this.stateData = {
 			id        : params.id,
 			name      : params.name || params.settings.name,
 		};
-		if ( settings ) { _.extend( this.stateData, settings ); }
+
+		if ( settings ) {
+			_.extend( this.stateData, settings );
+		}
+
 		this.patch       = params.patch;
 		this.state       = params.patch.state;
 		this.context     = params.context;
 		this.element     = params.element;		
-		this.$module     = $( this.getHtml() );
+		this.$module     = $( '<div class="module ' + this.stateData.name + '"></div>' );
 		this.outlets     = {};
-		this.jacks       = this.getJacks();
 		this.connections = [];
-		this.$deleteBtn  = new DeleteModuleBtn( this, this.patch )
-			.getElem()
-			.appendTo( this.$module );
 
-		this.renderJacks();
+		this.render();
+	};
+
+	Module.prototype.render = function() {
+
+		this.$module.html( this.getInnerHtml() );
+
+		if ( this.state.getMode() === 'edit' ) {
+			this.renderJacks();
+			this.$module.append( new DeleteModuleBtn( this, this.patch ).getElem() );
+		} else {
+			this.renderKnobs();
+		}
 	};
 
 	Module.prototype.getStateData = function() {
@@ -41,17 +54,16 @@ define([
 		return this.stateData.id;
 	};
 
-	// Create a module $wrapper
-	Module.prototype.getHtml = function() {
-		return '<div class="module ' + this.stateData.name + '">' + this.getInnerHtml() + '</div>';
-	};
-
 	Module.prototype.storeConnection = function( connection ) {
 		this.connections.push( connection );
 	};
 
 	Module.prototype.getConnectionIds = function() {
 		return this.connections;
+	};
+
+	Module.prototype.getKnobs = function() {
+		return [];
 	};
 
 	Module.prototype.getJacks = function() {
@@ -70,41 +82,46 @@ define([
 		return true;
 	};
 
-    Module.prototype.renderKnob = function( settings ) {
+	Module.prototype.renderKnobs = function() {
 
-		var knobLabel    = settings.knobLabel || '',
-			knobFunction = settings.knobFunction,
-			extraParams  = settings.extraParams || {},
-			knobValue    = ( typeof settings.knobValue !== 'undefined' ) ? settings.knobValue : 10,
-			$elem        = settings.$elem || false,
-			knobSettings = {
-				fgColor     : "#999",
-				inputColor  : '#666',
-				width       : 150,
-				height      : 150,
-				angleOffset : -125,
-				angleArc    : 250,
-				change      : knobFunction.bind( this )
-			};
+		_.each( this.getKnobs(), function( settings ) {
 
-		knobSettings = $.extend( {}, knobSettings, extraParams );
+			var knobLabel    = settings.knobLabel || '',
+				knobFunction = settings.knobFunction,
+				extraParams  = settings.extraParams || {},
+				knobValue    = ( typeof settings.knobValue !== 'undefined' ) ? settings.knobValue : 10,
+				$elem        = settings.$elem || false,
+				knobSettings = {
+					fgColor     : "#999",
+					inputColor  : '#666',
+					width       : 150,
+					height      : 150,
+					angleOffset : -125,
+					angleArc    : 250,
+					change      : knobFunction.bind( this )
+				};
 
-		if ( knobLabel ) {
-			$( '<p>' + knobLabel + '</p>' ).appendTo( this.$module );
-		}
+			knobSettings = $.extend( {}, knobSettings, extraParams );
 
-		if ( $elem ) {
-			return $elem.val( knobValue ).knob( knobSettings );
-		} else {
-    		return $( '<input type="text" value="' + knobValue + '" class="dial">' ).knob( knobSettings ).appendTo( this.$module );
-		}
+			if ( knobLabel ) {
+				$( '<p>' + knobLabel + '</p>' ).appendTo( this.$module );
+			}
+
+			if ( $elem ) {
+				return $elem.val( knobValue ).knob( knobSettings );
+			} else {
+	    		return $( '<input type="text" value="' + knobValue + '" class="dial">' ).knob( knobSettings ).appendTo( this.$module );
+			}
+		}, this );
 	};
 
 	Module.prototype.renderJacks = function() {
 
+		if ( this.state.getMode() === 'performance' ) { return; }
+
 		var $wrapper = $( '<div class="connections"></div>' );
 
-		_.each( this.jacks, function( jack ) {
+		_.each( this.getJacks(), function( jack ) {
 
 			 var $jack = $(
 			 	'<div class="jack-wrap">' +
