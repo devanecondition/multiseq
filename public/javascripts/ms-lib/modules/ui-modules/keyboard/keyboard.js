@@ -1,9 +1,11 @@
 define([
 	'UiModule',
+	'delete-module-btn',
 	'key',
 	'lodash'
 ], function(
 	UiModule,
+	DeleteModuleBtn,
 	Key,
 	_
 ) {
@@ -14,7 +16,7 @@ define([
 
 		this.active = false;
 
-		this.createKeys();
+		this.render();
 
 		this.$module.on( 'mouseleave', _.bind( this.deactivate, this ));
 	};
@@ -37,7 +39,11 @@ define([
 		];
 	};
 
-	Keyboard.prototype.createKeys = function() {
+	Keyboard.prototype.render = function() {
+
+		var $deleteBtn = new DeleteModuleBtn( this, this.patch ).getElem();
+
+		this.$module.html( '' ).append( $deleteBtn );
 
 		var notes = [
 			'f0', 'gb0', 'g0', 'ab0', 'a0', 'bb0', 'b0', 'c1', 'db1', 'd1', 'eb1', 'e1',
@@ -48,6 +54,8 @@ define([
 			var key = new Key( note, this );
 			this.$module.append( key.getKey() );
 		}, this ));
+
+		this.renderJacks();
 	};
 
 	Keyboard.prototype.activate = function() {
