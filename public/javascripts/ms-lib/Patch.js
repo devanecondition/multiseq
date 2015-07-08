@@ -58,9 +58,9 @@ window.State = this.state;
 		});
 
 		if ( mode === 'edit' ) {
-			// hide cables
+			// show connections
 		} else {
-			// show cables
+			_.each( connections, this.hideConnection, this );
 		}
 	};
 
@@ -127,12 +127,21 @@ window.State = this.state;
 
     Patch.prototype.setConnection = function( connection ) {
 
+    	var instance = this.getPlumbInstance(),
+
+			connection = instance.connect({
+				source: connection.source,
+				target: connection.target
+			});
+
+		return connection;
+    };
+
+    Patch.prototype.hideConnection = function( connection ) {
+
     	var instance = this.getPlumbInstance();
 
-		instance.connect({
-		  source: connection.source,
-		  target: connection.target
-		});
+		instance.detach( connection.data );
     };
 
     Patch.prototype.buildPresetModules = function() {
