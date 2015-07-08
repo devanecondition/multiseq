@@ -28,20 +28,23 @@ define([
 		this.setFrequency( 0.5 );
 		this.oscillator.start( 0 );
 
-
-		this.$tune = this.renderKnob({
-			$elem        : this.$module.find( '.dial' ),
-			knobFunction : this.setFrequency,
-			extraParams  : { min: 0.1, max: 50.0, step: 0.1 },
-			knobValue    : 0.5
-		});
-
 		this.$module
 			.on( 'click', '.wave-type', _.bind( this.onWaveTypeChange, this ));
 	};
 
 	Lfo.prototype = Object.create( AudioModule.prototype );
 	Lfo.prototype.constructor = Lfo;
+
+	Lfo.prototype.getKnobs = function() {
+		return [
+			{
+				$elem        : this.$module.find( '.dial' ),
+				knobFunction : this.setFrequency,
+				extraParams  : { min: 0.1, max: 50.0, step: 0.1 },
+				knobValue    : 0.5
+			}
+		];
+	};
 
 	Lfo.prototype.getJacks = function() {
 		return [

@@ -22,13 +22,6 @@ define([
 		this.output          = this.oscillator;
 		this.fineTune        = this.stateData.fineTune;
 
-		this.$tune = this.renderKnob({
-			$elem        : this.$module.find( '.dial' ),
-			knobFunction : this.setFineTuning,
-			extraParams  : { min: -20, max: 20 },
-			knobValue    : this.stateData.fineTune
-		});
-
 		this.setFrequency( this.stateData.frequency );
 		this.oscillator.start( 0 );
 
@@ -39,6 +32,17 @@ define([
 
 	Vco.prototype = Object.create( AudioModule.prototype );
 	Vco.prototype.constructor = Vco;
+
+	Vco.prototype.getKnobs = function() {
+		return [
+			{
+				$elem        : this.$module.find( '.dial' ),
+				knobFunction : this.setFineTuning,
+				extraParams  : { min: -20, max: 20 },
+				knobValue    : this.stateData.fineTune
+			}
+		];
+	};
 
 	Vco.prototype.getJacks = function() {
 		return [

@@ -17,16 +17,20 @@ define([
 		this.amplitude       = this.gain.gain;
 
 		this.setAmplitude( this.stateData.peakAmplitude );
-
-		this.$attack         = this.renderKnob({
-			knobLabel    : 'Attenuator',
-			knobFunction : this.setAmplitude,
-			knobValue    : this.stateData.peakAmplitude
-		});
     };
 
 	Vca.prototype = Object.create( AudioModule.prototype );
 	Vca.prototype.constructor = Vca;
+
+	Vca.prototype.getKnobs = function() {
+		return [
+			{
+				knobLabel    : 'Attenuator',
+				knobFunction : this.setAmplitude,
+				knobValue    : this.stateData.peakAmplitude
+			}
+		];
+	};
 
 	Vca.prototype.getJacks = function() {
 		return [

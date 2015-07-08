@@ -19,24 +19,27 @@ define([
 
 		this.setFrequency( this.stateData.frequency );
 		this.setResonance( this.stateData.resonance );
-
-		this.$freq = this.renderKnob({
-			knobLabel    : 'Frequency',
-			knobFunction : this.setFrequency,
-			extraParams  : { min: 20, max: 10000, step: 25 },
-			knobValue    : this.stateData.frequency
-		});
-
-		this.$resonance = this.renderKnob({
-			knobLabel    : 'Resonance',
-			knobFunction : this.setResonance,
-			extraParams  : { min: 0, max: 100 },
-			knobValue    : this.stateData.resonance
-		});
     };
 
 	Filter.prototype = Object.create( AudioModule.prototype );
 	Filter.prototype.constructor = Filter;
+
+	Filter.prototype.getKnobs = function() {
+		return [
+			{
+				knobLabel    : 'Frequency',
+				knobFunction : this.setFrequency,
+				extraParams  : { min: 20, max: 10000, step: 25 },
+				knobValue    : this.stateData.frequency
+			},
+			{
+				knobLabel    : 'Resonance',
+				knobFunction : this.setResonance,
+				extraParams  : { min: 0, max: 100 },
+				knobValue    : this.stateData.resonance
+			}
+		];
+	};
 
 	Filter.prototype.getJacks = function() {
 		return [

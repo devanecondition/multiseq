@@ -15,21 +15,25 @@ define([
 
 		this.setAttack( this.stateData.attackTime );
 		this.setRelease( this.stateData.releaseTime );
-
-		this.$attack  = this.renderKnob({
-			knobLabel    : 'Attack',
-			knobFunction : this.setAttack,
-			knobValue    : this.stateData.attackTime
-		});
-		this.$release = this.renderKnob({
-			knobLabel    : 'Release',
-			knobFunction : this.setRelease,
-			knobValue    : this.stateData.releaseTime
-		});
     };
 
 	EnvelopeGenerator.prototype = Object.create( AudioModule.prototype );
 	EnvelopeGenerator.prototype.constructor = EnvelopeGenerator;
+
+	EnvelopeGenerator.prototype.getKnobs = function() {
+		return [
+			{
+				knobLabel    : 'Attack',
+				knobFunction : this.setAttack,
+				knobValue    : this.stateData.attackTime
+			},
+			{
+				knobLabel    : 'Release',
+				knobFunction : this.setRelease,
+				knobValue    : this.stateData.releaseTime
+			}
+		];
+	};
 
 	EnvelopeGenerator.prototype.getJacks = function() {
 		return [

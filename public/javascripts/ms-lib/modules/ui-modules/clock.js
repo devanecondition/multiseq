@@ -12,14 +12,7 @@ define([
 			tempo : params.settings.tempo || 250
 		});
 
-		this.active  = false;
-
-		this.$tempo  = this.renderKnob({
-			knobLabel    : 'BPM',
-			knobFunction : this.adjustTempo,
-			extraParams  : { min: 20, max: 350 },
-			knobValue    : params.settings.tempo || 250
-		});
+		this.active = false;
 
 		//Add Listeners...
 		this.$module
@@ -28,6 +21,17 @@ define([
 
 	Clock.prototype = Object.create( UiModule.prototype );
 	Clock.prototype.constructor = Clock;
+
+	Clock.prototype.getKnobs = function() {
+		return [
+			{
+				knobLabel    : 'BPM',
+				knobFunction : this.adjustTempo,
+				extraParams  : { min: 20, max: 350 },
+				knobValue    : this.stateData.tempo || 250
+			}
+		];
+	};
 
 	Clock.prototype.getJacks = function() {
 		return [

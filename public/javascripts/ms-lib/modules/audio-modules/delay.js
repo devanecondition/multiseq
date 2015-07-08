@@ -21,24 +21,27 @@ define([
 
 		this.delay.connect( this.feedback );
     	this.feedback.connect( this.delay );
-
-		this.$time = this.renderKnob({
-			knobLabel    : 'Time',
-			knobFunction : this.setTime,
-			extraParams  : { min: 0, max: 100},
-			knobValue    : this.stateData.delayTime
-		});
-
-		this.$feedback = this.renderKnob({
-			knobLabel    : 'FeedBack',
-			knobFunction : this.setFeedback,
-			extraParams  : { min: 0, max: 100 },
-			knobValue    : this.stateData.feedback
-		});
     };
 
 	Delay.prototype = Object.create( AudioModule.prototype );
 	Delay.prototype.constructor = Delay;
+
+	Delay.prototype.getKnobs = function() {
+		return [
+			{
+				knobLabel    : 'Time',
+				knobFunction : this.setTime,
+				extraParams  : { min: 0, max: 100},
+				knobValue    : this.stateData.delayTime
+			},
+			{
+				knobLabel    : 'FeedBack',
+				knobFunction : this.setFeedback,
+				extraParams  : { min: 0, max: 100 },
+				knobValue    : this.stateData.feedback
+			}
+		];
+	};
 
 	Delay.prototype.getJacks = function() {
 		return [
