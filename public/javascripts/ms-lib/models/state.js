@@ -91,6 +91,10 @@ define([
 		}
 	};
 
+	proto.clearConnections = function() {
+		connections = [];
+	};
+
 	proto.save = function() {
 
 		var state = this.getState(),

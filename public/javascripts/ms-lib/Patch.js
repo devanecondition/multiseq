@@ -39,8 +39,7 @@ window.State = this.state;
 			} 
 		});
 
-	    this.instance.bind( 'connection', this.makeConnection.bind( this ) );
-	    this.instance.bind( 'click', this.onCableSelected.bind( this ) );
+		this.resetConnections();
 
 	    if ( this.preset ) {
 	    	this.buildPresetModules();
@@ -58,9 +57,12 @@ window.State = this.state;
 		});
 
 		if ( mode === 'edit' ) {
-			// show connections
+			this.state.clearConnections();
+			connections = {};
+			this.rendered = false;
+			this.postRenderFunction();
 		} else {
-			_.each( connections, this.hideConnection, this );
+			this.resetConnections();
 		}
 	};
 
@@ -74,13 +76,23 @@ window.State = this.state;
 		return this.$container;
 	};
 
+	Patch.prototype.resetConnections = function() {
+		this.instance.reset();
+	    this.instance.bind( 'connection', this.makeConnection.bind( this ) );
+	    this.instance.bind( 'click', this.onCableSelected.bind( this ) );
+	};
+
 	Patch.prototype.postRenderFunction = function( $wrapper ) {
+
 		if ( !this.rendered ) {
+
 			_.each( modules, function( module ) {
 				this.addJackListeners( module.getElem() );
 				module.postRenderFunction();
 			}, this );
+
 			this.rendered = true;
+
 			if ( this.state.getMode() === 'edit' ) {
 				_.each( this.preset.connections, this.setConnection, this);
 			}
@@ -127,21 +139,13 @@ window.State = this.state;
 
     Patch.prototype.setConnection = function( connection ) {
 
-    	var instance = this.getPlumbInstance(),
-
-			connection = instance.connect({
+    	var instance      = this.getPlumbInstance(),
+			newConnection = instance.connect({
 				source: connection.source,
 				target: connection.target
 			});
 
-		return connection;
-    };
-
-    Patch.prototype.hideConnection = function( connection ) {
-
-    	var instance = this.getPlumbInstance();
-
-		instance.detach( connection.data );
+		return newConnection;
     };
 
     Patch.prototype.buildPresetModules = function() {
@@ -239,6 +243,8 @@ window.State = this.state;
 			sourceData = $( connection.source ).data(),
 			targetData = $( connection.target ).data();
 
+		if ( _.contains( modules[ sourceData.moduleId ].getConnectionIds(), connection.id ) ) { return; }
+
 		this.addConnection({
 			data   : connection,
 			source : sourceData,
@@ -250,7 +256,7 @@ window.State = this.state;
 			source : info.source.id,
 			target : info.target.id
 		});
-		
+
 		modules[ sourceData.moduleId ].storeConnection( connection.id );
 		modules[ targetData.moduleId ].storeConnection( connection.id );
         modules[ sourceData.moduleId ].connect( sourceData.jackId, modules[ targetData.moduleId ] );
