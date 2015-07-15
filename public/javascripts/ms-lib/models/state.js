@@ -78,6 +78,11 @@ define([
 		return params.value;
 	};
 
+	proto.getConnection = function( id ) {
+		var index = _.findIndex( connections, { id: id } );
+		return connections[ index ];
+	};
+
 	proto.addConnection = function( connection ) {
 		connections.push( connection );
 	};

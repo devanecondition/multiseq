@@ -13,6 +13,7 @@ require.config({
         'menu-link'         : '../javascripts/ms-lib/ui-components/top-menu/menu-link',
         'delete-module-btn' : '../javascripts/ms-lib/ui-components/delete-module-btn',
         'jack'              : '../javascripts/ms-lib/ui-components/jack',
+        'cable'             : '../javascripts/ms-lib/ui-components/cable',
 
         // Models
         'state'             : '../javascripts/ms-lib/models/state',

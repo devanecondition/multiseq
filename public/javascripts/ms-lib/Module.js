@@ -44,6 +44,8 @@ define([
 		} else {
 			this.renderKnobs();
 		}
+
+		return this;
 	};
 
 	Module.prototype.getStateData = function() {
@@ -79,6 +81,7 @@ define([
 	};
 
 	Module.prototype.postRenderFunction = function() {
+		this.addJackListeners();
 		return true;
 	};
 
@@ -141,6 +144,37 @@ define([
 
 		this.$module.append( $wrapper );
 	};
+
+	Module.prototype.addJackListeners = function() {
+
+		var $module  = this.getElem()
+			$inlets  = $module.find( '.inlet' ),
+			$outlets = $module.find( '.outlet' ),
+			instance = this.patch.getPlumbInstance();
+
+		if ( $outlets.length ) {
+		    instance.makeSource( $outlets, {
+		        filter              : ".jack.outlet div",
+		        anchor              : "Center",
+		        connector           : [ "StateMachine", { curviness: 80 } ],
+		        connectorStyle      : {
+		            strokeStyle     : "#444",
+		            lineWidth       : 4,
+		            outlineColor    : "transparent",
+		            outlineWidth    : 4
+		        },
+		        connectorClass      : "patch-cord"
+		    });
+	    }
+
+	    if ( $inlets.length ) {
+		    instance.makeTarget( $inlets, {
+		        dropOptions: { hoverClass: "dragHover" },
+		        anchor: "Center",
+		        allowLoopback: false
+		    });
+	    }
+    };
 
 	Module.prototype.setModuleProperty = function( property, value ) {
 		return this.state.setModuleProperty({

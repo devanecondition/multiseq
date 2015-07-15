@@ -56,6 +56,8 @@ define([
 		}, this ));
 
 		this.renderJacks();
+
+		return this;
 	};
 
 	Keyboard.prototype.activate = function() {

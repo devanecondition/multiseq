@@ -2,12 +2,14 @@ define([
 	'modules',
 	'state',
 	'empty',
+	'cable',
 	'jsPlumb',
 	'lodash'
 ], function(
 	Modules,
 	State,
 	Empty,
+	Cable,
 	jsPlumb,
 	_
 ) {
@@ -17,17 +19,18 @@ define([
 
 	// private variables...
 	var modules             = {},
-		moduleIdIncrementor = 0,
 		connections         = {},
+		moduleIdIncrementor = 0,
 		context             = new AudioContext();
 
 	var Patch = function( instance, preset ) {
-		this.instance   = instance;
-		this.$container = $( this.getHtml() );
-		this.$doc       = $( document );
-		this.preset     = preset;
-		this.state      = new State( preset );
-		this.rendered   = ( typeof preset === 'undefined' );
+		this.instance     = instance;
+		this.$container   = $( this.getHtml() );
+		this.$doc         = $( document );
+		this.preset       = preset;
+		this.state        = new State( preset );
+		this.rendered     = ( typeof preset === 'undefined' );
+		this.connectionId = 0;
 
 window.State = this.state;
 
@@ -39,7 +42,7 @@ window.State = this.state;
 			} 
 		});
 
-		this.resetConnections();
+		this.enableConnections();
 
 	    if ( this.preset ) {
 	    	this.buildPresetModules();
@@ -53,16 +56,18 @@ window.State = this.state;
 		var mode = this.state.getMode();
 
 		_.each( modules, function( module ) {
-			module.render();
+			module
+			.render()
+			.postRenderFunction();
 		});
 
 		if ( mode === 'edit' ) {
-			this.state.clearConnections();
-			connections = {};
-			this.rendered = false;
-			this.postRenderFunction();
+			_.each( connections, function( connection ) {
+				connection.connect();
+			});
+			this.enableConnections();
 		} else {
-			this.resetConnections();
+			this.disableConnections();
 		}
 	};
 
@@ -76,25 +81,34 @@ window.State = this.state;
 		return this.$container;
 	};
 
-	Patch.prototype.resetConnections = function() {
-		this.instance.reset();
-	    this.instance.bind( 'connection', this.makeConnection.bind( this ) );
+	Patch.prototype.enableConnections = function() {
+	    this.instance.bind( 'connection', this.onConnection.bind( this ) );
 	    this.instance.bind( 'click', this.onCableSelected.bind( this ) );
+	};
+
+	Patch.prototype.disableConnections = function() {
+		this.instance.reset();
+	    this.instance.unbind( 'connection' );
+	    this.instance.unbind( 'click' );
 	};
 
 	Patch.prototype.postRenderFunction = function( $wrapper ) {
 
-		if ( !this.rendered ) {
+		_.each( modules, function( module ) {
+			module.postRenderFunction();
+		}, this );
 
-			_.each( modules, function( module ) {
-				this.addJackListeners( module.getElem() );
-				module.postRenderFunction();
-			}, this );
+		if ( !this.rendered ) {
 
 			this.rendered = true;
 
 			if ( this.state.getMode() === 'edit' ) {
-				_.each( this.preset.connections, this.setConnection, this);
+				_.each( this.preset.connections, function( connectionInfo ) {
+					return this.instance.connect({
+						source: connectionInfo.source,
+						target: connectionInfo.target
+					});
+				}, this);
 			}
 		}
 	};
@@ -106,47 +120,6 @@ window.State = this.state;
 	Patch.prototype.getPlumbInstance = function() {
 		return this.instance;
 	};
-
-	Patch.prototype.addJackListeners = function( $module ) {
-
-		var $inlets  = $module.find( '.inlet' ),
-			$outlets = $module.find( '.outlet' ),
-			instance = this.getPlumbInstance();
-
-		if ( $outlets.length ) {
-		    instance.makeSource( $outlets, {
-		        filter              : ".jack.outlet div",
-		        anchor              : "Center",
-		        connector           : [ "StateMachine", { curviness: 80 } ],
-		        connectorStyle      : {
-		            strokeStyle     : "#444",
-		            lineWidth       : 4,
-		            outlineColor    : "transparent",
-		            outlineWidth    : 4
-		        },
-		        connectorClass      : "patch-cord"
-		    });
-	    }
-
-	    if ( $inlets.length ) {
-		    instance.makeTarget( $inlets, {
-		        dropOptions: { hoverClass: "dragHover" },
-		        anchor: "Center",
-		        allowLoopback: false
-		    });
-	    }
-    };
-
-    Patch.prototype.setConnection = function( connection ) {
-
-    	var instance      = this.getPlumbInstance(),
-			newConnection = instance.connect({
-				source: connection.source,
-				target: connection.target
-			});
-
-		return newConnection;
-    };
 
     Patch.prototype.buildPresetModules = function() {
 
@@ -185,7 +158,6 @@ window.State = this.state;
 		this.$container.append( $module );
 
 		if ( this.rendered ) {
-			this.addJackListeners( $module );
 			modules[ id ].postRenderFunction();
 		}
 	};
@@ -205,7 +177,7 @@ window.State = this.state;
 	};
 
 	Patch.prototype.detachConnection = function( connectionId ) {
-
+console.log(connections[ connectionId ])
 		var connection = connections[ connectionId ],
 			source     = ( connection ) ? modules[ connection.source.moduleId ] : null;
 
@@ -233,33 +205,41 @@ window.State = this.state;
         this.$doc.on( 'keydown', onDeleteKeydown );
 	};
 
-	Patch.prototype.addConnection = function( connection ) {
-		connections[ connection.data.id ] = connection;
+	Patch.prototype.onConnection = function( connectionInfo ) {
+console.log('onConnection');
+
+		var cable = this.createConnection({
+			source : connectionInfo.sourceId,
+			target : connectionInfo.targetId
+		});
+
+		this.storeConnection({
+			cable : cable,
+			connectInfo : connectionInfo
+		});
 	};
 
-	Patch.prototype.makeConnection = function ( info ) {
-
-		var connection = info.connection,
-			sourceData = $( connection.source ).data(),
-			targetData = $( connection.target ).data();
-
-		if ( _.contains( modules[ sourceData.moduleId ].getConnectionIds(), connection.id ) ) { return; }
-
-		this.addConnection({
-			data   : connection,
-			source : sourceData,
-			target : targetData
+	Patch.prototype.createConnection = function ( connectInfo ) {
+		return new Cable({
+			id          : this.connectionId++,
+			instance    : this.getPlumbInstance(),
+			state       : this.state,
+			connectInfo : connectInfo
 		});
+	};
 
-		this.state.addConnection({
-			id     : connection.id,
-			source : info.source.id,
-			target : info.target.id
-		});
+	Patch.prototype.storeConnection = function( options ) {
+console.log('storeConnection');
 
-		modules[ sourceData.moduleId ].storeConnection( connection.id );
-		modules[ targetData.moduleId ].storeConnection( connection.id );
-        modules[ sourceData.moduleId ].connect( sourceData.jackId, modules[ targetData.moduleId ] );
+		var connectInfo = options.cable.getConnectInfo(),
+			cable       = options.cable,
+			sourceData  = $( options.connectInfo.source ).data(),
+			targetData  = $( options.connectInfo.target ).data();
+
+		connections[ cable.id ] = cable;
+		modules[ sourceData.moduleId ].storeConnection( cable.id );
+		modules[ targetData.moduleId ].storeConnection( cable.id );
+		modules[ sourceData.moduleId ].connect( sourceData.jackId, modules[ targetData.moduleId ] );
 	};
 
 	Patch.prototype.shortcuts = function( e ) {
