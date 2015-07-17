@@ -61,6 +61,24 @@ window.State = this.state;
 		});
 	};
 
+	Patch.prototype.getIdInfo = function( id ) {
+
+		var idArray  = id.split('_'),
+			jackType = idArray[0],
+			moduleId = idArray[1],
+			jackId;
+
+		idArray.splice( 0, 2 );
+
+		jackId = idArray.join('_');
+
+		return {
+			type     : jackType,
+			moduleId : moduleId,
+			jackId   : jackId
+		};
+	};
+
 	Patch.prototype.render = function() {
 
 		var mode = this.state.getMode();
@@ -74,13 +92,13 @@ window.State = this.state;
 		if ( !this.rendered ) {
 			_.each( this.preset.connections, function( connection ) {
 				var cable = this.createConnection( connection ),
-					sourceData = connection.source.split('_'),
-					targetData = connection.target.split('_');
+					sourceData = this.getIdInfo( connection.source ),
+					targetData = this.getIdInfo( connection.target );
 
 				connections[ cable.id ] = cable;
-				modules[ sourceData[1] ].storeConnection( cable.id );
-				modules[ targetData[1] ].storeConnection( cable.id );
-				modules[ sourceData[1] ].connect( sourceData[2], modules[ targetData[1] ] );
+				modules[ sourceData.moduleId ].storeConnection( cable.id );
+				modules[ targetData.moduleId ].storeConnection( cable.id );
+				modules[ sourceData.moduleId ].connect( sourceData.jackId, modules[ targetData.moduleId ] );
 			}, this );
 
 			this.rendered = true;
@@ -118,14 +136,14 @@ window.State = this.state;
 				target     : connection.targetId,
 				connection : connection.connection
 			}),
-			sourceData = connection.sourceId.split('_'),
-			targetData = connection.targetId.split('_');
+			sourceData = this.getIdInfo( connection.sourceId ),
+			targetData = this.getIdInfo( connection.targetId );
 
 		connections[ cable.id ] = cable;
 
-		modules[ sourceData[1] ].storeConnection( cable.id );
-		modules[ targetData[1] ].storeConnection( cable.id );
-		modules[ sourceData[1] ].connect( sourceData[2], modules[ targetData[1] ] );
+		modules[ sourceData[ moduleId ] ].storeConnection( cable.id );
+		modules[ targetData[ moduleId ] ].storeConnection( cable.id );
+		modules[ sourceData[ moduleId ] ].connect( sourceData[ jackId ], modules[ targetData[ moduleId ] ] );
 	};
 
 	Patch.prototype.disableConnections = function() {
@@ -156,7 +174,7 @@ window.State = this.state;
 	Patch.prototype.addModule = function( moduleObj, settings ) {
 
 		var timeStamp = new Date().getTime(),
-			id        = moduleObj.id || ++moduleIdIncrementor + '_' + timeStamp;
+			id        = moduleObj.id || ++moduleIdIncrementor + timeStamp;
 
 		modules[ id ] = new moduleObj.module({
 			name       : moduleObj.name,
