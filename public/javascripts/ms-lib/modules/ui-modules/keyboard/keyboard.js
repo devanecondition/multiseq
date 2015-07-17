@@ -43,7 +43,11 @@ define([
 
 		var $deleteBtn = new DeleteModuleBtn( this, this.patch ).getElem();
 
-		this.$module.html( '' ).append( $deleteBtn );
+		this.$module.html( '' );
+		
+		if ( this.state.getMode() === 'edit' ) {
+			this.$module.append( $deleteBtn );
+		}
 
 		var notes = [
 			'f0', 'gb0', 'g0', 'ab0', 'a0', 'bb0', 'b0', 'c1', 'db1', 'd1', 'eb1', 'e1',

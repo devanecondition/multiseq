@@ -51,6 +51,14 @@ window.State = this.state;
 	    this.state.addListener( 'mode', this.render, this );
 	};
 
+	Patch.prototype.createConnections = function ( connectInfo ) {
+		_.each( this.preset.connections, function( connection ) {
+			var cable = this.createConnection( connection );
+			this.storeConnection( connection, cable );				
+		}, this );
+		this.rendered = true;
+	};
+
 	Patch.prototype.createConnection = function ( connectInfo ) {
 		return new Cable({
 			id          : this.connectionId++,
@@ -83,25 +91,10 @@ window.State = this.state;
 
 		var mode = this.state.getMode();
 
-		_.each( modules, function( module ) {
-			module
-			.render()
-			.postRenderFunction();
-		});
+		this.renderModules();
 
 		if ( !this.rendered ) {
-			_.each( this.preset.connections, function( connection ) {
-				var cable = this.createConnection( connection ),
-					sourceData = this.getIdInfo( connection.source ),
-					targetData = this.getIdInfo( connection.target );
-
-				connections[ cable.id ] = cable;
-				modules[ sourceData.moduleId ].storeConnection( cable.id );
-				modules[ targetData.moduleId ].storeConnection( cable.id );
-				modules[ sourceData.moduleId ].connect( sourceData.jackId, modules[ targetData.moduleId ] );
-			}, this );
-
-			this.rendered = true;
+			this.createConnections();
 		}
 
 		if ( mode === 'edit' ) {
@@ -129,21 +122,27 @@ window.State = this.state;
 	    this.instance.bind( 'click', this.onCableSelected.bind( this ) );
 	};
 
+	Patch.prototype.storeConnection = function( connection, cable ) {
+
+		var connection = connection || {},
+			sourceData = this.getIdInfo( connection.sourceId || connection.source ),
+			targetData = this.getIdInfo( connection.targetId || connection.target );
+
+		connections[ cable.id ] = cable;
+		modules[ sourceData.moduleId ].storeConnection( cable.id );
+		modules[ targetData.moduleId ].storeConnection( cable.id );
+		modules[ sourceData.moduleId ].connect( sourceData.jackId, modules[ targetData.moduleId ] );
+	};
+
 	Patch.prototype.onConnection = function( connection ) {
 
 		var cable = this.createConnection({
 				source     : connection.sourceId,
 				target     : connection.targetId,
 				connection : connection.connection
-			}),
-			sourceData = this.getIdInfo( connection.sourceId ),
-			targetData = this.getIdInfo( connection.targetId );
+			});
 
-		connections[ cable.id ] = cable;
-
-		modules[ sourceData[ moduleId ] ].storeConnection( cable.id );
-		modules[ targetData[ moduleId ] ].storeConnection( cable.id );
-		modules[ sourceData[ moduleId ] ].connect( sourceData[ jackId ], modules[ targetData[ moduleId ] ] );
+		this.storeConnection( connection, cable );
 	};
 
 	Patch.prototype.disableConnections = function() {
@@ -188,6 +187,14 @@ window.State = this.state;
 		this.state.addModule( modules[ id ] );
 
 		this.renderModule( id );
+	};
+
+	Patch.prototype.renderModules = function( id ) {
+		_.each( modules, function( module ) {
+			module
+			.render()
+			.postRenderFunction();
+		});
 	};
 
 	Patch.prototype.renderModule = function( id ) {

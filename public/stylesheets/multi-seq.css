@@ -1070,6 +1070,7 @@ a {
   width: 142px !important;
   border-color: #999;
   padding: 0;
+  z-index: 100;
 }
 .module .ui-widget-content li {
   display: block;
@@ -1148,16 +1149,24 @@ a {
 .module.keyboard {
   width: 100%;
   height: auto;
-  border: none;
+  box-sizing: border-box;
 }
 .module.keyboard .key {
   width: 7.1428%;
   height: 200px;
   box-sizing: border-box;
-  border: 1px solid #ccc;
+  border-width: 0 1px;
+  border-style: solid;
+  border-color: #ccc;
   background: #eee;
   float: left;
   cursor: pointer;
+}
+.module.keyboard .key:first-child {
+  border-left-width: 0;
+}
+.module.keyboard .key:last-child {
+  border-right-width: 0;
 }
 .module.keyboard .key.pressed {
   background: #ddd;

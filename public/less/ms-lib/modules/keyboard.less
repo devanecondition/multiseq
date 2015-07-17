@@ -1,16 +1,25 @@
 &.keyboard {
 	width: 100%;
 	height: auto;
-	border: none;
+	box-sizing: border-box;
 
 	.key {
 		width: 7.1428%;
 		height: 200px;
 		box-sizing: border-box;
-		border: 1px solid #ccc;
+		border-width: 0 1px;
+		border-style: solid;
+		border-color: #ccc;
 		background: #eee;
 		float: left;
 		cursor: pointer;
+
+		&:first-child {
+			border-left-width: 0;
+		}
+		&:last-child {
+			border-right-width: 0;
+		}
 
 		&.pressed {
 			background: #ddd;
