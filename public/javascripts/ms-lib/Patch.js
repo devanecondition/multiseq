@@ -51,6 +51,16 @@ window.State = this.state;
 	    this.state.addListener( 'mode', this.render, this );
 	};
 
+	Patch.prototype.createConnection = function ( connectInfo ) {
+		return new Cable({
+			id          : this.connectionId++,
+			instance    : this.getPlumbInstance(),
+			patch       : this,
+			state       : this.state,
+			connectInfo : connectInfo
+		});
+	};
+
 	Patch.prototype.render = function() {
 
 		var mode = this.state.getMode();
@@ -60,6 +70,21 @@ window.State = this.state;
 			.render()
 			.postRenderFunction();
 		});
+
+		if ( !this.rendered ) {
+			_.each( this.preset.connections, function( connection ) {
+				var cable = this.createConnection( connection ),
+					sourceData = connection.source.split('_'),
+					targetData = connection.target.split('_');
+
+				connections[ cable.id ] = cable;
+				modules[ sourceData[1] ].storeConnection( cable.id );
+				modules[ targetData[1] ].storeConnection( cable.id );
+				modules[ sourceData[1] ].connect( sourceData[2], modules[ targetData[1] ] );
+			}, this );
+
+			this.rendered = true;
+		}
 
 		if ( mode === 'edit' ) {
 			_.each( connections, function( connection ) {
@@ -82,35 +107,31 @@ window.State = this.state;
 	};
 
 	Patch.prototype.enableConnections = function() {
-	    this.instance.bind( 'connection', this.onConnection.bind( this ) );
+		this.instance.bind( 'connection', this.onConnection.bind( this ) );
 	    this.instance.bind( 'click', this.onCableSelected.bind( this ) );
+	};
+
+	Patch.prototype.onConnection = function( connection ) {
+
+		var cable = this.createConnection({
+				source     : connection.sourceId,
+				target     : connection.targetId,
+				connection : connection.connection
+			}),
+			sourceData = connection.sourceId.split('_'),
+			targetData = connection.targetId.split('_');
+
+		connections[ cable.id ] = cable;
+
+		modules[ sourceData[1] ].storeConnection( cable.id );
+		modules[ targetData[1] ].storeConnection( cable.id );
+		modules[ sourceData[1] ].connect( sourceData[2], modules[ targetData[1] ] );
 	};
 
 	Patch.prototype.disableConnections = function() {
 		this.instance.reset();
 	    this.instance.unbind( 'connection' );
 	    this.instance.unbind( 'click' );
-	};
-
-	Patch.prototype.postRenderFunction = function( $wrapper ) {
-
-		_.each( modules, function( module ) {
-			module.postRenderFunction();
-		}, this );
-
-		if ( !this.rendered ) {
-
-			this.rendered = true;
-
-			if ( this.state.getMode() === 'edit' ) {
-				_.each( this.preset.connections, function( connectionInfo ) {
-					return this.instance.connect({
-						source: connectionInfo.source,
-						target: connectionInfo.target
-					});
-				}, this);
-			}
-		}
 	};
 
 	Patch.prototype.getModules = function() {
@@ -167,7 +188,10 @@ window.State = this.state;
 		var module = modules[ moduleId ];
 
 		// disconnect any patch cords
-		_.each( module.getConnectionIds(), this.detachConnection.bind( this ) );
+		_.each( module.getConnectionIds(), function( id ) {
+			this.detachConnection( connections[id].cableId );
+		}, this );
+
 		// remove from DOM
 		module.getElem().remove();
 		this.instance.repaintEverything();
@@ -177,12 +201,13 @@ window.State = this.state;
 	};
 
 	Patch.prototype.detachConnection = function( connectionId ) {
-console.log(connections[ connectionId ])
-		var connection = connections[ connectionId ],
-			source     = ( connection ) ? modules[ connection.source.moduleId ] : null;
+
+		var connection = _.findWhere( connections, { 'cableId': connectionId } );
 
 		if ( connection ) {
-			this.instance.detach( connection.data );
+
+			var source = ( connection ) ? modules[ connection.getConnectInfo().source.split('_')[1] ] : null;
+			connection.disconnect();
 			source.disconnect();
 			this.state.removeConnection( connectionId );
 			delete connections[ connectionId ];
@@ -203,43 +228,6 @@ console.log(connections[ connectionId ])
         cable.toggleType( 'selected' );
 
         this.$doc.on( 'keydown', onDeleteKeydown );
-	};
-
-	Patch.prototype.onConnection = function( connectionInfo ) {
-console.log('onConnection');
-
-		var cable = this.createConnection({
-			source : connectionInfo.sourceId,
-			target : connectionInfo.targetId
-		});
-
-		this.storeConnection({
-			cable : cable,
-			connectInfo : connectionInfo
-		});
-	};
-
-	Patch.prototype.createConnection = function ( connectInfo ) {
-		return new Cable({
-			id          : this.connectionId++,
-			instance    : this.getPlumbInstance(),
-			state       : this.state,
-			connectInfo : connectInfo
-		});
-	};
-
-	Patch.prototype.storeConnection = function( options ) {
-console.log('storeConnection');
-
-		var connectInfo = options.cable.getConnectInfo(),
-			cable       = options.cable,
-			sourceData  = $( options.connectInfo.source ).data(),
-			targetData  = $( options.connectInfo.target ).data();
-
-		connections[ cable.id ] = cable;
-		modules[ sourceData.moduleId ].storeConnection( cable.id );
-		modules[ targetData.moduleId ].storeConnection( cable.id );
-		modules[ sourceData.moduleId ].connect( sourceData.jackId, modules[ targetData.moduleId ] );
 	};
 
 	Patch.prototype.shortcuts = function( e ) {

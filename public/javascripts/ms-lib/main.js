@@ -32,7 +32,7 @@ require([
 
 			// Post-render functions...
 			plumbInstance.setContainer( patch.getElem() );
-			patch.postRenderFunction();		
+			patch.render();		
 		},
 
 		getPreset : function() {		

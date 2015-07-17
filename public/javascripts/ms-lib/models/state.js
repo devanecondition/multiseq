@@ -10,7 +10,7 @@ define([
 		listeners   = {},
 		State       = function( preset ) {
 			if ( preset ) {
-				// this.toggleMode( mode );
+				this.toggleMode( mode );
 			}
 		},
 		proto       = State.prototype;
