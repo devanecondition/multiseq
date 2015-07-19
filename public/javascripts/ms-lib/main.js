@@ -40,7 +40,10 @@ require([
 				url: '/api/patch/get/559b49a42a5843bd05000003',
 				method: 'GET',
 				dataType: 'json',
-				success: function( preset ) {			
+				success: function( preset ) {
+
+					if ( !preset ) { return; }
+					
 					preset.modules = JSON.parse( preset.modules );
 					preset.connections = JSON.parse( preset.connections );
 					synth.initialize( preset );
