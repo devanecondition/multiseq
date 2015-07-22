@@ -244,7 +244,10 @@ window.State = this.state;
 		var onDeleteKeydown = function( e ) {
         	if ( e.which == 8 ) {
 	        	e.preventDefault();
-        		this.detachConnection( cable.id );
+
+				var connection = _.findWhere( connections, { 'cableId': cable.id } );
+				
+        		this.detachConnection( connection.id );
         		this.$doc.off( 'keydown', onDeleteKeydown );
         	}
         }.bind( this );
