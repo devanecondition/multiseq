@@ -211,13 +211,12 @@ window.State = this.state;
 	Patch.prototype.removeModule = function( moduleId ) {
 
 		var module = modules[ moduleId ];
-console.log('rm');
+
 		// disconnect any patch cords
 		_.each( module.getConnectionIds(), function( id ) {
-console.log(id)
-			this.detachConnection( connections[id].cableId );
+			this.detachConnection( id );
 		}, this );
-console.log('rm2');
+
 		// remove from DOM
 		module.getElem().remove();
 		this.instance.repaintEverything();
@@ -227,11 +226,10 @@ console.log('rm2');
 	};
 
 	Patch.prototype.detachConnection = function( connectionId ) {
-console.log(connections)
-		var connection = _.findWhere( connections, { 'cableId': connectionId } );
-console.log(connection, connectionId)
+
+		var connection = _.findWhere( connections, { 'id': connectionId } );
+
 		if ( connection ) {
-console.log(connection.getConnectInfo().source)
 			var source = ( connection ) ? modules[ connection.getConnectInfo().source.split('_')[1] ] : null;
 			connection.disconnect();
 			source.disconnect();

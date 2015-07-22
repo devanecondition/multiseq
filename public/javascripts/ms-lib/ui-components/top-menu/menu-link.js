@@ -23,7 +23,7 @@ define([
 	MenuLink.prototype.onMenuLinkClick = function( e ) {
 
 		e.preventDefault();
-
+console.log('omlc!', this.patch);
 		this.patch.addModule({
 			name   : this.moduleName,
 			module : this.Module

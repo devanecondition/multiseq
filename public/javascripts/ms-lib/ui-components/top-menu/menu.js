@@ -18,6 +18,9 @@ define([
 
 		// add menu to wrapper div
 		this.$container = $( '<div class="menu-container">' + this.getHtml() + '</div>' )
+		this.$top = this.$container.find('.top');
+
+		this.$container
 			.on( 'click', '.add', this.toggleDrawer.bind( this ) )
 			.on( 'click', '.patch-mode', this.toggleMode.bind( this ) )
 			.on( 'click', '.new-patch', this.createNewPatch.bind( this ) );
@@ -29,7 +32,7 @@ define([
 	};
 
 	Menu.prototype.render = function() {
-		this.$container.html( this.getHtml() );
+		this.getMenuOptions();
 	};
 
 	Menu.prototype.getElem = function() {
@@ -39,13 +42,25 @@ define([
 	Menu.prototype.getHtml = function() {
 		var mode = this.patch.state.getMode();
 		return (			
-			'<div class="top">' +
-				'<a href="#" class="add">+</a>' +
-				'<div class="spacer">|</div>' +
-				'<a href="#" class="new-patch">New Patch</a>' +
+			'<div class="top">' + 
 				'<a href="#" class="patch-mode">' + mode + ' Mode</a>' +
 			'</div>' +
 			'<div class="drawer"></div>'
+		);
+	};
+
+	Menu.prototype.getMenuOptions = function() {
+
+		var mode = this.patch.state.getMode(),
+			editHtml = ( this.patch.state.getMode() === 'edit' ) ? (
+				'<a href="#" class="add">+</a>' +
+				'<div class="spacer">|</div>' +
+				'<a href="#" class="new-patch">New Patch</a>'
+			) : '';
+
+		this.$top.html(
+			editHtml +
+			'<a href="#" class="patch-mode">' + mode + ' Mode</a>'
 		);
 	};
 
@@ -96,6 +111,8 @@ define([
 	    this.destroyPatch();
 
 		this.patch = new Patch( plumbInstance );
+		this.$container.find('.drawer').empty();
+		this.createDrawerLinks();
 
 		this.patch.enableShortcuts(); // Add listeners for "n" and "delete" keys
 
@@ -106,7 +123,7 @@ define([
 
 		// Post-render functions...
 		plumbInstance.setContainer( this.patch.getElem() );
-		this.patch.postRenderFunction();		
+		this.patch.render();		
 	};
 
 	return Menu;
