@@ -4,12 +4,20 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose   = require('mongoose');
 
 var routes = require('./routes/index');
 var users  = require('./routes/users');
 var patch  = require('./api/patch');
+var users  = require('./api/users');
 
 var app = express();
+
+mongoose.connect('mongodb://synthcomp:Monsyn69@ds047732.mongolab.com:47732/heroku_9gr6r0r9'); // connect to our database
+
+// bodyParser gets the data from a POST
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,6 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 app.use('/api/patch', patch);
+app.use('/api/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
