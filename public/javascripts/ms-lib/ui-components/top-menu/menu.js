@@ -95,6 +95,7 @@ define([
 
 		$('.patch-container').remove();
 
+		this.patch.disableConnections();
 		this.patch.state.destroy();
 		delete this.patch;
 	};

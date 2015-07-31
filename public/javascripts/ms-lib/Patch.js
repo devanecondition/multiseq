@@ -42,8 +42,6 @@ window.State = this.state;
 			} 
 		});
 
-		this.enableConnections();
-
 	    if ( this.preset ) {
 	    	this.buildPresetModules();
 	    }
@@ -101,6 +99,7 @@ window.State = this.state;
 			_.each( connections, function( connection ) {
 				connection.connect();
 			});
+
 			this.enableConnections();
 		} else {
 			this.disableConnections();
@@ -115,11 +114,6 @@ window.State = this.state;
 
 	Patch.prototype.getElem = function() {
 		return this.$container;
-	};
-
-	Patch.prototype.enableConnections = function() {
-		this.instance.bind( 'connection', this.onConnection.bind( this ) );
-	    this.instance.bind( 'click', this.onCableSelected.bind( this ) );
 	};
 
 	Patch.prototype.storeConnection = function( connection, cable ) {
@@ -143,6 +137,11 @@ window.State = this.state;
 			});
 
 		this.storeConnection( connection, cable );
+	};
+
+	Patch.prototype.enableConnections = function() {
+		this.instance.bind( 'connection', this.onConnection.bind( this ) );
+	    this.instance.bind( 'click', this.onCableSelected.bind( this ) );
 	};
 
 	Patch.prototype.disableConnections = function() {
@@ -246,7 +245,7 @@ window.State = this.state;
 	        	e.preventDefault();
 
 				var connection = _.findWhere( connections, { 'cableId': cable.id } );
-				
+
         		this.detachConnection( connection.id );
         		this.$doc.off( 'keydown', onDeleteKeydown );
         	}
