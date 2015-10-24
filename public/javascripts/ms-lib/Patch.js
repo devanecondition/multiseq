@@ -24,6 +24,7 @@ define([
 		context             = new AudioContext();
 
 	var Patch = function( instance, preset ) {
+
 		this.instance     = instance;
 		this.$container   = $( this.getHtml() );
 		this.$doc         = $( document );

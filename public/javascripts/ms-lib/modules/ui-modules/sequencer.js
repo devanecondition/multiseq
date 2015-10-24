@@ -12,7 +12,7 @@ define([
 
 		UiModule.call( this, params, {
 			direction : params.settings.direction || 'forward',
-			seqNotes : params.settings.seqNotes || [ Notes['a1'], Notes['c1'], Notes['d1'], Notes['b1'], Notes['g1'], Notes['a1'] ]
+			seqNotes : params.settings.seqNotes || [ Notes['a1'], Notes['d1'], Notes['a1'], Notes['e1'], Notes['a2'], Notes['e1'], Notes['d2'], Notes['a1'], Notes['a2'] ]
 		});
 
 		this.note       = 'a1';
